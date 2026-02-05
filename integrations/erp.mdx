@@ -145,11 +145,7 @@ Ensure your ERP has:
 
 ### API Key Management
 
-Store credentials securely:
-
-1. Go to **Settings** → **Secrets**
-2. Add `ERP_API_KEY`
-3. Reference as `{{ERP_API_KEY}}`
+Store API keys as environment variables and reference them in your tool configuration using `{{ERP_API_KEY}}` syntax.
 
 ### Network Security
 
@@ -221,9 +217,6 @@ server: {
   </Card>
   <Card title="Voice Agents" icon="phone" href="/agents/voice-agents">
     Add tools to agents
-  </Card>
-  <Card title="Security" icon="shield" href="/engineering/security">
-    Security best practices
   </Card>
   <Card title="API Reference" icon="code" href="/api-reference/overview">
     API documentation

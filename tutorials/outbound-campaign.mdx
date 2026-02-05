@@ -1,0 +1,316 @@
+---
+title: "Launch an Outbound Campaign"
+description: "Run your first automated outbound voice campaign"
+---
+
+# Launch an Outbound Campaign
+
+This tutorial walks you through creating and launching an outbound voice campaign to reach prospects at scale.
+
+**Time:** 30-40 minutes  
+**Prerequisites:** Voice agent created, contact list
+
+## What We'll Build
+
+A campaign that:
+- Calls contacts from your list
+- Delivers personalized messages
+- Qualifies and captures leads
+- Tracks results in real-time
+
+## Step 1: Prepare Your Contact List
+
+### CSV Format
+
+Create a CSV file with your contacts:
+
+```csv
+phone,first_name,last_name,company,email,product_interest
++14155551234,John,Smith,Acme Corp,john@acme.com,steel beams
++14155555678,Jane,Doe,Widget Inc,jane@widget.com,aluminum sheets
++14155559012,Bob,Johnson,BuildCo,bob@buildco.com,steel tubing
+```
+
+### Required Fields
+
+| Field | Format | Required |
+|-------|--------|----------|
+| phone | E.164 (+1...) | Yes |
+| first_name | Text | Recommended |
+| last_name | Text | Recommended |
+
+### Clean Your Data
+
+Before uploading:
+- Verify phone numbers are valid
+- Remove duplicates
+- Check against DNC lists
+- Ensure proper E.164 format
+
+## Step 2: Create Campaign Agent
+
+Create a dedicated agent for outbound:
+
+### System Prompt for Outbound
+
+```markdown
+## Role
+You are calling on behalf of ABC Materials to follow up with 
+prospects who may be interested in our industrial materials.
+
+## Opening Script
+"Hi, this is Sarah from ABC Materials. I'm reaching out because 
+we work with companies like {{company}} in the {{industry}} space. 
+Do you have a quick moment?"
+
+## If Yes
+"Great! I wanted to see if you're currently sourcing any 
+{{product_interest}} for your projects. We've been helping 
+companies reduce costs by 15-20% with our new supplier program."
+
+## If Busy
+"No problem at all. When would be a better time to chat? 
+I can call you back then."
+
+## Objection Handling
+
+### "Not interested"
+"I understand. Before I go, can I ask what you're currently using 
+for your materials supply? Just so I know for our records."
+
+### "Already have a supplier"
+"That's great to hear. Many of our customers came to us after 
+comparing options. Would you be open to a quick comparison quote? 
+No obligation."
+
+### "Send me information"
+"Absolutely. What email should I send that to? And just so I 
+send the right materials, what type of products are you most 
+interested in?"
+
+## Goal
+- Primary: Schedule a meeting with sales
+- Secondary: Capture email for follow-up
+- Minimum: Understand their current situation
+
+## Call Duration
+Keep calls to 2-4 minutes unless prospect is highly engaged.
+```
+
+### Configure Voice
+
+```yaml
+Provider: Cartesia
+Voice: Professional, friendly
+Speed: Slightly slower than normal (0.95)
+```
+
+## Step 3: Create the Campaign
+
+1. Navigate to **Campaigns** → **Create Campaign**
+2. Enter details:
+
+| Field | Value |
+|-------|-------|
+| Name | Q1 Follow-up Campaign |
+| Description | Follow up with Q4 leads |
+| Start Date | (your date) |
+| End Date | (your date) |
+
+## Step 4: Upload Contacts
+
+1. Click **Upload Contacts**
+2. Select your CSV file
+3. Map fields:
+   - phone → Phone Number
+   - first_name → First Name
+   - company → Company
+4. Review import summary
+5. Click **Import**
+
+## Step 5: Configure Schedule
+
+### Calling Hours
+
+Set appropriate times (contact's local time):
+
+| Day | Start | End |
+|-----|-------|-----|
+| Monday | 9:00 AM | 5:00 PM |
+| Tuesday | 9:00 AM | 5:00 PM |
+| Wednesday | 9:00 AM | 5:00 PM |
+| Thursday | 9:00 AM | 5:00 PM |
+| Friday | 9:00 AM | 4:00 PM |
+
+### Best Practices
+
+- Avoid Monday 9-10 AM (people catching up)
+- Avoid Friday afternoon (low engagement)
+- Peak times: 10-11 AM, 2-4 PM
+
+## Step 6: Set Pacing
+
+Control call volume:
+
+| Setting | Recommended | Why |
+|---------|-------------|-----|
+| Calls per hour | 20 | Start conservative |
+| Max attempts | 3 | Don't over-call |
+| Retry delay | 4 hours | Space out retries |
+
+## Step 7: Configure Outcomes
+
+Define what counts as success:
+
+| Outcome | Definition |
+|---------|------------|
+| Meeting Booked | Scheduled with sales |
+| Interested | Will follow up |
+| Send Info | Wants email materials |
+| Not Interested | Clear decline |
+| Wrong Number | Number incorrect |
+| Do Not Call | Remove from list |
+
+## Step 8: Review & Launch
+
+### Pre-Launch Checklist
+
+- [ ] Contact list uploaded and verified
+- [ ] Agent configured and tested
+- [ ] Calling hours appropriate
+- [ ] Pacing is conservative to start
+- [ ] DNC list checked
+- [ ] Outcomes defined
+
+### Launch
+
+1. Review campaign summary
+2. Click **Start Campaign**
+3. Confirm launch
+
+## Step 9: Monitor in Real-Time
+
+### Dashboard Metrics
+
+Watch key metrics:
+
+| Metric | Target |
+|--------|--------|
+| Connect Rate | > 15% |
+| Conversion Rate | > 10% |
+| Meeting Rate | > 5% |
+
+### Live Call Stream
+
+Monitor calls as they happen:
+- View active calls
+- See real-time outcomes
+- Listen to calls (if enabled)
+
+### Alerts
+
+Set up alerts for:
+- Connect rate below 10%
+- Error rate above 5%
+- Campaign completed
+
+## Step 10: Optimize
+
+### After First Day
+
+Review performance:
+
+1. Check connect rate by hour
+2. Review call recordings
+3. Analyze outcomes
+
+### Adjustments
+
+Based on data:
+
+| Issue | Adjustment |
+|-------|------------|
+| Low connect | Change calling hours |
+| High hang-up | Improve opening |
+| Low conversion | Refine script |
+
+### Scale Up
+
+Once optimized:
+1. Increase pacing gradually
+2. Add more contacts
+3. Test variations
+
+## Campaign Analytics
+
+### Performance Report
+
+```
+Campaign: Q1 Follow-up
+────────────────────────────────
+Contacts:        500
+Attempted:       450  (90%)
+Connected:       108  (24%)
+────────────────────────────────
+Outcomes:
+  Meeting Booked:  18  (17%)
+  Interested:      32  (30%)
+  Send Info:       23  (21%)
+  Not Interested:  28  (26%)
+  Callback:         7   (6%)
+────────────────────────────────
+Meetings per 100 calls: 4.0
+```
+
+### Time Analysis
+
+```
+Best Performing Hours:
+  10 AM - 28% connect rate
+  2 PM  - 26% connect rate
+  11 AM - 24% connect rate
+
+Worst:
+  9 AM  - 12% connect rate
+  5 PM  - 14% connect rate
+```
+
+## What's Next?
+
+<CardGroup cols={2}>
+  <Card title="Campaign Monitoring" icon="chart-line" href="/campaigns/monitoring">
+    Advanced monitoring
+  </Card>
+  <Card title="Lead Management" icon="users" href="/leads/overview">
+    Manage captured leads
+  </Card>
+  <Card title="Analytics" icon="chart-bar" href="/analytics/overview">
+    Deep dive analytics
+  </Card>
+  <Card title="Voice Agents" icon="phone" href="/agents/voice-agents">
+    Optimize agents
+  </Card>
+</CardGroup>
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Very low connect rate">
+    - Verify phone numbers are valid
+    - Check calling hours match contact time zones
+    - Try different times of day
+    - Review caller ID settings
+  </Accordion>
+  <Accordion title="High hang-up rate">
+    - Review and improve opening script
+    - Ensure voice sounds natural
+    - Check for long pauses before speaking
+    - Consider more personalized openers
+  </Accordion>
+  <Accordion title="Compliance concerns">
+    - Verify DNC list is current
+    - Confirm calling hour restrictions
+    - Review consent documentation
+    - Check state-specific regulations
+  </Accordion>
+</AccordionGroup>

@@ -1,0 +1,304 @@
+---
+title: "Lead Enrichment"
+description: "Enriching leads with Apollo.io contact and company data"
+---
+
+# Lead Enrichment
+
+Lead enrichment automatically appends valuable data to captured leads using Apollo.io, giving your sales team the context they need to close deals.
+
+<Note>
+  **Updated in v2.4**: Improved enrichment reliability with better email matching, company domain resolution, and fallback strategies. See [Release Notes](/about/release-notes) for details.
+</Note>
+
+## What Gets Enriched
+
+### Contact Data
+
+| Field | Description |
+|-------|-------------|
+| **Title** | Job title (e.g., "VP of Operations") |
+| **Seniority** | Level (Executive, Director, Manager, etc.) |
+| **Department** | Function (Sales, Engineering, etc.) |
+| **LinkedIn** | LinkedIn profile URL |
+| **Direct Phone** | Direct dial number |
+| **Personal Email** | Additional email addresses |
+
+### Company Data
+
+| Field | Description |
+|-------|-------------|
+| **Company Name** | Official company name |
+| **Domain** | Company website |
+| **Industry** | Industry classification |
+| **Employee Count** | Company size |
+| **Revenue** | Estimated annual revenue |
+| **Location** | Headquarters location |
+| **Technologies** | Tech stack used |
+| **Funding** | Recent funding info |
+
+## Setting Up Apollo Integration
+
+### Step 1: Get Apollo API Key
+
+1. Log into [Apollo.io](https://apollo.io)
+2. Go to **Settings** → **API Keys**
+3. Create a new API key
+4. Copy the key
+
+### Step 2: Configure in Emanate
+
+1. Go to **Settings** → **Integrations** → **Apollo**
+2. Paste your API key
+3. Click **Connect**
+4. Test the connection
+
+### Step 3: Enable Auto-Enrichment
+
+```typescript
+enrichment: {
+  provider: "apollo",
+  autoEnrich: true,
+  trigger: "on_capture",  // or "on_demand"
+  retryOnFailure: true
+}
+```
+
+## Enrichment Triggers
+
+### Automatic (Recommended)
+
+Enrich immediately when leads are captured:
+
+- **on_capture**: Enrich as soon as lead is created
+- **on_qualify**: Enrich only when lead meets criteria
+
+### Manual
+
+Enrich on demand:
+
+1. Go to lead detail page
+2. Click **Enrich**
+3. Wait for data to populate
+
+### Batch
+
+Enrich multiple leads:
+
+1. Select leads in list view
+2. Click **Bulk Actions** → **Enrich**
+3. Process runs in background
+
+## Enrichment Process
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│ Lead Captured                                                    │
+│ name: "John Smith"                                               │
+│ email: "john@acme.com"                                           │
+│ company: "Acme Corp"                                             │
+└─────────────────────────────────────────────────────────────────┘
+                    │
+                    ▼
+┌─────────────────────────────────────────────────────────────────┐
+│ Apollo API Call                                                  │
+│ 1. Match by email (primary)                                      │
+│ 2. Match by name + company (fallback)                            │
+│ 3. Match by phone (if available)                                 │
+└─────────────────────────────────────────────────────────────────┘
+                    │
+                    ▼
+┌─────────────────────────────────────────────────────────────────┐
+│ Enriched Lead                                                    │
+│ name: "John Smith"                                               │
+│ email: "john@acme.com"                                           │
+│ company: "Acme Corporation"                                      │
+│ title: "VP of Operations"                                        │
+│ seniority: "VP"                                                  │
+│ linkedin: "linkedin.com/in/johnsmith"                            │
+│ directPhone: "+1-415-555-1234"                                   │
+│ companySize: "501-1000"                                          │
+│ industry: "Manufacturing"                                        │
+│ revenue: "$50M-100M"                                             │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+## Matching Strategies
+
+### Email-Based (Primary)
+
+Most reliable method:
+
+1. Extract email domain
+2. Match against Apollo database
+3. Return exact match or suggest alternatives
+
+### Name + Company (Fallback)
+
+When email isn't available:
+
+1. Search Apollo by name
+2. Filter by company name
+3. Use fuzzy matching for variations
+
+### Domain Resolution
+
+**New in v2.4**: Improved company matching:
+
+1. Extract domain from email
+2. Look up company in Apollo
+3. Enrich company data even if contact not found
+
+## Enrichment Settings
+
+### Field Mapping
+
+Map Apollo fields to your lead model:
+
+```typescript
+fieldMapping: {
+  "apollo.person.title": "lead.title",
+  "apollo.person.linkedin_url": "lead.linkedIn",
+  "apollo.organization.name": "lead.company",
+  "apollo.organization.estimated_num_employees": "lead.companySize"
+}
+```
+
+### Overwrite Rules
+
+Control how enrichment updates existing data:
+
+| Rule | Behavior |
+|------|----------|
+| **Always** | Replace existing values |
+| **If Empty** | Only fill blank fields |
+| **Never** | Don't overwrite |
+
+```typescript
+overwriteRules: {
+  title: "if_empty",
+  company: "always",  // Apollo may have better data
+  phone: "never"      // Keep user-provided phone
+}
+```
+
+## Enrichment Quality
+
+### Match Confidence
+
+Apollo returns confidence scores:
+
+| Score | Meaning |
+|-------|---------|
+| **High (90%+)** | Exact match, highly reliable |
+| **Medium (70-89%)** | Good match, review recommended |
+| **Low (under 70%)** | Uncertain, manual review needed |
+
+### Handling Low Confidence
+
+```typescript
+enrichment: {
+  minConfidence: 0.7,
+  lowConfidenceAction: "flag_for_review"  // or "skip"
+}
+```
+
+## Monitoring Enrichment
+
+### Dashboard Metrics
+
+| Metric | Description |
+|--------|-------------|
+| **Enrichment Rate** | % of leads enriched |
+| **Match Rate** | % with high-confidence match |
+| **API Usage** | Apollo credits consumed |
+| **Failed** | Enrichment failures |
+
+### Enrichment Status
+
+| Status | Meaning |
+|--------|---------|
+| **Pending** | Queued for enrichment |
+| **Processing** | Currently enriching |
+| **Enriched** | Successfully completed |
+| **Partial** | Some fields populated |
+| **Failed** | Could not enrich |
+| **No Match** | No Apollo record found |
+
+## Cost Management
+
+### Credit Usage
+
+Apollo charges per enrichment. Monitor usage:
+
+1. Go to **Settings** → **Integrations** → **Apollo**
+2. View credit balance
+3. Set usage alerts
+
+### Optimization Tips
+
+- Only enrich qualified leads
+- Use batch enrichment during off-hours
+- Cache results to avoid re-enrichment
+- Skip leads with complete data
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="No match found">
+    - Verify email address is correct
+    - Check company name spelling
+    - Try with different email domain
+    - Lead may not be in Apollo database
+  </Accordion>
+  <Accordion title="Outdated information">
+    - Apollo data may be stale
+    - Request re-enrichment
+    - Report to Apollo for update
+  </Accordion>
+  <Accordion title="API errors">
+    - Check API key is valid
+    - Verify credit balance
+    - Check rate limits
+    - Review error messages in logs
+  </Accordion>
+</AccordionGroup>
+
+## Best Practices
+
+### Enrich Strategically
+
+<Tip>
+  Enrich leads that matter. Use ICP scoring to prioritize enrichment for high-potential leads, saving API credits.
+</Tip>
+
+### Validate Before Enriching
+
+Ensure email is valid before calling Apollo:
+- Check format
+- Verify domain exists
+- Remove obvious test/fake emails
+
+### Monitor Quality
+
+Regularly review enrichment quality:
+- Spot check enriched data
+- Track match rates
+- Adjust confidence thresholds
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="ICP Scoring" icon="target" href="/leads/icp-scoring">
+    Score enriched leads
+  </Card>
+  <Card title="CRM Sync" icon="refresh" href="/leads/crm-sync">
+    Push to CRM
+  </Card>
+  <Card title="Lead Capture" icon="inbox" href="/leads/capture">
+    Capture configuration
+  </Card>
+  <Card title="Integrations" icon="plug" href="/integrations/overview">
+    Other integrations
+  </Card>
+</CardGroup>

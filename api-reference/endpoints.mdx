@@ -1,0 +1,388 @@
+---
+title: "API Endpoints"
+description: "Complete API endpoint reference"
+---
+
+# API Endpoints
+
+Complete reference for all Emanate API endpoints.
+
+## Leads
+
+### List Leads
+
+```bash
+GET /v1/leads
+```
+
+**Query Parameters:**
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| status | string | Filter by status |
+| source | string | Filter by source |
+| minScore | number | Minimum ICP score |
+| limit | number | Results per page |
+| offset | number | Pagination offset |
+
+**Response:**
+
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "id": "lead_123",
+      "name": "John Smith",
+      "email": "john@example.com",
+      "company": "Acme Corp",
+      "status": "qualified",
+      "icpScore": 85,
+      "source": "voice",
+      "createdAt": "2024-02-04T10:00:00Z"
+    }
+  ],
+  "pagination": {
+    "total": 150,
+    "limit": 50,
+    "offset": 0
+  }
+}
+```
+
+### Get Lead
+
+```bash
+GET /v1/leads/:id
+```
+
+**Response:**
+
+```json
+{
+  "success": true,
+  "data": {
+    "id": "lead_123",
+    "name": "John Smith",
+    "email": "john@example.com",
+    "phone": "+14155551234",
+    "company": "Acme Corp",
+    "title": "VP Operations",
+    "status": "qualified",
+    "icpScore": 85,
+    "enrichment": {
+      "companySize": "500-1000",
+      "industry": "Manufacturing",
+      "linkedIn": "linkedin.com/in/johnsmith"
+    },
+    "source": "voice",
+    "agentId": "asst_456",
+    "conversationId": "call_789",
+    "crmId": "hubspot_123",
+    "createdAt": "2024-02-04T10:00:00Z",
+    "updatedAt": "2024-02-04T10:05:00Z"
+  }
+}
+```
+
+### Create Lead
+
+```bash
+POST /v1/leads
+```
+
+**Request Body:**
+
+```json
+{
+  "name": "Jane Doe",
+  "email": "jane@example.com",
+  "company": "Widget Inc",
+  "phone": "+14155555678",
+  "source": "api",
+  "customFields": {
+    "projectType": "construction",
+    "timeline": "Q2 2024"
+  }
+}
+```
+
+### Update Lead
+
+```bash
+PUT /v1/leads/:id
+```
+
+**Request Body:**
+
+```json
+{
+  "status": "contacted",
+  "notes": "Follow-up call scheduled"
+}
+```
+
+### Delete Lead
+
+```bash
+DELETE /v1/leads/:id
+```
+
+---
+
+## Agents
+
+### List Agents
+
+```bash
+GET /v1/agents
+```
+
+**Query Parameters:**
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| type | string | voice, chat |
+| status | string | active, paused |
+
+**Response:**
+
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "id": "asst_123",
+      "name": "Sales Assistant",
+      "type": "voice",
+      "status": "active",
+      "createdAt": "2024-01-15T08:00:00Z"
+    }
+  ]
+}
+```
+
+### Get Agent
+
+```bash
+GET /v1/agents/:id
+```
+
+### Create Agent
+
+```bash
+POST /v1/agents
+```
+
+**Request Body:**
+
+```json
+{
+  "name": "New Agent",
+  "type": "voice",
+  "firstMessage": "Hi, how can I help?",
+  "systemPrompt": "You are a helpful assistant...",
+  "model": {
+    "provider": "openai",
+    "model": "gpt-4o"
+  }
+}
+```
+
+### Update Agent
+
+```bash
+PUT /v1/agents/:id
+```
+
+---
+
+## Campaigns
+
+### List Campaigns
+
+```bash
+GET /v1/campaigns
+```
+
+**Query Parameters:**
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| status | string | draft, running, paused, completed |
+
+### Get Campaign
+
+```bash
+GET /v1/campaigns/:id
+```
+
+### Create Campaign
+
+```bash
+POST /v1/campaigns
+```
+
+**Request Body:**
+
+```json
+{
+  "name": "Q1 Outreach",
+  "agentId": "asst_123",
+  "startDate": "2024-02-01",
+  "endDate": "2024-02-28",
+  "schedule": {
+    "monday": { "start": "09:00", "end": "17:00" },
+    "tuesday": { "start": "09:00", "end": "17:00" }
+  },
+  "pacing": {
+    "callsPerHour": 20,
+    "maxAttempts": 3
+  }
+}
+```
+
+### Start Campaign
+
+```bash
+POST /v1/campaigns/:id/start
+```
+
+### Pause Campaign
+
+```bash
+POST /v1/campaigns/:id/pause
+```
+
+### Add Contacts
+
+```bash
+POST /v1/campaigns/:id/contacts
+```
+
+**Request Body:**
+
+```json
+{
+  "contacts": [
+    {
+      "phone": "+14155551234",
+      "firstName": "John",
+      "lastName": "Smith",
+      "company": "Acme"
+    }
+  ]
+}
+```
+
+---
+
+## Analytics
+
+### Overview
+
+```bash
+GET /v1/analytics/overview
+```
+
+**Query Parameters:**
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| startDate | string | ISO date |
+| endDate | string | ISO date |
+
+**Response:**
+
+```json
+{
+  "success": true,
+  "data": {
+    "conversations": 4370,
+    "leads": 1892,
+    "conversionRate": 0.43,
+    "avgDuration": 245,
+    "byChannel": {
+      "voice": 2847,
+      "chat": 1523
+    }
+  }
+}
+```
+
+### Call Metrics
+
+```bash
+GET /v1/analytics/calls
+```
+
+**Response:**
+
+```json
+{
+  "success": true,
+  "data": {
+    "total": 2847,
+    "connected": 1892,
+    "connectRate": 0.66,
+    "avgDuration": 312,
+    "outcomes": {
+      "completed": 1654,
+      "voicemail": 423,
+      "noAnswer": 312,
+      "transferred": 189,
+      "abandoned": 89
+    }
+  }
+}
+```
+
+### Lead Metrics
+
+```bash
+GET /v1/analytics/leads
+```
+
+**Response:**
+
+```json
+{
+  "success": true,
+  "data": {
+    "total": 1892,
+    "qualified": 823,
+    "enriched": 1654,
+    "synced": 756,
+    "avgScore": 68.5,
+    "bySource": {
+      "voice": 1243,
+      "chat": 523,
+      "campaign": 126
+    }
+  }
+}
+```
+
+---
+
+## Error Codes
+
+| Code | Description |
+|------|-------------|
+| `INVALID_REQUEST` | Malformed request |
+| `UNAUTHORIZED` | Invalid API key |
+| `FORBIDDEN` | Insufficient permissions |
+| `NOT_FOUND` | Resource not found |
+| `RATE_LIMITED` | Too many requests |
+| `INTERNAL_ERROR` | Server error |
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="API Overview" icon="code" href="/api-reference/overview">
+    API introduction
+  </Card>
+  <Card title="Webhooks" icon="bell" href="/api-reference/webhooks">
+    Webhook integration
+  </Card>
+</CardGroup>

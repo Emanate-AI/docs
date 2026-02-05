@@ -1,0 +1,351 @@
+---
+title: "Workflow Squads"
+description: "Multi-agent orchestration for complex workflows"
+---
+
+# Workflow Squads
+
+Workflow Squads enable multiple AI agents to work together on complex conversational flows. Using VAPI's Squad feature, you can create orchestrated workflows where specialized agents handle different parts of a conversation.
+
+## What are Squads?
+
+A **Squad** is a group of agents that collaborate on a single conversation:
+
+- **Receptionist** → qualifies the caller
+- **Sales Specialist** → handles product questions
+- **Support Agent** → resolves technical issues
+
+The conversation flows seamlessly between agents based on customer needs.
+
+## Squad Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                          Squad                                   │
+├─────────────────────────────────────────────────────────────────┤
+│  ┌─────────────┐    ┌─────────────┐    ┌─────────────┐          │
+│  │ Receptionist│───►│   Sales     │───►│  Support    │          │
+│  │   Agent     │    │   Agent     │    │   Agent     │          │
+│  └─────────────┘    └─────────────┘    └─────────────┘          │
+│         │                  │                  │                  │
+│         └──────────────────┴──────────────────┘                  │
+│                    Shared Context                                │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+## Creating a Squad
+
+Navigate to **Agents** → **Workflow Squads** → **Create Squad**
+
+### Step 1: Define Members
+
+Add agents to the squad:
+
+```typescript
+members: [
+  {
+    assistant: "receptionist_agent",
+    name: "Receptionist",
+    destinations: [
+      { type: "assistant", assistantId: "sales_agent" },
+      { type: "assistant", assistantId: "support_agent" }
+    ]
+  },
+  {
+    assistant: "sales_agent",
+    name: "Sales Specialist",
+    destinations: [
+      { type: "assistant", assistantId: "receptionist_agent" }
+    ]
+  },
+  {
+    assistant: "support_agent",
+    name: "Technical Support",
+    destinations: [
+      { type: "assistant", assistantId: "receptionist_agent" }
+    ]
+  }
+]
+```
+
+### Step 2: Configure Routing
+
+Define how conversations flow between agents:
+
+| Trigger | Action |
+|---------|--------|
+| "I want to buy..." | Transfer to Sales |
+| "I have a problem..." | Transfer to Support |
+| "Transfer me back" | Return to Receptionist |
+
+### Step 3: Set Entry Point
+
+Choose which agent handles initial contact:
+
+```typescript
+squad: {
+  name: "Customer Service Squad",
+  firstAssistantId: "receptionist_agent",
+  members: [...]
+}
+```
+
+## Workflow Canvas
+
+The visual workflow builder lets you design agent flows:
+
+### Canvas Elements
+
+| Element | Description |
+|---------|-------------|
+| **Nodes** | Represent agents |
+| **Edges** | Represent transfer paths |
+| **Entry Point** | Green indicator for first agent |
+| **Config Panel** | Settings for selected element |
+
+### Building Workflows
+
+1. **Add Agent Nodes**: Drag agents onto the canvas
+2. **Connect Edges**: Draw lines between agents
+3. **Configure Triggers**: Set transfer conditions
+4. **Set Entry Point**: Mark the first agent
+
+## Transfer Conditions
+
+Configure when agents hand off:
+
+### Intent-Based Transfers
+
+```typescript
+transferConditions: [
+  {
+    intent: "sales_inquiry",
+    destination: "sales_agent",
+    message: "Let me connect you with our sales team."
+  },
+  {
+    intent: "technical_support",
+    destination: "support_agent",
+    message: "I'll transfer you to technical support."
+  }
+]
+```
+
+### Keyword-Based Transfers
+
+```typescript
+transferConditions: [
+  {
+    keywords: ["buy", "purchase", "pricing", "quote"],
+    destination: "sales_agent"
+  },
+  {
+    keywords: ["broken", "not working", "error", "help"],
+    destination: "support_agent"
+  }
+]
+```
+
+### Explicit Transfers
+
+Users can request transfers directly:
+
+- "Can I speak to sales?"
+- "Transfer me to support"
+- "I need a specialist"
+
+## Shared Context
+
+All agents in a squad share conversation context:
+
+### What's Shared
+
+- **Transcript**: Full conversation history
+- **Lead Data**: Captured contact information
+- **Custom Data**: Variables set by agents
+
+### Context Handoff
+
+```typescript
+// Receptionist captures info
+context.set("customerName", "John Smith");
+context.set("orderNumber", "ORD-12345");
+
+// Sales agent receives context
+const name = context.get("customerName"); // "John Smith"
+```
+
+## Squad Prompts
+
+### Receptionist Prompt
+
+```markdown
+## Role
+You are the receptionist for ABC Materials. Your job is to:
+- Greet callers warmly
+- Understand their needs
+- Route them to the right specialist
+
+## Routing Rules
+- Sales questions → Transfer to Sales Specialist
+- Technical issues → Transfer to Technical Support
+- General inquiries → Handle directly
+
+## Before Transferring
+Always collect:
+- Caller's name
+- Company name
+- Brief description of their need
+```
+
+### Specialist Prompts
+
+```markdown
+## Role
+You are a Sales Specialist for ABC Materials.
+
+## Context
+You will receive callers from the Receptionist. They have already 
+provided their name and basic needs.
+
+## Your Focus
+- Answer detailed product questions
+- Provide pricing information
+- Schedule meetings for quotes
+- Close sales opportunities
+```
+
+## Testing Squads
+
+Use the workflow test panel:
+
+1. Click **Test** in the squad editor
+2. Start a test call
+3. Verify:
+   - Entry agent greets correctly
+   - Transfers trigger appropriately
+   - Context passes between agents
+   - Return paths work
+
+### Test Scenarios
+
+| Scenario | Flow |
+|----------|------|
+| Sales inquiry | Receptionist → Sales → Close |
+| Support request | Receptionist → Support → Resolution |
+| Wrong transfer | Sales → Back to Receptionist → Correct agent |
+| Complex flow | Receptionist → Sales → Support → Receptionist |
+
+## Best Practices
+
+### Agent Specialization
+
+<Tip>
+  Give each agent a focused role. A sales agent should excel at sales; don't overload it with support responsibilities.
+</Tip>
+
+### Clear Handoffs
+
+Make transfers seamless:
+
+```markdown
+"I'll connect you with our sales specialist who can help with pricing. 
+One moment please..."
+```
+
+### Context Preservation
+
+Ensure agents acknowledge shared context:
+
+```markdown
+"Hi [Name], I understand you're calling about [Issue]. Let me help 
+you with that..."
+```
+
+### Graceful Returns
+
+Always provide a path back:
+
+```markdown
+## If Unable to Help
+If you cannot assist the caller, offer to transfer them back to 
+the receptionist for re-routing.
+```
+
+## Advanced Patterns
+
+### Supervisor Agent
+
+Add a supervisor that can join any conversation:
+
+```typescript
+members: [
+  {
+    assistant: "supervisor_agent",
+    canJoinAny: true,
+    joinTrigger: "escalation_requested"
+  }
+]
+```
+
+### Parallel Processing
+
+Multiple agents processing simultaneously:
+
+```typescript
+workflow: {
+  type: "parallel",
+  agents: ["data_lookup_agent", "scheduling_agent"],
+  joinCondition: "all_complete"
+}
+```
+
+### Conditional Routing
+
+Route based on business logic:
+
+```typescript
+routing: {
+  conditions: [
+    { if: "businessHours", then: "live_agent" },
+    { if: "afterHours", then: "voicemail_agent" }
+  ]
+}
+```
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Transfers not triggering">
+    - Check transfer conditions match conversation
+    - Verify destination agent IDs are correct
+    - Review agent prompts for transfer instructions
+  </Accordion>
+  <Accordion title="Context not passing">
+    - Ensure context variables are set correctly
+    - Check variable names match between agents
+    - Verify squad configuration includes context sharing
+  </Accordion>
+  <Accordion title="Conversation loops">
+    - Add clear exit conditions
+    - Limit circular transfers
+    - Include "dead end" handling
+  </Accordion>
+</AccordionGroup>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Voice Agents" icon="phone" href="/agents/voice-agents">
+    Create individual voice agents
+  </Card>
+  <Card title="Custom Actions" icon="bolt" href="/agents/custom-actions">
+    Add ERP integrations
+  </Card>
+  <Card title="Testing" icon="flask" href="/agents/testing">
+    Test workflow squads
+  </Card>
+  <Card title="Call Logs" icon="list" href="/analytics/call-logs">
+    Review squad conversations
+  </Card>
+</CardGroup>

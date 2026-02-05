@@ -1,0 +1,208 @@
+---
+title: "Key Concepts"
+description: "Essential terminology and concepts in Emanate"
+---
+
+# Key Concepts
+
+Understanding these core concepts will help you get the most out of Emanate.
+
+## Agents
+
+### Assistant
+
+An **Assistant** is an AI-powered agent configured to handle conversations. Each assistant has:
+
+- **System Prompt**: Instructions that define behavior and personality
+- **Model**: The LLM powering the agent (GPT-4o, Claude 3.5, etc.)
+- **Voice**: For voice agents, the text-to-speech voice
+- **Knowledge Base**: Documents providing context
+- **Tools**: Custom actions the agent can perform
+
+### Voice Agent
+
+A voice agent handles phone calls. It includes:
+
+- **Transcriber**: Speech-to-text (Deepgram Nova-3)
+- **Voice**: Text-to-speech (Cartesia, ElevenLabs)
+- **Phone Number**: The number callers dial
+
+### Chat Agent
+
+A chat agent handles website conversations via an embedded widget. It includes:
+
+- **Widget Config**: Colors, position, welcome message
+- **Embed Code**: JavaScript snippet for your website
+
+### Workflow Squad
+
+A **Squad** is a group of agents that work together on complex workflows. Squads enable:
+
+- **Agent Handoffs**: Transfer conversations between specialists
+- **Conditional Routing**: Route based on customer intent
+- **Parallel Processing**: Multiple agents working simultaneously
+
+## Leads
+
+### Lead
+
+A **Lead** is a potential customer captured from an agent conversation. Lead records include:
+
+- Contact information (name, email, phone)
+- Company information
+- Conversation context
+- Enrichment data
+- ICP score
+
+### Lead Capture
+
+**Lead Capture** is the automatic extraction of contact information from conversations. Agents naturally ask for and collect:
+
+- Name
+- Email address
+- Phone number
+- Company name
+- Custom fields
+
+### Lead Enrichment
+
+**Lead Enrichment** appends additional data to leads via Apollo.io:
+
+- Job title
+- Company size
+- Industry
+- LinkedIn profile
+- Direct phone
+
+### ICP Scoring
+
+**ICP (Ideal Customer Profile) Scoring** rates how well a lead matches your target customer:
+
+- **Score**: 0-100 rating
+- **Factors**: Industry, company size, role, intent signals
+- **Automation**: High-scoring leads can be fast-tracked
+
+## Campaigns
+
+### Voice Campaign
+
+A **Voice Campaign** is an automated outbound calling program:
+
+- **Contact List**: Phone numbers to call
+- **Agent**: The voice agent making calls
+- **Schedule**: When calls are made
+- **Pacing**: Calls per hour limit
+
+### Campaign Status
+
+| Status | Description |
+|--------|-------------|
+| **Draft** | Campaign being configured |
+| **Scheduled** | Waiting to start |
+| **Running** | Actively making calls |
+| **Paused** | Temporarily stopped |
+| **Completed** | All contacts processed |
+
+## Analytics
+
+### Call Log
+
+A **Call Log** records every voice call:
+
+- Call duration
+- Transcript
+- Recording URL
+- Outcome (completed, voicemail, no answer)
+- Lead captured (if any)
+
+### Chat Log
+
+A **Chat Log** records every chat session:
+
+- Messages exchanged
+- Session duration
+- Outcome
+- Lead captured (if any)
+
+### Evaluation
+
+An **Evaluation** is a quality assessment of a conversation:
+
+- **Criteria**: Greeting, product knowledge, objection handling
+- **Score**: Per-criteria and overall rating
+- **Feedback**: AI-generated improvement suggestions
+
+### Insights
+
+**Insights** are AI-generated performance analyses:
+
+- Trend identification
+- Anomaly detection
+- Improvement recommendations
+
+## Technical Concepts
+
+### VAPI
+
+**VAPI** is the Voice AI Platform that powers Emanate's voice and chat capabilities. Key concepts:
+
+- **Assistant**: VAPI's term for an AI agent configuration
+- **Call**: A voice conversation session
+- **Chat**: A text conversation session
+- **Tool**: A function the agent can invoke
+
+### Business DNA
+
+**Business DNA** is Emanate's brand context system:
+
+- **Extraction**: Automatic scraping of brand info from your website
+- **Brand Kit**: Generated images matching your brand
+- **Agent Context**: Personality and tone settings
+
+### Webhook
+
+A **Webhook** is an HTTP callback triggered by events:
+
+- `call.ended`: Voice call completed
+- `session.updated`: Chat session updated
+- `lead.created`: New lead captured
+
+### Structured Output
+
+A **Structured Output** is a schema for extracting data from conversations:
+
+- **Lead Capture**: Contact information extraction
+- **Conversation Metrics**: Intent, sentiment, outcome
+
+## Data Flow
+
+### "VAPI Writes, Supabase Reads"
+
+Emanate uses a specific data pattern:
+
+1. **Writes** go to VAPI first (source of truth)
+2. **Syncs** copy data to Supabase after writes
+3. **Reads** come from Supabase (fast, cached)
+
+This ensures:
+- Consistent data across the platform
+- Fast list/detail views
+- Reliable state management
+
+## Glossary
+
+| Term | Definition |
+|------|------------|
+| **Agent** | AI-powered conversation handler |
+| **Assistant** | VAPI configuration for an agent |
+| **Business DNA** | Brand context system |
+| **Campaign** | Automated outbound calling program |
+| **Enrichment** | Appending data to leads via Apollo |
+| **ICP** | Ideal Customer Profile |
+| **Knowledge Base** | Documents providing agent context |
+| **Lead** | Potential customer from conversation |
+| **Squad** | Multi-agent workflow group |
+| **Tool** | Custom action an agent can perform |
+| **VAPI** | Voice AI Platform |
+| **Webhook** | HTTP callback for events |
+| **Widget** | Embeddable chat interface |

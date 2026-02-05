@@ -1,0 +1,338 @@
+---
+title: "CRM Sync"
+description: "Syncing leads to HubSpot and Salesforce via Merge"
+---
+
+# CRM Sync
+
+Emanate automatically syncs captured and enriched leads to your CRM, ensuring your sales team has immediate access to new opportunities.
+
+## Supported CRMs
+
+Emanate integrates with CRMs via [Merge.dev](https://merge.dev):
+
+| CRM | Features |
+|-----|----------|
+| **HubSpot** | Contacts, Companies, Deals, Notes |
+| **Salesforce** | Leads, Contacts, Accounts, Tasks |
+| **Pipedrive** | Contacts, Organizations, Deals |
+| **Zoho CRM** | Leads, Contacts, Accounts |
+
+## Setting Up CRM Sync
+
+### Step 1: Connect Your CRM
+
+1. Go to **Settings** → **Integrations** → **CRM**
+2. Click **Connect CRM**
+3. Select your CRM from the list
+4. Authorize Emanate via OAuth
+
+### Step 2: Configure Field Mapping
+
+Map Emanate fields to CRM fields:
+
+#### Contact Mapping
+
+| Emanate Field | HubSpot | Salesforce |
+|---------------|---------|------------|
+| `name` | `firstname` + `lastname` | `FirstName` + `LastName` |
+| `email` | `email` | `Email` |
+| `phone` | `phone` | `Phone` |
+| `title` | `jobtitle` | `Title` |
+| `linkedIn` | `linkedin_url` | `LinkedIn_URL__c` |
+
+#### Company Mapping
+
+| Emanate Field | HubSpot | Salesforce |
+|---------------|---------|------------|
+| `company` | `company.name` | `Account.Name` |
+| `industry` | `company.industry` | `Account.Industry` |
+| `companySize` | `company.numberofemployees` | `Account.Employees` |
+| `revenue` | `company.annualrevenue` | `Account.AnnualRevenue` |
+
+### Step 3: Set Sync Rules
+
+Configure when and how leads sync:
+
+```typescript
+syncRules: {
+  trigger: "on_qualify",  // or "on_capture", "manual"
+  minScore: 60,           // Only sync qualified leads
+  deduplication: "email", // Dedupe strategy
+  createIfNotExists: true,
+  updateIfExists: true
+}
+```
+
+## Sync Triggers
+
+### Automatic Sync
+
+| Trigger | Description |
+|---------|-------------|
+| **on_capture** | Sync immediately when captured |
+| **on_enrich** | Sync after enrichment |
+| **on_qualify** | Sync when ICP score threshold met |
+
+### Manual Sync
+
+Push individual leads:
+
+1. Open lead detail
+2. Click **Sync to CRM**
+3. Confirm mapping
+4. Push to CRM
+
+### Batch Sync
+
+Push multiple leads:
+
+1. Select leads in list view
+2. Click **Bulk Actions** → **Sync to CRM**
+3. Review and confirm
+4. Process runs in background
+
+## What Gets Synced
+
+### To HubSpot
+
+When a lead syncs to HubSpot:
+
+1. **Contact Created/Updated**
+   - Name, email, phone
+   - Title, LinkedIn
+   - Custom properties
+
+2. **Company Created/Associated**
+   - Company name, domain
+   - Industry, size, revenue
+   - Associated with contact
+
+3. **Note Added**
+   - Conversation summary
+   - Timestamp
+   - Agent/source info
+
+### To Salesforce
+
+When a lead syncs to Salesforce:
+
+1. **Lead or Contact Created**
+   - Core contact fields
+   - Custom fields mapped
+
+2. **Account Created/Linked**
+   - Company information
+   - Account ↔ Contact relationship
+
+3. **Task Created**
+   - Follow-up action
+   - Linked to lead/contact
+
+## Sync Process
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│ Lead Ready for Sync                                              │
+│ - Enriched                                                       │
+│ - Score: 85                                                      │
+└─────────────────────────────────────────────────────────────────┘
+                    │
+                    ▼
+┌─────────────────────────────────────────────────────────────────┐
+│ Deduplication Check                                              │
+│ - Search CRM by email                                            │
+│ - Search by phone (if email not found)                           │
+│ - Search by name + company (fallback)                            │
+└─────────────────────────────────────────────────────────────────┘
+                    │
+           ┌───────┴───────┐
+           │               │
+     Found Match    No Match
+           │               │
+           ▼               ▼
+┌─────────────────┐ ┌─────────────────┐
+│ Update Record   │ │ Create Record   │
+│ - Merge data    │ │ - All fields    │
+│ - Add note      │ │ - Create company│
+└─────────────────┘ └─────────────────┘
+                    │
+                    ▼
+┌─────────────────────────────────────────────────────────────────┐
+│ Sync Complete                                                    │
+│ - CRM ID saved to lead                                           │
+│ - Sync status updated                                            │
+│ - Audit trail logged                                             │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+## Conversation Notes
+
+Include conversation context in CRM:
+
+### Note Template
+
+```markdown
+## AI Conversation Summary
+
+**Date:** {{timestamp}}
+**Agent:** {{agentName}}
+**Channel:** {{channel}}
+**Duration:** {{duration}}
+
+### Summary
+{{conversationSummary}}
+
+### Key Points
+{{keyPoints}}
+
+### Next Steps
+{{suggestedActions}}
+
+---
+*Captured by Emanate*
+```
+
+### Custom Note Fields
+
+Configure what's included:
+
+```typescript
+noteConfig: {
+  includeTranscript: false,    // Can be long
+  includeSummary: true,
+  includeKeyPoints: true,
+  includeIcpScore: true,
+  includeIntentSignals: true
+}
+```
+
+## Deduplication
+
+### Matching Strategy
+
+```typescript
+deduplication: {
+  primary: "email",      // First try email
+  secondary: "phone",    // Then phone
+  tertiary: "name+company", // Last resort
+  caseSensitive: false
+}
+```
+
+### Handling Duplicates
+
+| Scenario | Action |
+|----------|--------|
+| Email match found | Update existing record |
+| Phone match (no email) | Link or update |
+| Name+Company match | Flag for review |
+| No match | Create new record |
+
+## Sync Status
+
+Track sync status for each lead:
+
+| Status | Meaning |
+|--------|---------|
+| **Pending** | Queued for sync |
+| **Syncing** | Currently processing |
+| **Synced** | Successfully pushed |
+| **Updated** | Existing record updated |
+| **Error** | Sync failed |
+| **Skipped** | Did not meet criteria |
+
+### Error Handling
+
+When sync fails:
+
+1. Error logged with details
+2. Lead marked with error status
+3. Retry scheduled (if transient)
+4. Alert sent (if configured)
+
+## Custom Fields
+
+### Creating Custom Fields
+
+In HubSpot:
+
+1. Go to HubSpot → Settings → Properties
+2. Create new property
+3. Map in Emanate settings
+
+In Salesforce:
+
+1. Go to Salesforce → Setup → Fields
+2. Create custom field
+3. Map in Emanate settings
+
+### Mapping Custom Fields
+
+```typescript
+customFieldMapping: {
+  "icpScore": "hubspot.icp_score",
+  "conversationId": "hubspot.emanate_conversation_id",
+  "sourceAgent": "hubspot.emanate_agent"
+}
+```
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Sync failing with auth error">
+    - Re-authorize CRM connection
+    - Check OAuth token hasn't expired
+    - Verify API permissions
+  </Accordion>
+  <Accordion title="Duplicate records created">
+    - Review deduplication settings
+    - Check field mapping for email
+    - Verify data quality
+  </Accordion>
+  <Accordion title="Fields not syncing">
+    - Verify field mapping is complete
+    - Check field types match
+    - Look for required fields in CRM
+  </Accordion>
+</AccordionGroup>
+
+## Best Practices
+
+### Map Essential Fields
+
+<Tip>
+  At minimum, map: name, email, phone, company, and a conversation reference. Add ICP score if your CRM supports it.
+</Tip>
+
+### Handle Existing Records
+
+Decide your merge strategy:
+- **Update**: Overwrite with new data
+- **Append**: Add notes without changing fields
+- **Skip**: Don't modify existing records
+
+### Monitor Sync Health
+
+Regularly check:
+- Sync success rate
+- Error frequency
+- Duplicate rate
+- Data quality
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="CRM Integration" icon="database" href="/integrations/crm">
+    Detailed CRM setup
+  </Card>
+  <Card title="Lead Enrichment" icon="sparkles" href="/leads/enrichment">
+    Enrich before sync
+  </Card>
+  <Card title="ICP Scoring" icon="target" href="/leads/icp-scoring">
+    Score leads first
+  </Card>
+  <Card title="Analytics" icon="chart-bar" href="/analytics/overview">
+    Track lead metrics
+  </Card>
+</CardGroup>

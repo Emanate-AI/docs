@@ -1,0 +1,235 @@
+---
+title: "Webhooks"
+description: "VAPI webhook handling and custom webhooks"
+---
+
+# Webhooks
+
+Webhooks enable real-time notifications when events occur in Emanate.
+
+## VAPI Webhooks
+
+VAPI sends webhooks for call and chat events.
+
+### Webhook URL
+
+Configure in VAPI dashboard or via assistant settings:
+
+```
+https://your-domain.com/api/webhooks/vapi
+```
+
+### Event Types
+
+| Event | Description |
+|-------|-------------|
+| `assistant-request` | Call started, needs assistant |
+| `function-call` | Tool invocation |
+| `status-update` | Call status changed |
+| `end-of-call-report` | Call completed |
+| `transcript` | Transcript update |
+| `hang` | Call hung up |
+| `speech-update` | Speech detected |
+
+### End-of-Call Report
+
+Sent when a call completes:
+
+```json
+{
+  "message": {
+    "type": "end-of-call-report",
+    "call": {
+      "id": "call_123",
+      "assistantId": "asst_456",
+      "customer": {
+        "number": "+14155551234"
+      },
+      "status": "ended",
+      "startedAt": "2024-02-04T10:00:00Z",
+      "endedAt": "2024-02-04T10:05:32Z",
+      "transcript": "Agent: Hi, thanks for calling...",
+      "recordingUrl": "https://..."
+    },
+    "structuredData": {
+      "leadCapture": {
+        "name": "John Smith",
+        "email": "john@example.com",
+        "company": "Acme Corp"
+      }
+    }
+  }
+}
+```
+
+### Handling Webhooks
+
+```typescript
+// app/api/webhooks/vapi/route.ts
+import { NextRequest, NextResponse } from "next/server";
+
+export async function POST(req: NextRequest) {
+  const body = await req.json();
+  
+  switch (body.message?.type) {
+    case "end-of-call-report":
+      await handleEndOfCall(body.message);
+      break;
+    case "function-call":
+      return handleFunctionCall(body.message);
+    default:
+      console.log("Unhandled event:", body.message?.type);
+  }
+  
+  return NextResponse.json({ success: true });
+}
+```
+
+### Function Call Handling
+
+When an agent invokes a tool:
+
+```json
+{
+  "message": {
+    "type": "function-call",
+    "functionCall": {
+      "name": "check_inventory",
+      "parameters": {
+        "sku": "STL-BEAM-W8",
+        "quantity": 100
+      }
+    }
+  }
+}
+```
+
+Response format:
+
+```json
+{
+  "result": {
+    "available": true,
+    "quantity": 250,
+    "location": "Chicago"
+  }
+}
+```
+
+## Custom Webhooks
+
+Send events to your own endpoints.
+
+### Configure Webhooks
+
+1. Go to **Settings** → **Webhooks**
+2. Click **Add Webhook**
+3. Configure:
+
+| Field | Description |
+|-------|-------------|
+| URL | Your endpoint |
+| Events | Which events to send |
+| Secret | For signature verification |
+
+### Available Events
+
+| Event | Description |
+|-------|-------------|
+| `lead.created` | New lead captured |
+| `lead.enriched` | Enrichment complete |
+| `lead.qualified` | Meets ICP threshold |
+| `lead.synced` | Pushed to CRM |
+| `call.started` | Voice call began |
+| `call.ended` | Voice call completed |
+| `chat.started` | Chat session began |
+| `chat.ended` | Chat session completed |
+| `campaign.started` | Campaign launched |
+| `campaign.completed` | Campaign finished |
+
+### Webhook Payload
+
+```json
+{
+  "event": "lead.created",
+  "timestamp": "2024-02-04T10:30:00Z",
+  "data": {
+    "lead": {
+      "id": "lead_123",
+      "name": "John Smith",
+      "email": "john@example.com",
+      "company": "Acme Corp",
+      "source": "voice",
+      "agentId": "asst_456"
+    }
+  }
+}
+```
+
+### Signature Verification
+
+Verify webhook authenticity:
+
+```typescript
+import crypto from "crypto";
+
+function verifySignature(
+  payload: string,
+  signature: string,
+  secret: string
+): boolean {
+  const expected = crypto
+    .createHmac("sha256", secret)
+    .update(payload)
+    .digest("hex");
+  
+  return crypto.timingSafeEqual(
+    Buffer.from(signature),
+    Buffer.from(expected)
+  );
+}
+
+// In your handler
+export async function POST(req: NextRequest) {
+  const payload = await req.text();
+  const signature = req.headers.get("X-Emanate-Signature");
+  
+  if (!verifySignature(payload, signature!, WEBHOOK_SECRET)) {
+    return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
+  }
+  
+  const body = JSON.parse(payload);
+  // Process webhook...
+}
+```
+
+### Retry Policy
+
+Failed webhooks are retried:
+
+| Attempt | Delay |
+|---------|-------|
+| 1 | Immediate |
+| 2 | 1 minute |
+| 3 | 5 minutes |
+| 4 | 30 minutes |
+| 5 | 2 hours |
+
+### Webhook Logs
+
+View webhook history:
+
+1. Go to **Settings** → **Webhooks**
+2. Click on a webhook
+3. View **Delivery History**
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="API Overview" icon="code" href="/api-reference/overview">
+    API introduction
+  </Card>
+  <Card title="Endpoints" icon="list" href="/api-reference/endpoints">
+    Endpoint reference
+  </Card>
+</CardGroup>

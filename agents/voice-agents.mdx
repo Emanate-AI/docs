@@ -1,0 +1,292 @@
+---
+title: "Voice Agents"
+description: "Creating and configuring AI voice agents for phone calls"
+---
+
+# Voice Agents
+
+Voice agents handle phone calls with natural, human-like conversation. They can answer inbound calls, make outbound calls, qualify leads, and transfer to human agents when needed.
+
+## Creating a Voice Agent
+
+Navigate to **Agents** → **Voice Agents** → **Create Agent**
+
+### Basic Configuration
+
+| Field | Description | Example |
+|-------|-------------|---------|
+| **Name** | Internal identifier | "Sales Assistant" |
+| **First Message** | Opening greeting | "Hi, thanks for calling ABC Materials..." |
+| **System Prompt** | Agent instructions | Role, capabilities, guidelines |
+
+### Model Configuration
+
+Select your LLM provider and model:
+
+```typescript
+model: {
+  provider: "openai",
+  model: "gpt-4o",
+  temperature: 0.7,
+  maxTokens: 2000
+}
+```
+
+**Recommended Settings:**
+
+| Setting | Value | Reason |
+|---------|-------|--------|
+| Temperature | 0.7 | Balanced creativity/consistency |
+| Max Tokens | 2000 | Sufficient for detailed responses |
+
+### Voice Configuration
+
+Configure text-to-speech:
+
+```typescript
+voice: {
+  provider: "cartesia",
+  voiceId: "a167e0f3-df7e-4d52-a9c3-f949145efdab",
+  model: "sonic-3"
+}
+```
+
+**Voice Providers:**
+
+| Provider | Strengths | Best For |
+|----------|-----------|----------|
+| **Cartesia** | Natural, expressive | Most use cases |
+| **ElevenLabs** | Highly realistic | Premium experiences |
+| **Deepgram** | Fast, efficient | High volume |
+| **PlayHT** | Voice cloning | Brand voices |
+
+### Transcriber Configuration
+
+Configure speech-to-text:
+
+```typescript
+transcriber: {
+  provider: "deepgram",
+  model: "nova-3",
+  language: "en"
+}
+```
+
+## Voice Settings
+
+### Interruption Handling
+
+Control how the agent handles being interrupted:
+
+| Setting | Description |
+|---------|-------------|
+| **Allow Interruption** | Caller can interrupt agent mid-sentence |
+| **Interruption Threshold** | Sensitivity to interruptions (0-1) |
+
+### Silence Handling
+
+Configure behavior during silence:
+
+| Setting | Description | Default |
+|---------|-------------|---------|
+| **Max Silence** | Seconds before prompting | 10 |
+| **Silence Message** | What to say after silence | "Are you still there?" |
+
+### End Call Conditions
+
+Define when to end calls:
+
+- **Max Duration**: Maximum call length
+- **Goodbye Detection**: End on "goodbye" phrases
+- **Inactivity Timeout**: End after extended silence
+
+## Phone Numbers
+
+Voice agents need phone numbers to receive/make calls.
+
+### Adding a Phone Number
+
+1. Go to **Phone Numbers** tab in agent editor
+2. Click **Add Phone Number**
+3. Choose:
+   - **Local**: Area code-specific number
+   - **Toll-Free**: 1-800 style number
+
+### Phone Number Settings
+
+| Setting | Description |
+|---------|-------------|
+| **Fallback Number** | Forward calls when agent unavailable |
+| **Voicemail** | Enable/disable voicemail |
+| **Recording** | Record all calls |
+
+## System Prompt Best Practices
+
+### Structure
+
+```markdown
+## Role
+You are [Name], a [role] at [Company].
+
+## Capabilities
+- Answer questions about [products/services]
+- Qualify leads by understanding needs
+- Schedule meetings with sales team
+
+## Guidelines
+- Be professional and helpful
+- Keep responses concise (2-3 sentences)
+- Ask clarifying questions when needed
+
+## Boundaries
+- Don't discuss competitor pricing
+- Don't make commitments on custom orders
+- Transfer to human for complex technical questions
+```
+
+### Including Business DNA
+
+Business DNA is automatically injected into prompts:
+
+```markdown
+## Company Context
+Business: {{businessName}}
+Industry: {{industry}}
+Products: {{productsServices}}
+Target Audience: {{targetAudience}}
+```
+
+## Lead Capture
+
+Enable automatic lead capture:
+
+1. Go to **Overview** tab
+2. Enable **Lead Capture**
+3. Configure fields:
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| Name | Yes | Contact name |
+| Email | No | Email address |
+| Phone | No | Phone number |
+| Company | No | Company name |
+
+The agent will naturally collect this information during conversation.
+
+## Transfer Calls
+
+Set up call transfers to human agents:
+
+1. Go to **Custom Actions** tab
+2. Add **Transfer Tool**
+3. Configure destinations:
+
+```typescript
+{
+  type: "transferCall",
+  destinations: [
+    {
+      type: "phoneNumber",
+      number: "+1234567890",
+      description: "Sales Team"
+    },
+    {
+      type: "sipUri", 
+      uri: "sip:support@company.com",
+      description: "Support Team"
+    }
+  ]
+}
+```
+
+### Transfer Triggers
+
+Configure when to transfer:
+
+- Explicit request: "Let me speak to a human"
+- Complex questions: Technical queries outside scope
+- Escalation: Frustrated customer detection
+
+## Testing Voice Agents
+
+Use the built-in test panel:
+
+1. Click **Test** in agent editor
+2. Click **Start Call** to begin test session
+3. Speak naturally and verify:
+   - First message plays correctly
+   - Agent understands speech
+   - Responses are appropriate
+   - Lead capture works
+
+### Test Scenarios
+
+| Scenario | What to Verify |
+|----------|----------------|
+| Happy path | Basic Q&A flows correctly |
+| Knowledge query | Agent uses knowledge base |
+| Lead capture | Information collected |
+| Transfer request | Handoff triggers |
+| Edge cases | Silence, interruption, unclear speech |
+
+## Advanced Configuration
+
+### Custom Vocabulary
+
+Add industry-specific terms for better recognition:
+
+```typescript
+transcriber: {
+  provider: "deepgram",
+  model: "nova-3",
+  keywords: ["SKU-1234", "polyethylene", "HDPE"]
+}
+```
+
+### Conditional Responses
+
+Use the system prompt for conditional behavior:
+
+```markdown
+## Routing Logic
+- If caller asks about pricing: Collect company info first
+- If caller mentions urgent order: Offer to transfer to sales
+- If after hours: Offer callback scheduling
+```
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Agent doesn't understand speech">
+    - Check transcriber configuration
+    - Add industry terms to keywords
+    - Try a different transcriber model
+  </Accordion>
+  <Accordion title="Voice sounds unnatural">
+    - Adjust voice provider/voice ID
+    - Check speech rate settings
+    - Simplify sentence structures in prompts
+  </Accordion>
+  <Accordion title="Calls disconnecting">
+    - Check max duration settings
+    - Review silence timeout
+    - Verify phone number configuration
+  </Accordion>
+</AccordionGroup>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Knowledge Base" icon="book" href="/agents/knowledge-base">
+    Add context documents
+  </Card>
+  <Card title="Custom Actions" icon="bolt" href="/agents/custom-actions">
+    Add ERP integrations
+  </Card>
+  <Card title="Voice Campaigns" icon="bullhorn" href="/campaigns/voice-campaigns">
+    Run outbound campaigns
+  </Card>
+  <Card title="Testing" icon="flask" href="/agents/testing">
+    Testing best practices
+  </Card>
+</CardGroup>

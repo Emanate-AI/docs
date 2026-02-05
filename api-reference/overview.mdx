@@ -1,0 +1,190 @@
+---
+title: "API Overview"
+description: "Introduction to the Emanate API"
+---
+
+# API Reference
+
+The Emanate API enables programmatic access to leads, agents, campaigns, and analytics.
+
+## Base URL
+
+```
+https://api.emanate.ai/v1
+```
+
+## Authentication
+
+All requests require an API key in the header:
+
+```bash
+curl -H "Authorization: Bearer YOUR_API_KEY" \
+     https://api.emanate.ai/v1/leads
+```
+
+### Getting an API Key
+
+1. Go to **Settings** → **API**
+2. Click **Create API Key**
+3. Name your key and set permissions
+4. Copy the key (shown only once)
+
+### Key Permissions
+
+| Scope | Access |
+|-------|--------|
+| `leads:read` | Read leads |
+| `leads:write` | Create/update leads |
+| `agents:read` | Read agent configs |
+| `agents:write` | Modify agents |
+| `campaigns:read` | Read campaigns |
+| `campaigns:write` | Manage campaigns |
+| `analytics:read` | Access analytics |
+
+## Response Format
+
+All responses are JSON:
+
+### Success Response
+
+```json
+{
+  "success": true,
+  "data": { ... }
+}
+```
+
+### Error Response
+
+```json
+{
+  "success": false,
+  "error": {
+    "code": "INVALID_REQUEST",
+    "message": "Invalid email format"
+  }
+}
+```
+
+## Common Status Codes
+
+| Code | Description |
+|------|-------------|
+| 200 | Success |
+| 201 | Created |
+| 400 | Bad request |
+| 401 | Unauthorized |
+| 403 | Forbidden |
+| 404 | Not found |
+| 429 | Rate limited |
+| 500 | Server error |
+
+## Rate Limits
+
+| Endpoint Type | Limit |
+|---------------|-------|
+| Read (GET) | 1000/min |
+| Write (POST/PUT) | 100/min |
+| Bulk operations | 10/min |
+
+Rate limit headers:
+```
+X-RateLimit-Limit: 1000
+X-RateLimit-Remaining: 998
+X-RateLimit-Reset: 1612345678
+```
+
+## Pagination
+
+List endpoints support pagination:
+
+```bash
+GET /v1/leads?limit=50&offset=100
+```
+
+### Parameters
+
+| Parameter | Default | Max |
+|-----------|---------|-----|
+| limit | 50 | 100 |
+| offset | 0 | - |
+
+### Response
+
+```json
+{
+  "success": true,
+  "data": [...],
+  "pagination": {
+    "total": 500,
+    "limit": 50,
+    "offset": 100,
+    "hasMore": true
+  }
+}
+```
+
+## Filtering
+
+Most list endpoints support filtering:
+
+```bash
+GET /v1/leads?status=qualified&source=voice
+```
+
+## Quick Reference
+
+### Leads
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | /leads | List leads |
+| GET | /leads/:id | Get lead |
+| POST | /leads | Create lead |
+| PUT | /leads/:id | Update lead |
+| DELETE | /leads/:id | Delete lead |
+
+### Agents
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | /agents | List agents |
+| GET | /agents/:id | Get agent |
+| POST | /agents | Create agent |
+| PUT | /agents/:id | Update agent |
+
+### Campaigns
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | /campaigns | List campaigns |
+| GET | /campaigns/:id | Get campaign |
+| POST | /campaigns | Create campaign |
+| POST | /campaigns/:id/start | Start campaign |
+| POST | /campaigns/:id/pause | Pause campaign |
+
+### Analytics
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | /analytics/overview | Dashboard metrics |
+| GET | /analytics/calls | Call metrics |
+| GET | /analytics/leads | Lead metrics |
+
+## SDKs
+
+Official SDKs coming soon:
+- Node.js
+- Python
+- Go
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Webhooks" icon="bell" href="/api-reference/webhooks">
+    Event webhooks
+  </Card>
+  <Card title="Endpoints" icon="code" href="/api-reference/endpoints">
+    Full endpoint reference
+  </Card>
+</CardGroup>

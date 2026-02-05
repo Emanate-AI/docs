@@ -1,0 +1,272 @@
+---
+title: "Automated Lead Qualification"
+description: "Set up AI-powered lead qualification and scoring"
+---
+
+# Automated Lead Qualification
+
+This tutorial shows you how to set up automated lead qualification, from capture to scoring to CRM sync.
+
+**Time:** 25-30 minutes  
+**Prerequisites:** Agent created, Apollo integration (optional)
+
+## What We'll Build
+
+A lead qualification system that:
+- Captures leads from conversations
+- Enriches with Apollo data
+- Scores against your ICP
+- Syncs qualified leads to CRM
+
+## Step 1: Configure Lead Capture
+
+### Enable on Your Agent
+
+1. Open your voice or chat agent
+2. Go to **Overview** tab
+3. Enable **Lead Capture**
+
+### Configure Fields
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| Name | Yes | Contact name |
+| Email | Yes | For enrichment & follow-up |
+| Company | Yes | For company matching |
+| Phone | No | Direct contact |
+| Project Details | No | Custom field |
+
+### Add to System Prompt
+
+```markdown
+## Lead Qualification
+
+During conversations with interested prospects, collect:
+
+### Required Information
+1. **Full Name**: "May I have your name?"
+2. **Email**: "What's the best email for follow-up?"
+3. **Company**: "What company are you with?"
+
+### Qualifying Questions
+Ask to understand their needs:
+- "What type of materials are you looking for?"
+- "What's your project timeline?"
+- "Approximately how much quantity do you need?"
+- "Are you the decision-maker for this purchase?"
+
+### Collection Approach
+- Be conversational, not interrogative
+- Explain why you're asking ("So I can send you relevant information...")
+- Don't pressure if they decline
+```
+
+## Step 2: Set Up Lead Enrichment
+
+### Connect Apollo
+
+1. Go to **Settings** → **Integrations** → **Apollo**
+2. Enter your API key
+3. Click **Connect**
+
+### Configure Auto-Enrichment
+
+```yaml
+Enrichment:
+  trigger: on_capture
+  min_confidence: 0.7
+  fields:
+    - title
+    - seniority
+    - company_size
+    - industry
+    - linkedin_url
+```
+
+## Step 3: Define Your ICP
+
+### Access ICP Settings
+
+1. Go to **Settings** → **Leads** → **ICP Configuration**
+
+### Define Criteria
+
+#### Company Criteria
+
+| Criterion | Target Values | Weight |
+|-----------|---------------|--------|
+| Industry | Manufacturing, Construction | 25% |
+| Company Size | 100-5000 employees | 20% |
+| Revenue | $10M-500M | 15% |
+| Location | United States | 10% |
+
+#### Role Criteria
+
+| Criterion | Target Values | Weight |
+|-----------|---------------|--------|
+| Title Level | VP, Director, Manager | 15% |
+| Department | Operations, Procurement, Engineering | 10% |
+| Seniority | Executive, Senior | 10% |
+
+### Set Intent Signals
+
+| Signal | Points |
+|--------|--------|
+| Requested pricing | +10 |
+| Mentioned timeline | +10 |
+| Budget confirmed | +15 |
+| Requested meeting | +20 |
+| Decision-maker | +15 |
+
+## Step 4: Configure Scoring Thresholds
+
+### Score Tiers
+
+| Score | Tier | Action |
+|-------|------|--------|
+| 80-100 | Hot | Immediate sales follow-up |
+| 60-79 | Warm | Standard nurturing |
+| 40-59 | Cool | Marketing sequence |
+| 0-39 | Cold | Low priority |
+
+### Automated Actions
+
+```yaml
+Actions:
+  hot_lead:
+    score_min: 80
+    actions:
+      - sync_to_crm
+      - notify_sales
+      - priority_flag
+  
+  warm_lead:
+    score_min: 60
+    score_max: 79
+    actions:
+      - sync_to_crm
+      - add_to_nurture
+  
+  cool_lead:
+    score_max: 59
+    actions:
+      - add_to_marketing
+```
+
+## Step 5: Connect CRM
+
+### Set Up Integration
+
+1. Go to **Settings** → **Integrations** → **CRM**
+2. Click **Connect CRM**
+3. Select HubSpot or Salesforce
+4. Authorize access
+
+### Configure Sync Rules
+
+```yaml
+Sync:
+  trigger: on_qualify
+  min_score: 60
+  create_company: true
+  include_notes: true
+  custom_fields:
+    icp_score: hubspot.icp_score
+    source: hubspot.lead_source
+```
+
+## Step 6: Test the Flow
+
+### Test Lead Capture
+
+1. Open agent test panel
+2. Simulate a conversation:
+
+```
+Agent: "Hi, thanks for calling! How can I help?"
+You: "I'm interested in getting a quote for steel beams"
+Agent: "I'd be happy to help. May I have your name?"
+You: "John Smith"
+Agent: "And what company are you with, John?"
+You: "Acme Manufacturing"
+Agent: "Great! What's the best email to send quote info?"
+You: "john@acme-mfg.com"
+```
+
+3. Verify lead appears in **Leads** list
+
+### Verify Enrichment
+
+1. Open the captured lead
+2. Check enrichment status
+3. Verify fields populated:
+   - Title
+   - Company size
+   - Industry
+
+### Check ICP Score
+
+1. View lead detail
+2. Check ICP Score breakdown:
+   - Company fit
+   - Role fit
+   - Intent signals
+
+### Verify CRM Sync
+
+1. Check lead has CRM ID
+2. Open your CRM
+3. Verify contact/company created
+4. Check note with conversation summary
+
+## Step 7: Monitor & Optimize
+
+### Track Metrics
+
+| Metric | Target |
+|--------|--------|
+| Capture Rate | > 40% of conversations |
+| Enrichment Rate | > 85% of leads |
+| Qualification Rate | > 60% meet threshold |
+| Sync Success | > 98% |
+
+### Optimize ICP
+
+After 2-4 weeks:
+
+1. Export closed/won deals
+2. Analyze common traits
+3. Adjust ICP weights
+4. Re-evaluate scores
+
+## Full Pipeline Visualization
+
+```
+┌─────────────┐     ┌─────────────┐     ┌─────────────┐
+│ Conversation│────►│   Capture   │────►│   Enrich    │
+│   (Agent)   │     │   (Auto)    │     │  (Apollo)   │
+└─────────────┘     └─────────────┘     └─────────────┘
+                                               │
+                                               ▼
+┌─────────────┐     ┌─────────────┐     ┌─────────────┐
+│     CRM     │◄────│   Qualify   │◄────│    Score    │
+│ (HubSpot)   │     │   (Rules)   │     │   (ICP)     │
+└─────────────┘     └─────────────┘     └─────────────┘
+```
+
+## What's Next?
+
+<CardGroup cols={2}>
+  <Card title="ICP Scoring" icon="target" href="/leads/icp-scoring">
+    Advanced scoring configuration
+  </Card>
+  <Card title="CRM Integration" icon="database" href="/integrations/crm">
+    Deep CRM setup
+  </Card>
+  <Card title="Analytics" icon="chart-bar" href="/analytics/insights">
+    Lead analytics
+  </Card>
+  <Card title="Campaigns" icon="bullhorn" href="/tutorials/outbound-campaign">
+    Outbound campaigns
+  </Card>
+</CardGroup>

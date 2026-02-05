@@ -1,0 +1,173 @@
+---
+title: "Agents Overview"
+description: "Understanding AI agents in Emanate"
+---
+
+# AI Agents Overview
+
+Agents are the core of Emanate — AI-powered assistants that handle customer conversations autonomously across voice and chat channels.
+
+## Agent Types
+
+<CardGroup cols={3}>
+  <Card title="Voice Agents" icon="phone" href="/agents/voice-agents">
+    Handle phone calls with natural conversation
+  </Card>
+  <Card title="Chat Agents" icon="message" href="/agents/chat-agents">
+    Website chat widgets for visitor engagement
+  </Card>
+  <Card title="Workflow Squads" icon="users" href="/agents/workflow-squads">
+    Multi-agent orchestration for complex flows
+  </Card>
+</CardGroup>
+
+## How Agents Work
+
+Every agent is built on four pillars:
+
+### 1. Language Model
+
+The LLM powers the agent's understanding and responses:
+
+| Provider | Models | Best For |
+|----------|--------|----------|
+| OpenAI | GPT-4o, GPT-4o-mini | General purpose, fast responses |
+| Anthropic | Claude 3.5 Sonnet | Complex reasoning, nuanced responses |
+| Google | Gemini Pro | Multimodal, technical queries |
+| Groq | LLaMA 3.1 | Ultra-fast responses |
+
+### 2. System Prompt
+
+The system prompt defines agent behavior:
+
+```
+You are a sales assistant for [Company], a leading provider of 
+industrial materials. Your role is to:
+- Answer questions about our products
+- Qualify leads by understanding their needs
+- Schedule meetings with sales representatives
+
+Always be professional, helpful, and knowledgeable about our 
+product catalog.
+```
+
+### 3. Knowledge Base
+
+Documents that provide context:
+
+- Product catalogs
+- FAQ documents
+- Sales materials
+- Technical specifications
+
+### 4. Tools
+
+Custom actions the agent can perform:
+
+- **Function Tools**: Custom API calls (ERP lookup, pricing)
+- **Transfer Tools**: Hand off to human agents
+- **SMS Tools**: Send text messages
+- **Calendar Tools**: Book meetings
+
+## Agent Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                        Agent Configuration                       │
+├─────────────────────────────────────────────────────────────────┤
+│  System Prompt        Business DNA + Custom Instructions         │
+├─────────────────────────────────────────────────────────────────┤
+│  Model                OpenAI / Anthropic / Google / Groq         │
+├─────────────────────────────────────────────────────────────────┤
+│  Voice (if voice)     Cartesia / ElevenLabs / Deepgram           │
+├─────────────────────────────────────────────────────────────────┤
+│  Knowledge Base       Documents for context                      │
+├─────────────────────────────────────────────────────────────────┤
+│  Tools                Functions, transfers, SMS                  │
+├─────────────────────────────────────────────────────────────────┤
+│  Structured Outputs   Lead capture, conversation metrics         │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+## Creating an Agent
+
+<Steps>
+  <Step title="Choose Agent Type">
+    Select Voice Agent, Chat Agent, or Workflow Squad
+  </Step>
+  <Step title="Configure Basics">
+    Set name, first message, and system prompt
+  </Step>
+  <Step title="Select Model & Voice">
+    Choose LLM provider and voice (for voice agents)
+  </Step>
+  <Step title="Add Knowledge">
+    Upload documents for context
+  </Step>
+  <Step title="Configure Tools">
+    Add custom actions as needed
+  </Step>
+  <Step title="Enable Lead Capture">
+    Configure structured outputs for data collection
+  </Step>
+  <Step title="Test & Deploy">
+    Verify in test panel, then go live
+  </Step>
+</Steps>
+
+## Best Practices
+
+### System Prompts
+
+<Tip>
+  **Keep prompts focused.** Define the agent's role clearly and list specific capabilities. Avoid overloading with too many instructions.
+</Tip>
+
+```markdown
+# Good
+You are a product specialist for ABC Materials. Help customers 
+find the right materials for their projects.
+
+# Avoid
+You are an AI assistant that can help with anything including 
+products, support, billing, HR questions, weather...
+```
+
+### Knowledge Base
+
+- **Start small**: Begin with your FAQ and top 10 product documents
+- **Keep updated**: Refresh documents when products change
+- **Structure clearly**: Use headers and bullet points in documents
+
+### Testing
+
+- Test with real customer scenarios
+- Verify knowledge base queries work
+- Check lead capture extracts data correctly
+- Test edge cases (hang-ups, silence, unclear questions)
+
+## Agent Lifecycle
+
+| Status | Description |
+|--------|-------------|
+| **Draft** | Agent being configured, not active |
+| **Active** | Agent is live and handling conversations |
+| **Paused** | Temporarily disabled |
+| **Archived** | No longer in use |
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Voice Agents" icon="phone" href="/agents/voice-agents">
+    Create phone-based AI agents
+  </Card>
+  <Card title="Chat Agents" icon="message" href="/agents/chat-agents">
+    Build website chat widgets
+  </Card>
+  <Card title="Knowledge Base" icon="book" href="/agents/knowledge-base">
+    Manage agent knowledge
+  </Card>
+  <Card title="Custom Actions" icon="bolt" href="/agents/custom-actions">
+    Add ERP and CRM integrations
+  </Card>
+</CardGroup>

@@ -1,0 +1,126 @@
+{
+  "$schema": "https://mintlify.com/schema.json",
+  "name": "Emanate",
+  "logo": {
+    "dark": "/logo/dark.svg",
+    "light": "/logo/light.svg"
+  },
+  "favicon": "/favicon.svg",
+  "colors": {
+    "primary": "#6366F1",
+    "light": "#818CF8",
+    "dark": "#4F46E5"
+  },
+  "topbarLinks": [
+    { "name": "Dashboard", "url": "https://app.emanate.ai" }
+  ],
+  "topbarCtaButton": {
+    "name": "Get Started",
+    "url": "https://app.emanate.ai/signup"
+  },
+  "anchors": [
+    { "name": "API Reference", "icon": "code", "url": "api-reference" },
+    { "name": "Changelog", "icon": "list", "url": "about/release-notes" }
+  ],
+  "navigation": [
+    {
+      "group": "Getting Started",
+      "pages": [
+        "introduction",
+        "getting-started/welcome",
+        "getting-started/quickstart",
+        "getting-started/onboarding",
+        "getting-started/concepts"
+      ]
+    },
+    {
+      "group": "Agents",
+      "pages": [
+        "agents/overview",
+        "agents/voice-agents",
+        "agents/chat-agents",
+        "agents/workflow-squads",
+        "agents/knowledge-base",
+        "agents/custom-actions",
+        "agents/testing"
+      ]
+    },
+    {
+      "group": "Campaigns",
+      "pages": [
+        "campaigns/overview",
+        "campaigns/voice-campaigns",
+        "campaigns/monitoring"
+      ]
+    },
+    {
+      "group": "Leads",
+      "pages": [
+        "leads/overview",
+        "leads/capture",
+        "leads/enrichment",
+        "leads/icp-scoring",
+        "leads/crm-sync"
+      ]
+    },
+    {
+      "group": "Analytics",
+      "pages": [
+        "analytics/overview",
+        "analytics/call-logs",
+        "analytics/chat-logs",
+        "analytics/evaluations",
+        "analytics/insights"
+      ]
+    },
+    {
+      "group": "Integrations",
+      "pages": [
+        "integrations/overview",
+        "integrations/crm",
+        "integrations/email",
+        "integrations/calendar",
+        "integrations/erp"
+      ]
+    },
+    {
+      "group": "Engineering",
+      "pages": [
+        "engineering/architecture",
+        "engineering/vapi-integration",
+        "engineering/data-flow",
+        "engineering/business-dna",
+        "engineering/security"
+      ]
+    },
+    {
+      "group": "Tutorials",
+      "pages": [
+        "tutorials/first-voice-agent",
+        "tutorials/embed-chat-widget",
+        "tutorials/lead-qualification",
+        "tutorials/outbound-campaign"
+      ]
+    },
+    {
+      "group": "API Reference",
+      "pages": [
+        "api-reference/overview",
+        "api-reference/webhooks",
+        "api-reference/endpoints"
+      ]
+    },
+    {
+      "group": "About",
+      "pages": [
+        "about/overview",
+        "about/release-notes",
+        "about/roadmap"
+      ]
+    }
+  ],
+  "footerSocials": {
+    "linkedin": "https://linkedin.com/company/emanate",
+    "twitter": "https://twitter.com/emanate"
+  }
+}

@@ -1,0 +1,138 @@
+---
+title: "Integrations Overview"
+description: "Connect Emanate to your existing tools"
+---
+
+# Integrations Overview
+
+Emanate integrates with your existing tools to create a seamless workflow from conversation to conversion.
+
+## Available Integrations
+
+<CardGroup cols={2}>
+  <Card title="CRM" icon="database" href="/integrations/crm">
+    HubSpot, Salesforce via Merge
+  </Card>
+  <Card title="Email" icon="envelope" href="/integrations/email">
+    Resend for transactional email
+  </Card>
+  <Card title="Calendar" icon="calendar" href="/integrations/calendar">
+    Calendly, Cal.com integration
+  </Card>
+  <Card title="ERP" icon="building" href="/integrations/erp">
+    Custom ERP connections
+  </Card>
+</CardGroup>
+
+## Integration Categories
+
+### Data Enrichment
+
+| Service | Purpose |
+|---------|---------|
+| **Apollo.io** | Contact & company enrichment |
+
+### CRM Systems
+
+| Service | Purpose |
+|---------|---------|
+| **HubSpot** | Contact, company, deal sync |
+| **Salesforce** | Lead, account, opportunity sync |
+| **Pipedrive** | Contact, deal management |
+
+### Communication
+
+| Service | Purpose |
+|---------|---------|
+| **Resend** | Transactional email |
+| **Twilio** | SMS (via VAPI) |
+
+### Scheduling
+
+| Service | Purpose |
+|---------|---------|
+| **Calendly** | Meeting scheduling |
+| **Cal.com** | Open-source scheduling |
+
+### Voice Platform
+
+| Service | Purpose |
+|---------|---------|
+| **VAPI** | Voice AI platform (core) |
+
+## Setting Up Integrations
+
+### General Process
+
+1. Navigate to **Settings** → **Integrations**
+2. Find the integration you need
+3. Click **Connect**
+4. Authorize via OAuth or enter API key
+5. Configure settings
+
+### Authentication Types
+
+| Type | Used By |
+|------|---------|
+| **OAuth 2.0** | HubSpot, Salesforce, Calendly |
+| **API Key** | Apollo, Resend |
+| **Merge Link** | CRM via Merge.dev |
+
+## Integration Status
+
+| Status | Meaning |
+|--------|---------|
+| 🟢 Connected | Working normally |
+| 🟡 Needs Attention | Action required |
+| 🔴 Disconnected | Not connected or errored |
+
+## Data Flow
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                        Emanate                                   │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│   Conversation → Lead Capture → Enrichment → CRM Sync           │
+│        │              │              │            │              │
+│        ▼              ▼              ▼            ▼              │
+│     [VAPI]      [Internal]     [Apollo]    [HubSpot]            │
+│                                              [Salesforce]        │
+│                                                                  │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+## Webhooks
+
+Send data to custom endpoints:
+
+```typescript
+webhooks: [
+  {
+    event: "lead.created",
+    url: "https://your-api.com/webhook",
+    headers: { "X-API-Key": "{{API_KEY}}" }
+  }
+]
+```
+
+### Available Events
+
+| Event | Trigger |
+|-------|---------|
+| `lead.created` | New lead captured |
+| `lead.enriched` | Lead enrichment complete |
+| `lead.qualified` | Lead meets ICP threshold |
+| `call.ended` | Voice call completed |
+| `chat.ended` | Chat session completed |
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="CRM Integration" icon="database" href="/integrations/crm">
+    Connect your CRM
+  </Card>
+  <Card title="Email Setup" icon="envelope" href="/integrations/email">
+    Configure email
+  </Card>
+</CardGroup>

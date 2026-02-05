@@ -1,0 +1,302 @@
+---
+title: "Lead Capture"
+description: "Capturing lead information from AI agent conversations"
+---
+
+# Lead Capture
+
+Lead capture automatically extracts contact information from AI agent conversations, creating structured lead records without manual data entry.
+
+## How It Works
+
+```
+Customer: "I'm John Smith from Acme Corp, interested in steel beams"
+                    │
+                    ▼
+┌─────────────────────────────────────────────────────────────────┐
+│ Structured Output extracts:                                      │
+│ - name: "John Smith"                                             │
+│ - company: "Acme Corp"                                           │
+│ - interest: "steel beams"                                        │
+└─────────────────────────────────────────────────────────────────┘
+                    │
+                    ▼
+Lead record created in database
+```
+
+## Enabling Lead Capture
+
+### Per-Agent Configuration
+
+1. Open agent editor
+2. Go to **Overview** tab
+3. Toggle **Lead Capture** on
+4. Configure fields
+
+### Capture Fields
+
+| Field | Description | Default |
+|-------|-------------|---------|
+| **Name** | Contact name | Required |
+| **Email** | Email address | Optional |
+| **Phone** | Phone number | Optional |
+| **Company** | Organization | Optional |
+| **Title** | Job title | Optional |
+
+### Custom Fields
+
+Add fields specific to your business:
+
+```typescript
+customFields: [
+  {
+    name: "project_timeline",
+    description: "When they need the product",
+    type: "string"
+  },
+  {
+    name: "budget_range",
+    description: "Estimated budget",
+    type: "string"
+  },
+  {
+    name: "product_interest",
+    description: "Which products interested in",
+    type: "array"
+  }
+]
+```
+
+## Structured Outputs
+
+Lead capture uses VAPI's structured outputs feature:
+
+### Schema Configuration
+
+```typescript
+structuredOutput: {
+  type: "lead_capture",
+  schema: {
+    type: "object",
+    properties: {
+      name: {
+        type: "string",
+        description: "The contact's full name"
+      },
+      email: {
+        type: "string",
+        description: "The contact's email address"
+      },
+      company: {
+        type: "string",
+        description: "The contact's company or organization"
+      },
+      projectDetails: {
+        type: "string",
+        description: "What they're looking for"
+      }
+    },
+    required: ["name"]
+  }
+}
+```
+
+### Extraction Behavior
+
+The agent naturally collects information during conversation:
+
+```
+Agent: "Thanks for your interest! May I have your name?"
+Customer: "John Smith"
+Agent: "Nice to meet you John. And what company are you with?"
+Customer: "Acme Corporation"
+Agent: "Great. What's the best email to send information to?"
+Customer: "john@acme.com"
+```
+
+## Capture Strategies
+
+### Immediate Collection
+
+Collect information at the start:
+
+```markdown
+## Lead Capture
+At the beginning of the call, collect:
+1. Name
+2. Company
+3. Email
+
+Be natural: "Before we dive in, let me grab your details..."
+```
+
+### Contextual Collection
+
+Collect during natural conversation:
+
+```markdown
+## Lead Capture
+Collect information naturally during the conversation:
+- When they mention their company, note it
+- When ready to send info, ask for email
+- When discussing follow-up, ask for phone
+```
+
+### End-of-Call Collection
+
+Collect before ending:
+
+```markdown
+## Lead Capture
+Before ending the call:
+1. Summarize what was discussed
+2. Offer to send more information
+3. Collect email to send materials
+4. Confirm best phone for callback
+```
+
+## System Prompt Instructions
+
+Guide the agent on lead capture:
+
+```markdown
+## Lead Collection Guidelines
+
+### Required Information
+Always collect before ending a productive call:
+- Full name
+- Email address
+- Company name
+
+### How to Ask
+Be conversational, not interrogative:
+- ❌ "What is your email address?"
+- ✅ "What's the best email to send that information to?"
+
+### When to Collect
+- After establishing rapport
+- When offering to send information
+- Before scheduling a follow-up
+
+### If They Decline
+If they don't want to share information:
+- Don't pressure
+- Offer general website/phone as alternative
+- Note in conversation for context
+```
+
+## Validation
+
+### Email Validation
+
+```typescript
+validation: {
+  email: {
+    format: "email",
+    domains: ["!gmail.com", "!yahoo.com"],  // Block personal emails
+    required: false
+  }
+}
+```
+
+### Phone Validation
+
+```typescript
+validation: {
+  phone: {
+    format: "e164",
+    country: ["US", "CA"],
+    required: false
+  }
+}
+```
+
+## Lead Quality Indicators
+
+Track capture quality:
+
+| Indicator | Description |
+|-----------|-------------|
+| **Completeness** | % of fields filled |
+| **Accuracy** | Validation pass rate |
+| **Business Email** | % with business domain |
+| **Phone Valid** | % with valid phone |
+
+## Viewing Captured Leads
+
+### Lead List
+
+Navigate to **Leads** to see all captured leads:
+
+- Filter by date, source, status
+- Search by name, company, email
+- Sort by capture date, score
+
+### Lead Detail
+
+Click a lead to see:
+
+- All captured fields
+- Source conversation transcript
+- Enrichment data (if enabled)
+- ICP score
+- CRM sync status
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Lead not being captured">
+    - Verify lead capture is enabled on agent
+    - Check structured output configuration
+    - Review conversation for information shared
+    - Test with explicit information
+  </Accordion>
+  <Accordion title="Incomplete data">
+    - Review agent prompt for collection instructions
+    - Check if caller declined to share
+    - Add prompts for missing fields
+  </Accordion>
+  <Accordion title="Duplicate leads">
+    - Deduplication runs on email
+    - Multiple calls from same number merge
+    - Check lead merge settings
+  </Accordion>
+</AccordionGroup>
+
+## Best Practices
+
+### Be Natural
+
+<Tip>
+  Train agents to collect information conversationally. Rapid-fire questions feel like interrogation and reduce completion rates.
+</Tip>
+
+### Explain Why
+
+Give reasons for collecting information:
+- "So I can email you the pricing sheet..."
+- "To have our specialist call you back..."
+
+### Handle Resistance
+
+Some callers won't share information:
+- Don't insist multiple times
+- Offer alternatives (website, general line)
+- Still provide value without data
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Lead Enrichment" icon="sparkles" href="/leads/enrichment">
+    Enrich with Apollo data
+  </Card>
+  <Card title="ICP Scoring" icon="target" href="/leads/icp-scoring">
+    Score lead quality
+  </Card>
+  <Card title="CRM Sync" icon="refresh" href="/leads/crm-sync">
+    Push to CRM
+  </Card>
+  <Card title="Voice Agents" icon="phone" href="/agents/voice-agents">
+    Agent configuration
+  </Card>
+</CardGroup>

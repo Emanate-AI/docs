@@ -1,0 +1,198 @@
+---
+title: "Call Logs"
+description: "Voice call history and transcripts"
+---
+
+# Call Logs
+
+Call logs provide complete history of all voice conversations, including transcripts, recordings, and metadata.
+
+## Accessing Call Logs
+
+Navigate to **Analytics** → **Call Logs**
+
+## Call List
+
+The call list shows all voice conversations:
+
+| Column | Description |
+|--------|-------------|
+| **Date/Time** | When the call occurred |
+| **Caller** | Phone number or name |
+| **Agent** | AI agent that handled call |
+| **Duration** | Call length |
+| **Outcome** | Result (completed, voicemail, etc.) |
+| **Lead** | Lead captured (if any) |
+
+### Filtering
+
+Filter calls by:
+
+- Date range
+- Agent
+- Outcome
+- Duration (min/max)
+- Has lead
+- Has recording
+
+### Sorting
+
+Sort by any column, default is most recent first.
+
+## Call Detail View
+
+Click a call to see full details:
+
+### Overview Tab
+
+- Call ID
+- Date/time
+- Duration
+- Agent
+- Phone number
+- Outcome
+- Lead (if captured)
+
+### Transcript Tab
+
+Full conversation transcript:
+
+```
+[00:00] Agent: "Hi, thanks for calling ABC Materials. How can I help you today?"
+[00:03] Caller: "Hi, I'm looking for pricing on steel beams."
+[00:06] Agent: "I'd be happy to help with that. Do you have a specific size or grade in mind?"
+[00:10] Caller: "W8x31 beams, about 500 linear feet."
+...
+```
+
+#### Transcript Features
+
+- Timestamped messages
+- Speaker identification
+- Search within transcript
+- Copy full transcript
+
+### Recording Tab
+
+If recording is enabled:
+
+- Play/pause controls
+- Speed adjustment (0.5x - 2x)
+- Download option
+- Waveform visualization
+
+### Analysis Tab
+
+AI-generated analysis:
+
+- Conversation summary
+- Key topics discussed
+- Sentiment throughout call
+- Intent signals detected
+- Suggested follow-up actions
+
+### Lead Tab
+
+If lead was captured:
+
+- All captured fields
+- Enrichment data
+- ICP score
+- CRM sync status
+
+## Call Outcomes
+
+| Outcome | Description |
+|---------|-------------|
+| **Completed** | Conversation finished normally |
+| **Voicemail** | Left voicemail message |
+| **No Answer** | No one picked up |
+| **Busy** | Line was busy |
+| **Failed** | Technical failure |
+| **Transferred** | Handed off to human |
+| **Abandoned** | Caller hung up early |
+
+## Search
+
+Search across all calls:
+
+- By caller phone number
+- By transcript content
+- By lead name/email
+- By call ID
+
+## Bulk Actions
+
+Select multiple calls for:
+
+- Export to CSV
+- Add to campaign list
+- Flag for review
+- Delete
+
+## Call Analytics
+
+### By Agent
+
+| Agent | Calls | Avg Duration | Lead Rate |
+|-------|-------|--------------|-----------|
+| Sales | 523 | 3:45 | 48% |
+| Support | 312 | 5:12 | 12% |
+| General | 189 | 2:30 | 35% |
+
+### By Outcome
+
+```
+Outcome Distribution
+────────────────────────────────────
+Completed    ████████████████  68%
+Transferred  ████░░░░░░░░░░░░  15%
+Voicemail    ███░░░░░░░░░░░░░  10%
+No Answer    ██░░░░░░░░░░░░░░   5%
+Abandoned    █░░░░░░░░░░░░░░░   2%
+```
+
+### Duration Analysis
+
+```
+Call Duration Distribution
+────────────────────────────────────
+0-1 min    ███████░░░░░░░░░  22%
+1-3 min    ██████████████░░  48%
+3-5 min    ██████░░░░░░░░░░  18%
+5-10 min   ███░░░░░░░░░░░░░   9%
+10+ min    █░░░░░░░░░░░░░░░   3%
+```
+
+## Troubleshooting Calls
+
+### Finding Failed Calls
+
+1. Filter by outcome: "Failed"
+2. Review error details
+3. Check agent configuration
+4. Verify phone number setup
+
+### Review Abandoned Calls
+
+1. Filter by outcome: "Abandoned"
+2. Check abandon point in transcript
+3. Analyze patterns
+4. Improve agent responses
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Chat Logs" icon="message" href="/analytics/chat-logs">
+    Chat session history
+  </Card>
+  <Card title="Evaluations" icon="star" href="/analytics/evaluations">
+    Quality scoring
+  </Card>
+  <Card title="Insights" icon="lightbulb" href="/analytics/insights">
+    AI recommendations
+  </Card>
+  <Card title="Voice Agents" icon="phone" href="/agents/voice-agents">
+    Agent configuration
+  </Card>
+</CardGroup>

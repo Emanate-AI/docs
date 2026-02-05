@@ -1,0 +1,402 @@
+---
+title: "Custom Actions"
+description: "Integrating ERP, CRM, and other tools with AI agents"
+---
+
+# Custom Actions
+
+Custom Actions extend your AI agents with the ability to perform real-world tasks — look up inventory, check pricing, book meetings, send emails, and more.
+
+## Overview
+
+Custom Actions are **tools** that agents can invoke during conversations:
+
+```
+Customer: "Do you have 500 units of SKU-1234 in stock?"
+                    │
+                    ▼
+┌─────────────────────────────────────────────────────────────────┐
+│ Agent invokes: check_inventory(sku: "SKU-1234", quantity: 500)  │
+└─────────────────────────────────────────────────────────────────┘
+                    │
+                    ▼
+Agent: "Yes, we have 750 units of SKU-1234 in stock. 
+        Would you like me to place an order?"
+```
+
+## Tool Types
+
+### Function Tools
+
+Custom API calls to your systems:
+
+```typescript
+{
+  type: "function",
+  function: {
+    name: "check_inventory",
+    description: "Check product availability in inventory system",
+    parameters: {
+      type: "object",
+      properties: {
+        sku: { type: "string", description: "Product SKU" },
+        quantity: { type: "number", description: "Requested quantity" }
+      },
+      required: ["sku"]
+    }
+  },
+  server: {
+    url: "https://api.yourcompany.com/inventory"
+  }
+}
+```
+
+### Transfer Call Tools
+
+Hand off calls to human agents:
+
+```typescript
+{
+  type: "transferCall",
+  destinations: [
+    {
+      type: "phoneNumber",
+      number: "+1234567890",
+      description: "Sales Team"
+    },
+    {
+      type: "sipUri",
+      uri: "sip:support@company.com",
+      description: "Support Team"
+    }
+  ]
+}
+```
+
+### SMS Tools
+
+Send text messages:
+
+```typescript
+{
+  type: "sms",
+  function: {
+    name: "send_confirmation",
+    description: "Send order confirmation via SMS"
+  },
+  messages: [
+    {
+      role: "system",
+      content: "Send a confirmation message with order details"
+    }
+  ]
+}
+```
+
+## Creating Custom Actions
+
+### Step 1: Define the Function
+
+Navigate to **Custom Actions** tab → **Add Tool**
+
+```typescript
+{
+  name: "get_pricing",
+  description: "Get current pricing for a product",
+  parameters: {
+    type: "object",
+    properties: {
+      product_id: {
+        type: "string",
+        description: "The product ID or SKU"
+      },
+      quantity: {
+        type: "number",
+        description: "Quantity for volume pricing"
+      }
+    },
+    required: ["product_id"]
+  }
+}
+```
+
+### Step 2: Configure the Server
+
+Set the API endpoint:
+
+```typescript
+server: {
+  url: "https://api.yourcompany.com/pricing",
+  method: "POST",
+  headers: {
+    "Authorization": "Bearer {{PRICING_API_KEY}}",
+    "Content-Type": "application/json"
+  }
+}
+```
+
+### Step 3: Test the Tool
+
+1. Click **Test** in the tool configuration
+2. Enter sample parameters
+3. Verify the response
+
+## Common Integrations
+
+### ERP Systems
+
+| System | Use Case |
+|--------|----------|
+| SAP | Inventory, pricing, orders |
+| Oracle | Customer data, orders |
+| NetSuite | Full ERP integration |
+
+**Example: SAP Inventory Lookup**
+
+```typescript
+{
+  name: "sap_inventory_check",
+  description: "Check inventory levels in SAP",
+  parameters: {
+    type: "object",
+    properties: {
+      material_number: { type: "string" },
+      plant: { type: "string" }
+    }
+  },
+  server: {
+    url: "https://sap-api.company.com/inventory",
+    headers: {
+      "Authorization": "Bearer {{SAP_API_KEY}}"
+    }
+  }
+}
+```
+
+### CRM Systems
+
+| System | Use Case |
+|--------|----------|
+| HubSpot | Contact lookup, deal creation |
+| Salesforce | Lead updates, opportunity tracking |
+
+**Example: HubSpot Contact Lookup**
+
+```typescript
+{
+  name: "lookup_contact",
+  description: "Look up contact information in CRM",
+  parameters: {
+    type: "object",
+    properties: {
+      email: { type: "string" },
+      phone: { type: "string" }
+    }
+  },
+  server: {
+    url: "https://api.hubapi.com/crm/v3/objects/contacts/search",
+    headers: {
+      "Authorization": "Bearer {{HUBSPOT_API_KEY}}"
+    }
+  }
+}
+```
+
+### Calendar Systems
+
+**Example: Book Meeting**
+
+```typescript
+{
+  name: "schedule_meeting",
+  description: "Schedule a meeting with sales team",
+  parameters: {
+    type: "object",
+    properties: {
+      date: { type: "string", description: "Preferred date (YYYY-MM-DD)" },
+      time: { type: "string", description: "Preferred time (HH:MM)" },
+      duration: { type: "number", description: "Duration in minutes" },
+      attendee_email: { type: "string" }
+    }
+  },
+  server: {
+    url: "https://api.calendly.com/scheduled_events",
+    headers: {
+      "Authorization": "Bearer {{CALENDLY_API_KEY}}"
+    }
+  }
+}
+```
+
+## Tool Prompts
+
+Guide the agent on when and how to use tools:
+
+### System Prompt Instructions
+
+```markdown
+## Available Tools
+
+### check_inventory
+Use this tool when customers ask about product availability.
+Always check inventory before quoting delivery times.
+
+### get_pricing
+Use this tool for pricing questions. Requires product_id.
+For volume pricing, include quantity parameter.
+
+### schedule_meeting
+Offer to schedule meetings when:
+- Customer wants a detailed quote
+- Customer has complex requirements
+- Customer explicitly requests a meeting
+```
+
+### Contextual Usage
+
+```markdown
+## Tool Usage Guidelines
+
+1. **Always confirm before actions**: "I can check that for you. One moment..."
+2. **Handle errors gracefully**: "I'm having trouble accessing that. Let me transfer you..."
+3. **Provide context**: "Based on your order of 500 units, the price is..."
+```
+
+## Error Handling
+
+### Timeout Handling
+
+```typescript
+server: {
+  url: "https://api.company.com/endpoint",
+  timeoutSeconds: 10,
+  fallbackMessage: "I'm unable to check that right now. Let me get you to someone who can help."
+}
+```
+
+### Response Validation
+
+```typescript
+{
+  name: "get_pricing",
+  // ...
+  validation: {
+    successPath: "$.success",
+    dataPath: "$.data.price",
+    errorPath: "$.error.message"
+  }
+}
+```
+
+### Retry Configuration
+
+```typescript
+server: {
+  retries: 2,
+  retryDelay: 1000,
+  retryOn: [500, 502, 503]
+}
+```
+
+## Security
+
+### API Key Management
+
+Store API keys securely:
+
+1. Navigate to **Settings** → **Secrets**
+2. Add secret: `PRICING_API_KEY`
+3. Reference in tools: `{{PRICING_API_KEY}}`
+
+<Warning>
+  Never hardcode API keys in tool configurations. Always use secret references.
+</Warning>
+
+### Request Signing
+
+For systems requiring signed requests:
+
+```typescript
+server: {
+  url: "https://api.company.com/endpoint",
+  authentication: {
+    type: "oauth2",
+    clientId: "{{CLIENT_ID}}",
+    clientSecret: "{{CLIENT_SECRET}}",
+    tokenUrl: "https://auth.company.com/token"
+  }
+}
+```
+
+## Testing Tools
+
+### Test Panel
+
+1. Go to **Custom Actions** tab
+2. Click **Test** on a tool
+3. Enter sample parameters
+4. View request/response
+
+### Conversation Testing
+
+1. Open agent test panel
+2. Ask questions that trigger tools
+3. Verify tool invocation in debug view
+
+## Best Practices
+
+### Tool Naming
+
+- Use clear, descriptive names: `check_inventory` not `inv_chk`
+- Use snake_case consistently
+- Group related tools with prefixes: `crm_lookup`, `crm_update`
+
+### Parameter Design
+
+- Make parameters intuitive
+- Provide clear descriptions
+- Set sensible defaults
+- Mark required fields appropriately
+
+### Error Messages
+
+- Provide user-friendly fallbacks
+- Don't expose technical errors
+- Offer alternatives when tools fail
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Tool not being invoked">
+    - Check tool description matches use case
+    - Verify system prompt includes tool instructions
+    - Test with explicit trigger phrases
+  </Accordion>
+  <Accordion title="API errors">
+    - Verify endpoint URL is correct
+    - Check authentication headers
+    - Test endpoint directly with curl/Postman
+  </Accordion>
+  <Accordion title="Slow responses">
+    - Check API endpoint performance
+    - Reduce timeout if endpoint is fast
+    - Add loading messages for long operations
+  </Accordion>
+</AccordionGroup>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="CRM Integration" icon="database" href="/integrations/crm">
+    Connect HubSpot/Salesforce
+  </Card>
+  <Card title="ERP Integration" icon="building" href="/integrations/erp">
+    Connect ERP systems
+  </Card>
+  <Card title="Testing" icon="flask" href="/agents/testing">
+    Test custom actions
+  </Card>
+  <Card title="API Reference" icon="code" href="/api-reference/overview">
+    API documentation
+  </Card>
+</CardGroup>

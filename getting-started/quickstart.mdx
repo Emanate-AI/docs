@@ -1,0 +1,176 @@
+---
+title: "Quickstart"
+description: "Get your first AI agent running in 15 minutes"
+---
+
+# Quickstart Guide
+
+This guide will get you from zero to a working AI agent in 15 minutes.
+
+## Prerequisites
+
+- An Emanate account ([sign up here](https://app.emanate.ai/signup))
+- Your company website URL (for Business DNA extraction)
+
+## Step 1: Complete Onboarding
+
+After signing up, you'll be guided through the onboarding wizard:
+
+<Steps>
+  <Step title="Enter Your Website URL">
+    Emanate automatically extracts your brand context:
+    - Company name and tagline
+    - Products and services
+    - Brand colors and visual style
+    - Industry and target audience
+  </Step>
+  <Step title="Review Business DNA">
+    Verify the extracted information and make any corrections
+  </Step>
+  <Step title="Configure Agent Context">
+    Set the tone and personality for your AI agents
+  </Step>
+</Steps>
+
+<Note>
+  The Business DNA extraction typically completes in 30-60 seconds. This context is used to make all your agents sound authentic to your brand.
+</Note>
+
+## Step 2: Create Your First Agent
+
+Navigate to **Agents** → **Voice Agents** → **Create Agent**
+
+### Basic Configuration
+
+```yaml
+Name: Sales Assistant
+Type: Voice Agent
+First Message: "Hi, thanks for calling [Company]. How can I help you today?"
+```
+
+### Model Selection
+
+Choose your preferred LLM provider:
+
+| Provider | Model | Best For |
+|----------|-------|----------|
+| OpenAI | GPT-4o | General purpose, fast |
+| Anthropic | Claude 3.5 | Complex reasoning |
+| Google | Gemini Pro | Multimodal tasks |
+
+### Voice Selection
+
+Select a voice that matches your brand:
+
+| Provider | Recommended Voices |
+|----------|-------------------|
+| Cartesia | Sonic (natural, conversational) |
+| ElevenLabs | Sarah, Josh (professional) |
+| Deepgram | Aura (fast, efficient) |
+
+## Step 3: Add Knowledge Base
+
+Upload documents to give your agent context:
+
+1. Go to the **Knowledge Base** tab
+2. Click **Upload Documents**
+3. Add your product catalog, FAQ, or sales materials
+
+Supported formats:
+- PDF documents
+- Word documents (.docx)
+- Text files (.txt)
+- Markdown (.md)
+
+<Tip>
+  Start with your FAQ or most common customer questions. You can always add more documents later.
+</Tip>
+
+## Step 4: Configure Lead Capture
+
+Enable automatic lead capture to collect contact information:
+
+1. Go to the **Overview** tab
+2. Enable **Lead Capture**
+3. Select the fields to capture:
+   - Name (required)
+   - Email
+   - Phone
+   - Company
+   - Custom fields
+
+The agent will naturally ask for this information during conversations.
+
+## Step 5: Test Your Agent
+
+Use the built-in test panel to verify your agent works correctly:
+
+1. Click the **Test** button in the agent editor
+2. Start a test call or chat session
+3. Verify:
+   - First message sounds correct
+   - Agent answers questions from knowledge base
+   - Lead capture collects information properly
+
+### Test Checklist
+
+- [ ] First message plays correctly
+- [ ] Agent responds to common questions
+- [ ] Lead information is captured
+- [ ] Handoff triggers work (if configured)
+
+## Step 6: Deploy
+
+Once testing is complete, deploy your agent:
+
+### For Voice Agents
+
+1. Go to **Phone Numbers** tab
+2. Click **Add Phone Number**
+3. Choose local or toll-free
+4. Assign to your agent
+
+Your agent is now live and answering calls!
+
+### For Chat Agents
+
+1. Go to **Widget** tab
+2. Copy the embed code
+3. Add to your website's HTML
+
+```html
+<script src="https://cdn.emanate.ai/widget.js" 
+        data-agent-id="YOUR_AGENT_ID">
+</script>
+```
+
+## What's Next?
+
+<CardGroup cols={2}>
+  <Card title="Voice Agents Deep Dive" icon="phone" href="/agents/voice-agents">
+    Advanced voice configuration
+  </Card>
+  <Card title="Lead Enrichment" icon="sparkles" href="/leads/enrichment">
+    Set up Apollo.io integration
+  </Card>
+  <Card title="CRM Integration" icon="database" href="/leads/crm-sync">
+    Connect to HubSpot or Salesforce
+  </Card>
+  <Card title="Run a Campaign" icon="bullhorn" href="/tutorials/outbound-campaign">
+    Launch your first outbound campaign
+  </Card>
+</CardGroup>
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Agent doesn't respond to questions">
+    Check that your knowledge base documents are uploaded and indexed. Document processing can take 1-2 minutes.
+  </Accordion>
+  <Accordion title="Voice sounds robotic">
+    Try a different voice provider. Cartesia and ElevenLabs typically provide the most natural-sounding voices.
+  </Accordion>
+  <Accordion title="Lead capture not working">
+    Verify lead capture is enabled in the Overview tab and that the structured output is configured correctly.
+  </Accordion>
+</AccordionGroup>

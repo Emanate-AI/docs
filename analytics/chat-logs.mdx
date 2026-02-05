@@ -1,0 +1,152 @@
+---
+title: "Chat Logs"
+description: "Chat session history and conversations"
+---
+
+# Chat Logs
+
+Chat logs provide complete history of all chat widget conversations, including messages, metadata, and lead information.
+
+## Accessing Chat Logs
+
+Navigate to **Analytics** → **Chat Logs**
+
+## Session List
+
+The session list shows all chat conversations:
+
+| Column | Description |
+|--------|-------------|
+| **Date/Time** | When session started |
+| **Visitor** | Name or ID |
+| **Agent** | Chat agent used |
+| **Messages** | Message count |
+| **Duration** | Session length |
+| **Lead** | Lead captured |
+
+### Filtering
+
+Filter sessions by:
+
+- Date range
+- Agent
+- Has lead
+- Message count
+- Duration
+
+## Session Detail View
+
+Click a session to see full details:
+
+### Messages
+
+Full chat history:
+
+```
+Agent (10:32 AM):
+  Hi! How can I help you today?
+
+Visitor (10:32 AM):
+  I'm looking for pricing on your steel products
+
+Agent (10:33 AM):
+  I'd be happy to help! We offer a wide range of steel products.
+  What specific type are you interested in?
+  - Structural steel
+  - Sheet steel  
+  - Steel tubing
+
+Visitor (10:33 AM):
+  Structural steel beams
+```
+
+### Session Info
+
+- Session ID
+- Start/end time
+- Page URL where chat started
+- Visitor location
+- Device type
+
+### Lead Info
+
+If captured:
+- Contact details
+- Enrichment data
+- ICP score
+
+## Chat Analytics
+
+### Message Patterns
+
+```
+Messages per Session
+────────────────────────────────────
+1-5 msgs    ████████████░░░░  45%
+6-10 msgs   ██████████░░░░░░  35%
+11-20 msgs  ████░░░░░░░░░░░░  15%
+20+ msgs    █░░░░░░░░░░░░░░░   5%
+```
+
+### Session Duration
+
+| Range | % of Sessions |
+|-------|---------------|
+| < 1 min | 15% |
+| 1-5 min | 52% |
+| 5-15 min | 28% |
+| 15+ min | 5% |
+
+### Common Topics
+
+AI identifies frequently discussed topics:
+
+1. Pricing inquiries (34%)
+2. Product availability (28%)
+3. Shipping questions (18%)
+4. Technical specs (12%)
+5. Support requests (8%)
+
+## Widget Performance
+
+### By Page
+
+| Page | Sessions | Lead Rate |
+|------|----------|-----------|
+| Homepage | 523 | 12% |
+| Products | 312 | 34% |
+| Pricing | 189 | 48% |
+| Contact | 156 | 52% |
+
+### By Device
+
+| Device | Sessions | Avg Duration |
+|--------|----------|--------------|
+| Desktop | 68% | 4:30 |
+| Mobile | 28% | 2:45 |
+| Tablet | 4% | 3:15 |
+
+## Export
+
+Export chat data:
+
+- CSV: Session metadata
+- JSON: Full messages
+- PDF: Individual transcripts
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Call Logs" icon="phone" href="/analytics/call-logs">
+    Voice call history
+  </Card>
+  <Card title="Evaluations" icon="star" href="/analytics/evaluations">
+    Quality scoring
+  </Card>
+  <Card title="Chat Agents" icon="message" href="/agents/chat-agents">
+    Agent configuration
+  </Card>
+  <Card title="Insights" icon="lightbulb" href="/analytics/insights">
+    AI recommendations
+  </Card>
+</CardGroup>

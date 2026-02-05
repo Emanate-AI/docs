@@ -1,0 +1,192 @@
+---
+title: "System Architecture"
+description: "Technical architecture overview of Emanate"
+---
+
+# System Architecture
+
+Emanate is built on a modern, scalable architecture designed for reliability and performance.
+
+## High-Level Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                         Clients                                  │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐              │
+│  │   Web App   │  │  Chat Widget│  │  Phone/PSTN │              │
+│  └─────────────┘  └─────────────┘  └─────────────┘              │
+└─────────────────────────────────────────────────────────────────┘
+                            │
+                            ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                    Next.js Application                           │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐              │
+│  │   App Router│  │ API Routes  │  │Server Actions│              │
+│  └─────────────┘  └─────────────┘  └─────────────┘              │
+└─────────────────────────────────────────────────────────────────┘
+                            │
+            ┌───────────────┼───────────────┐
+            ▼               ▼               ▼
+┌─────────────────┐ ┌─────────────────┐ ┌─────────────────┐
+│      VAPI       │ │    Supabase     │ │   External      │
+│  (Voice/Chat)   │ │   (Database)    │ │   Services      │
+│                 │ │                 │ │                 │
+│ • Assistants    │ │ • PostgreSQL    │ │ • Apollo.io     │
+│ • Calls         │ │ • Auth          │ │ • Merge.dev     │
+│ • Chats         │ │ • Storage       │ │ • Resend        │
+│ • Phone Numbers │ │ • Realtime      │ │ • Trigger.dev   │
+└─────────────────┘ └─────────────────┘ └─────────────────┘
+```
+
+## Tech Stack
+
+| Layer | Technology |
+|-------|------------|
+| **Framework** | Next.js 14 (App Router) |
+| **Voice AI** | VAPI (@vapi-ai/server-sdk) |
+| **Database** | Supabase (PostgreSQL) |
+| **Auth** | PropelAuth |
+| **Styling** | Tailwind CSS + shadcn/ui |
+| **State** | React Hooks + Server Actions |
+| **Background Jobs** | Trigger.dev |
+
+## Feature-Based Architecture
+
+Code is organized by feature, not by technical layer:
+
+```
+src/
+├── app/                    # Next.js pages & API routes
+│   ├── (protected)/        # Auth-required routes
+│   │   ├── voice-agents/
+│   │   ├── chat-agents/
+│   │   ├── campaigns/
+│   │   └── leads/
+│   └── api/
+│       └── webhooks/       # VAPI webhooks
+│
+├── features/               # Product features
+│   ├── agents/             # Voice & chat agent management
+│   ├── campaigns/          # Outbound calling
+│   ├── leads/              # Lead management
+│   ├── logs/               # Call & chat history
+│   └── metrics/            # Analytics & insights
+│
+├── lib/                    # Shared infrastructure
+│   ├── vapi/               # VAPI integration (4-layer)
+│   ├── supabase/           # Database client
+│   ├── business-dna/       # Brand context system
+│   └── email/              # Email infrastructure
+│
+└── components/             # Shared UI components
+    └── ui/                 # shadcn/ui primitives
+```
+
+### Key Principle
+
+> **Features import from `lib/`, never from each other.**
+
+This keeps features isolated and maintainable.
+
+## Data Flow
+
+### Write Path
+
+```
+UI Component
+    │
+    ▼
+React Hook (useCreateAssistant)
+    │
+    ▼
+Server Action (createAssistantAction)
+    │
+    ├──► VAPI API (create assistant)
+    │         │
+    │         ▼
+    │    Assistant created
+    │
+    └──► Supabase (sync cache)
+              │
+              ▼
+         Cache updated
+```
+
+### Read Path
+
+```
+UI Component
+    │
+    ▼
+React Hook (useAssistants)
+    │
+    ▼
+Server Action (listAssistantsAction)
+    │
+    ▼
+Supabase (query cache)
+    │
+    ▼
+Instant response
+```
+
+## Multi-Tenancy
+
+Emanate supports multi-tenant organizations:
+
+- **Organization ID**: Every record has `org_id`
+- **Row-Level Security**: Supabase RLS enforces isolation
+- **VAPI Metadata**: `org_id` stored in assistant metadata
+
+```sql
+-- Example RLS policy
+CREATE POLICY "Users can only see their org's assistants"
+ON assistants
+FOR SELECT
+USING (org_id = auth.jwt()->>'org_id');
+```
+
+## Background Processing
+
+Trigger.dev handles async tasks:
+
+| Task | Purpose |
+|------|---------|
+| `extract-brand` | Business DNA extraction |
+| `image-agent` | Brand image generation |
+| `enrich-lead` | Apollo enrichment |
+| `sync-crm` | CRM synchronization |
+
+## Deployment
+
+### Environments
+
+| Environment | Purpose |
+|-------------|---------|
+| `development` | Local development |
+| `staging` | Pre-production testing |
+| `production` | Live system |
+
+### Infrastructure
+
+- **Hosting**: Vercel (Next.js)
+- **Database**: Supabase Cloud
+- **Voice**: VAPI Cloud
+- **CDN**: Vercel Edge
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="VAPI Integration" icon="phone" href="/engineering/vapi-integration">
+    4-layer VAPI architecture
+  </Card>
+  <Card title="Data Flow" icon="arrows-rotate" href="/engineering/data-flow">
+    VAPI writes, Supabase reads
+  </Card>
+  <Card title="Business DNA" icon="dna" href="/engineering/business-dna">
+    Brand extraction system
+  </Card>
+  <Card title="Security" icon="shield" href="/engineering/security">
+    Security & compliance
+  </Card>
+</CardGroup>

@@ -1,0 +1,293 @@
+---
+title: "Embed Chat Widget"
+description: "Add an AI chat widget to your website"
+---
+
+# Embed Chat Widget
+
+This tutorial shows you how to add an AI chat widget to your website, enabling 24/7 customer engagement.
+
+**Time:** 15-20 minutes  
+**Prerequisites:** Emanate account, website access
+
+## What We'll Build
+
+A chat widget that:
+- Appears on your website
+- Matches your brand colors
+- Answers visitor questions
+- Captures leads automatically
+
+## Step 1: Create Chat Agent
+
+1. Navigate to **Agents** → **Chat Agents**
+2. Click **Create Agent**
+3. Enter basic information:
+
+| Field | Value |
+|-------|-------|
+| Name | Website Assistant |
+| First Message | "Hi! 👋 I'm here to help you find the right materials for your project. What can I help you with?" |
+
+## Step 2: Configure System Prompt
+
+```markdown
+## Role
+You are a helpful website assistant for ABC Materials. Your job is to:
+- Answer questions about our products and services
+- Help visitors find information on the website
+- Qualify leads and collect contact information
+- Provide a great first impression
+
+## Response Style
+- Keep messages short (1-3 sentences)
+- Use bullet points for lists
+- Include relevant links when helpful
+- Be friendly but professional
+
+## Lead Qualification
+When visitors show buying intent, collect:
+- Name
+- Email
+- Company
+- Project details
+
+## Common Questions
+- Pricing: "Pricing varies by product and quantity. I can help you get a quote!"
+- Shipping: "We ship nationwide. Delivery times depend on your location."
+- Custom orders: "Yes, we handle custom orders. Tell me more about your needs."
+
+## Handoff
+If asked for human assistance:
+"I'd be happy to connect you with our team. Let me get your email so they can reach out."
+```
+
+## Step 3: Configure Widget Appearance
+
+1. Go to **Widget** tab
+2. Set appearance:
+
+```yaml
+Primary Color: #6366F1  # Match your brand
+Position: bottom-right
+Welcome Message: "Need help? Chat with us!"
+Agent Name: Support
+```
+
+3. Add suggested prompts:
+
+```yaml
+Suggested Prompts:
+  - "What products do you offer?"
+  - "How do I get a quote?"
+  - "What are shipping times?"
+```
+
+## Step 4: Add Knowledge Base
+
+1. Go to **Knowledge Base** tab
+2. Upload your documents:
+   - Product information
+   - FAQ
+   - Company info
+
+## Step 5: Enable Lead Capture
+
+1. Go to **Overview** tab
+2. Enable **Lead Capture**
+3. Set capture timing: **Contextual** (during natural conversation)
+
+## Step 6: Test the Widget
+
+1. Click **Test** to open test panel
+2. Test conversations:
+
+```
+You: "What products do you sell?"
+Bot: Should respond with product info from knowledge base
+
+You: "I need a quote for steel beams"
+Bot: Should start collecting lead information
+```
+
+## Step 7: Get Embed Code
+
+1. Go to **Widget** tab
+2. Copy the embed code:
+
+```html
+<script 
+  src="https://cdn.emanate.ai/widget.js" 
+  data-agent-id="YOUR_AGENT_ID"
+  data-primary-color="#6366F1"
+  data-position="bottom-right">
+</script>
+```
+
+## Step 8: Add to Your Website
+
+### Standard HTML
+
+Add before `</body>`:
+
+```html
+<!DOCTYPE html>
+<html>
+<head>...</head>
+<body>
+  <!-- Your content -->
+  
+  <!-- Emanate Chat Widget -->
+  <script 
+    src="https://cdn.emanate.ai/widget.js" 
+    data-agent-id="YOUR_AGENT_ID">
+  </script>
+</body>
+</html>
+```
+
+### WordPress
+
+1. Go to **Appearance** → **Theme Editor**
+2. Edit `footer.php`
+3. Add script before `</body>`
+
+Or use a plugin like "Insert Headers and Footers".
+
+### Shopify
+
+1. Go to **Online Store** → **Themes** → **Edit Code**
+2. Find `theme.liquid`
+3. Add script before `</body>`
+
+### React
+
+```jsx
+// components/Chat.jsx
+import { useEffect } from 'react';
+
+export function ChatWidget() {
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = 'https://cdn.emanate.ai/widget.js';
+    script.setAttribute('data-agent-id', 'YOUR_AGENT_ID');
+    document.body.appendChild(script);
+    
+    return () => document.body.removeChild(script);
+  }, []);
+  
+  return null;
+}
+
+// app.jsx
+import { ChatWidget } from './components/Chat';
+
+function App() {
+  return (
+    <>
+      <YourContent />
+      <ChatWidget />
+    </>
+  );
+}
+```
+
+### Next.js
+
+```jsx
+// app/layout.tsx
+import Script from 'next/script';
+
+export default function RootLayout({ children }) {
+  return (
+    <html>
+      <body>
+        {children}
+        <Script 
+          src="https://cdn.emanate.ai/widget.js"
+          data-agent-id="YOUR_AGENT_ID"
+          strategy="lazyOnload"
+        />
+      </body>
+    </html>
+  );
+}
+```
+
+## Step 9: Verify Installation
+
+1. Visit your website
+2. Look for the chat bubble (bottom-right by default)
+3. Click to open the widget
+4. Test a conversation
+
+## Customization Options
+
+### Widget Parameters
+
+| Parameter | Description |
+|-----------|-------------|
+| `data-agent-id` | Your agent ID (required) |
+| `data-primary-color` | Brand color (hex) |
+| `data-position` | `bottom-right` or `bottom-left` |
+| `data-welcome-message` | Pre-chat message |
+| `data-hide-launcher` | Hide until triggered |
+
+### Advanced: Programmatic Control
+
+```javascript
+// Open widget
+window.EmanateChat.open();
+
+// Close widget
+window.EmanateChat.close();
+
+// Toggle widget
+window.EmanateChat.toggle();
+
+// Send message
+window.EmanateChat.sendMessage("Hello!");
+
+// Set user data
+window.EmanateChat.setUser({
+  name: "John",
+  email: "john@example.com"
+});
+```
+
+## What's Next?
+
+<CardGroup cols={2}>
+  <Card title="Chat Logs" icon="message" href="/analytics/chat-logs">
+    View chat conversations
+  </Card>
+  <Card title="Lead Capture" icon="inbox" href="/leads/capture">
+    Configure lead collection
+  </Card>
+  <Card title="Custom Actions" icon="bolt" href="/agents/custom-actions">
+    Add integrations
+  </Card>
+  <Card title="Analytics" icon="chart-bar" href="/analytics/overview">
+    Track performance
+  </Card>
+</CardGroup>
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Widget doesn't appear">
+    - Check script is loaded (DevTools → Network)
+    - Verify agent ID is correct
+    - Look for JavaScript errors in console
+  </Accordion>
+  <Accordion title="Widget appears but doesn't respond">
+    - Test agent in Emanate dashboard first
+    - Check model configuration
+    - Verify knowledge base is ready
+  </Accordion>
+  <Accordion title="Wrong colors/position">
+    - Check data attributes are set correctly
+    - Clear browser cache
+    - Verify CSS isn't overriding styles
+  </Accordion>
+</AccordionGroup>

@@ -1,0 +1,250 @@
+---
+title: "Insights"
+description: "AI-generated performance insights and recommendations"
+---
+
+# Insights
+
+Insights uses AI to analyze your agent performance and provide actionable recommendations for improvement.
+
+## How Insights Work
+
+Emanate continuously analyzes:
+- Conversation patterns
+- Success/failure rates
+- Customer sentiment
+- Agent responses
+
+And generates:
+- Trend identification
+- Anomaly detection
+- Improvement recommendations
+- Predicted outcomes
+
+## Insights Dashboard
+
+### Performance Summary
+
+Current performance vs. previous period:
+
+| Metric | Current | Previous | Change |
+|--------|---------|----------|--------|
+| Conversations | 4,370 | 3,892 | +12% |
+| Lead Rate | 43% | 38% | +5% |
+| Avg Score | 86.5 | 84.2 | +2.3 |
+| Resolution | 78% | 75% | +3% |
+
+### Key Insights
+
+AI-generated insights displayed as cards:
+
+#### Positive Trends
+
+> **Lead capture rate improved 12%**
+> 
+> Since adding qualifying questions to the sales agent prompt, 
+> lead capture has increased from 38% to 43%. The specific 
+> change that helped was asking about timeline early in calls.
+
+#### Areas for Improvement
+
+> **Support calls averaging 2 minutes longer than benchmark**
+> 
+> Support conversations are running 5:12 on average vs. 3:15 
+> benchmark. Common pattern: agents spending time on issues 
+> that could be resolved with knowledge base updates.
+> 
+> **Recommendation:** Add FAQ content for top 5 support topics.
+
+#### Anomalies Detected
+
+> **Unusual drop in connect rate on Tuesdays**
+> 
+> Tuesday connect rates dropped 15% over the last 3 weeks. 
+> This correlates with a change in calling hours. Consider 
+> adjusting Tuesday schedule to match Monday/Wednesday patterns.
+
+## Insight Categories
+
+### Volume Insights
+
+- Traffic patterns
+- Peak hours
+- Seasonal trends
+- Campaign impact
+
+### Quality Insights
+
+- Score trends
+- Category improvements
+- Common issues
+- Agent comparisons
+
+### Conversion Insights
+
+- Lead capture patterns
+- Qualification rates
+- Successful techniques
+- Drop-off points
+
+### Operational Insights
+
+- Technical issues
+- Response times
+- Error rates
+- System health
+
+## Recommendations
+
+### System Prompt Suggestions
+
+AI suggests prompt improvements:
+
+```markdown
+## Current Prompt Issue
+Agent often misses collecting company name early in calls.
+
+## Suggested Addition
+After greeting, add: "May I ask what company you're calling from? 
+This helps me provide more relevant information."
+
+## Expected Impact
++15% company name capture rate based on similar changes.
+```
+
+### Knowledge Base Gaps
+
+Identify missing content:
+
+```
+Top Questions Without Good Answers
+────────────────────────────────────
+1. "What's the lead time for custom orders?" (23 occurrences)
+2. "Do you ship internationally?" (18 occurrences)
+3. "What's your return policy?" (15 occurrences)
+
+Recommendation: Add FAQ content for these topics.
+```
+
+### Process Improvements
+
+```
+Opportunity: Callback Scheduling
+
+Currently, when callers can't talk, agents say "call back anytime."
+
+Suggestion: Offer to schedule a specific callback time using 
+calendar integration. Similar companies see 40% higher return rate.
+```
+
+## Trend Analysis
+
+### Weekly Trends
+
+```
+Lead Rate Trend (Last 8 Weeks)
+────────────────────────────────────────────────
+W1  ███████████░░░░░░░░░  34%
+W2  ████████████░░░░░░░░  38%
+W3  █████████████░░░░░░░  40%
+W4  █████████████░░░░░░░  41%  ← Prompt update
+W5  ██████████████░░░░░░  43%
+W6  ███████████████░░░░░  46%
+W7  ███████████████░░░░░  45%
+W8  ████████████████░░░░  48%
+```
+
+### Pattern Detection
+
+AI identifies recurring patterns:
+
+- "Mondays have 20% lower scores - agents may need refresher after weekend"
+- "Calls after 4pm have higher abandon rate - consider adjusted staffing"
+- "Product X inquiries convert 2x higher than average"
+
+## Predictive Insights
+
+### Forecasting
+
+```
+Next Month Projections
+────────────────────────────────────
+Conversations:     ~4,800 (+10%)
+Leads Expected:    ~2,100
+Qualified Leads:   ~840
+Meetings Booked:   ~168
+```
+
+### Risk Alerts
+
+```
+⚠️ Warning: Campaign exhaustion predicted
+
+Current outbound list has 2,300 remaining contacts at 
+current pace. List will be exhausted in ~12 days.
+
+Action: Upload additional contacts or reduce pacing.
+```
+
+## Custom Insights
+
+### Define Focus Areas
+
+Tell AI what to analyze:
+
+```typescript
+insightFocus: [
+  "enterprise_lead_conversion",
+  "support_resolution_time",
+  "competitor_mentions"
+]
+```
+
+### Custom Metrics
+
+Track business-specific metrics:
+
+```typescript
+customMetrics: [
+  {
+    name: "Enterprise Lead Rate",
+    filter: { companySize: ">500" },
+    calculate: "leads / conversations"
+  }
+]
+```
+
+## Insight Actions
+
+### One-Click Improvements
+
+Some insights have direct actions:
+
+- **Update Prompt**: Apply suggested prompt change
+- **Add Content**: Create knowledge base article
+- **Adjust Schedule**: Modify campaign timing
+- **Create Alert**: Set up monitoring
+
+### Share Insights
+
+Send insights to stakeholders:
+- Email summary
+- Slack notification
+- PDF report
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Evaluations" icon="star" href="/analytics/evaluations">
+    Quality scoring
+  </Card>
+  <Card title="Call Logs" icon="phone" href="/analytics/call-logs">
+    Review conversations
+  </Card>
+  <Card title="Voice Agents" icon="phone" href="/agents/voice-agents">
+    Apply improvements
+  </Card>
+  <Card title="Campaigns" icon="bullhorn" href="/campaigns/overview">
+    Optimize campaigns
+  </Card>
+</CardGroup>

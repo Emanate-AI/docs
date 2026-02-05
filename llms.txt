@@ -1,0 +1,119 @@
+# Emanate Documentation
+
+> The AI Revenue Engine for Industrial Materials
+
+Emanate provides autonomous AI agents that handle revenue-generating operations for industrial materials companies. This documentation covers setup, configuration, and integration of voice agents, chat agents, lead management, and campaign orchestration.
+
+## Quick Links
+
+- Introduction: /introduction
+- Quickstart Guide: /getting-started/quickstart
+- API Reference: /api-reference/overview
+
+## Core Concepts
+
+### Agents
+AI-powered voice and chat agents that handle customer interactions autonomously.
+- Voice Agents: Phone-based AI agents for inbound/outbound calls
+- Chat Agents: Website embeddable chat widgets
+- Workflow Squads: Multi-agent orchestration for complex workflows
+
+### Leads
+Automated lead capture, enrichment, and CRM synchronization.
+- Lead Capture: Extract contact info from agent conversations
+- Lead Enrichment: Apollo.io integration for company/contact data
+- ICP Scoring: AI-powered ideal customer profile matching
+- CRM Sync: HubSpot/Salesforce integration via Merge
+
+### Campaigns
+Outbound voice campaign management with real-time monitoring.
+- Voice Campaigns: Automated outbound calling
+- Monitoring: Real-time call tracking and alerts
+
+### Analytics
+Comprehensive metrics and conversation insights.
+- Call Logs: Voice call history and transcripts
+- Chat Logs: Chat session history
+- Evaluations: Quality assurance and performance evals
+- Insights: AI-generated performance analysis
+
+## Architecture
+
+Emanate uses a 4-layer VAPI integration:
+1. VAPI Client (SDK wrapper)
+2. Service Layer (business logic)
+3. Server Actions (Next.js)
+4. React Hooks (UI)
+
+Key pattern: "VAPI writes, Supabase reads"
+- All mutations go through VAPI (source of truth)
+- List/detail views read from Supabase cache (fast)
+
+## Tech Stack
+
+- Framework: Next.js 14 (App Router)
+- Voice AI: VAPI (@vapi-ai/server-sdk)
+- Database: Supabase (PostgreSQL)
+- Auth: PropelAuth
+- Styling: Tailwind CSS + shadcn/ui
+
+## File Structure
+
+```
+docs/
+├── introduction.mdx
+├── getting-started/
+│   ├── welcome.mdx
+│   ├── quickstart.mdx
+│   ├── onboarding.mdx
+│   └── concepts.mdx
+├── agents/
+│   ├── overview.mdx
+│   ├── voice-agents.mdx
+│   ├── chat-agents.mdx
+│   ├── workflow-squads.mdx
+│   ├── knowledge-base.mdx
+│   ├── custom-actions.mdx
+│   └── testing.mdx
+├── campaigns/
+│   ├── overview.mdx
+│   ├── voice-campaigns.mdx
+│   └── monitoring.mdx
+├── leads/
+│   ├── overview.mdx
+│   ├── capture.mdx
+│   ├── enrichment.mdx
+│   ├── icp-scoring.mdx
+│   └── crm-sync.mdx
+├── analytics/
+│   ├── overview.mdx
+│   ├── call-logs.mdx
+│   ├── chat-logs.mdx
+│   ├── evaluations.mdx
+│   └── insights.mdx
+├── integrations/
+│   ├── overview.mdx
+│   ├── crm.mdx
+│   ├── email.mdx
+│   ├── calendar.mdx
+│   └── erp.mdx
+├── engineering/
+│   ├── architecture.mdx
+│   ├── vapi-integration.mdx
+│   ├── data-flow.mdx
+│   ├── business-dna.mdx
+│   └── security.mdx
+├── tutorials/
+│   ├── first-voice-agent.mdx
+│   ├── embed-chat-widget.mdx
+│   ├── lead-qualification.mdx
+│   └── outbound-campaign.mdx
+├── api-reference/
+│   ├── overview.mdx
+│   ├── webhooks.mdx
+│   └── endpoints.mdx
+└── about/
+    ├── overview.mdx
+    ├── release-notes.mdx
+    └── roadmap.mdx
+```

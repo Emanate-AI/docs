@@ -1,0 +1,262 @@
+---
+title: "Knowledge Base"
+description: "Managing documents and context for AI agents"
+---
+
+# Knowledge Base
+
+The Knowledge Base provides AI agents with context from your documents. Upload product catalogs, FAQs, and sales materials to give agents the information they need to answer customer questions accurately.
+
+## How It Works
+
+```
+┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
+│    Documents    │────►│    Processing   │────►│    Agent        │
+│    Uploaded     │     │    & Indexing   │     │    Context      │
+└─────────────────┘     └─────────────────┘     └─────────────────┘
+```
+
+1. **Upload**: Add documents to the knowledge base
+2. **Process**: Documents are chunked and indexed
+3. **Query**: Agent retrieves relevant chunks during conversations
+
+## Uploading Documents
+
+### Supported Formats
+
+| Format | Extension | Best For |
+|--------|-----------|----------|
+| PDF | `.pdf` | Product catalogs, brochures |
+| Word | `.docx` | Sales materials, guides |
+| Text | `.txt` | FAQs, simple docs |
+| Markdown | `.md` | Structured content |
+
+### Upload Process
+
+1. Navigate to **Knowledge Base** tab in agent editor
+2. Click **Upload Documents**
+3. Select files (drag & drop or browse)
+4. Wait for processing to complete
+
+### File Size Limits
+
+| Limit | Value |
+|-------|-------|
+| Max file size | 10 MB |
+| Max files per agent | 50 |
+| Max total size | 100 MB |
+
+## Document Structure
+
+### Best Practices
+
+<Tip>
+  Well-structured documents lead to better agent responses. Use clear headings, bullet points, and organized sections.
+</Tip>
+
+**Good Document Structure:**
+
+```markdown
+# Product: Steel Beams
+
+## Overview
+Steel beams are structural components used in construction...
+
+## Specifications
+- Material: A992 Grade 50 Steel
+- Sizes: W4x13 to W44x335
+- Length: Up to 60 feet
+
+## Applications
+- Commercial buildings
+- Bridges
+- Industrial facilities
+
+## Pricing
+Contact sales for current pricing. Volume discounts available.
+```
+
+**Avoid:**
+
+- Scanned images without OCR
+- Complex tables without context
+- Documents with only headers (no content)
+
+### Document Categories
+
+Organize documents by type:
+
+| Category | Contents |
+|----------|----------|
+| **Products** | Catalogs, spec sheets, datasheets |
+| **FAQ** | Common questions and answers |
+| **Policies** | Shipping, returns, warranties |
+| **Sales** | Pricing guides, comparisons |
+
+## Query Tools
+
+Knowledge base documents are accessed via query tools:
+
+### How Query Tools Work
+
+```
+Customer: "What sizes do your steel beams come in?"
+                    │
+                    ▼
+┌─────────────────────────────────────────────────────────────────┐
+│ Query Tool executes:                                             │
+│ 1. Extracts question: "steel beam sizes"                         │
+│ 2. Searches knowledge base                                       │
+│ 3. Returns relevant chunks                                       │
+│ 4. Agent synthesizes response                                    │
+└─────────────────────────────────────────────────────────────────┘
+                    │
+                    ▼
+Agent: "Our steel beams range from W4x13 to W44x335, 
+        with lengths up to 60 feet."
+```
+
+### Query Tool Configuration
+
+```typescript
+{
+  type: "query",
+  function: {
+    name: "query_knowledge_base",
+    description: "Search product documentation for information"
+  },
+  knowledgeBaseId: "kb_123..."
+}
+```
+
+## Document Management
+
+### Viewing Documents
+
+1. Go to **Knowledge Base** tab
+2. View list of uploaded documents
+3. Click a document to see details:
+   - File name and type
+   - Upload date
+   - Processing status
+   - Chunk count
+
+### Updating Documents
+
+When content changes:
+
+1. Delete the old document
+2. Upload the updated version
+3. Wait for reprocessing
+
+<Note>
+  Documents are re-indexed after upload. Allow 1-2 minutes for processing before testing.
+</Note>
+
+### Deleting Documents
+
+1. Go to **Knowledge Base** tab
+2. Click the delete icon on the document
+3. Confirm deletion
+
+Deleted documents are immediately removed from the agent's context.
+
+## Processing Status
+
+| Status | Description |
+|--------|-------------|
+| **Uploading** | File being uploaded |
+| **Processing** | Document being chunked and indexed |
+| **Ready** | Available for agent queries |
+| **Error** | Processing failed |
+
+### Troubleshooting Processing
+
+If a document fails to process:
+
+1. Check file format is supported
+2. Verify file isn't corrupted
+3. Ensure file size is under limit
+4. Try re-uploading
+
+## Knowledge Base Best Practices
+
+### Content Quality
+
+- **Be specific**: Include product names, SKUs, exact specifications
+- **Be complete**: Don't assume knowledge, spell everything out
+- **Be current**: Update documents when products change
+
+### Organization
+
+- **One topic per document**: Don't mix unrelated content
+- **Clear naming**: Use descriptive file names
+- **Regular updates**: Review and refresh periodically
+
+### Testing
+
+After adding documents:
+
+1. Test queries in the agent test panel
+2. Ask questions you expect customers to ask
+3. Verify responses are accurate
+4. Adjust documents if needed
+
+## Multiple Knowledge Bases
+
+Agents can access multiple knowledge bases:
+
+### Use Cases
+
+- **Product KB**: Technical specifications
+- **Policy KB**: Shipping, returns, warranties
+- **FAQ KB**: Common questions
+
+### Configuration
+
+```typescript
+knowledgeBases: [
+  { id: "kb_products", name: "Product Catalog" },
+  { id: "kb_policies", name: "Company Policies" },
+  { id: "kb_faq", name: "FAQ" }
+]
+```
+
+The agent automatically queries the most relevant knowledge base based on the question.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Agent doesn't use knowledge base">
+    - Verify documents are in "Ready" status
+    - Check query tool is configured
+    - Test with explicit questions matching document content
+  </Accordion>
+  <Accordion title="Responses are inaccurate">
+    - Review source documents for accuracy
+    - Improve document structure
+    - Add more context/detail to documents
+  </Accordion>
+  <Accordion title="Processing takes too long">
+    - Large PDFs take longer to process
+    - Split large documents into smaller files
+    - Check for complex formatting that slows processing
+  </Accordion>
+</AccordionGroup>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Custom Actions" icon="bolt" href="/agents/custom-actions">
+    Add ERP integrations
+  </Card>
+  <Card title="Voice Agents" icon="phone" href="/agents/voice-agents">
+    Configure voice settings
+  </Card>
+  <Card title="Testing" icon="flask" href="/agents/testing">
+    Test knowledge retrieval
+  </Card>
+  <Card title="First Agent Tutorial" icon="graduation-cap" href="/tutorials/first-voice-agent">
+    Complete setup guide
+  </Card>
+</CardGroup>

@@ -1,0 +1,231 @@
+---
+title: "ERP Integration"
+description: "Connect your ERP systems for inventory and pricing"
+---
+
+# ERP Integration
+
+Connect your ERP system to enable AI agents to check inventory, retrieve pricing, and access customer data in real-time.
+
+## Overview
+
+ERP integrations enable agents to:
+
+- Check product availability
+- Get real-time pricing
+- Look up customer order history
+- Verify credit limits
+- Create quotes
+
+## Supported Systems
+
+Emanate connects to ERPs via custom API integrations:
+
+| System | Common Use Cases |
+|--------|-----------------|
+| **SAP** | Inventory, pricing, orders |
+| **Oracle** | Customer data, orders |
+| **NetSuite** | Full ERP integration |
+| **Microsoft Dynamics** | Inventory, CRM |
+| **Custom ERP** | Via REST API |
+
+## Setting Up ERP Connection
+
+### Step 1: API Access
+
+Ensure your ERP has:
+- REST API enabled
+- API credentials (key or OAuth)
+- Network access from Emanate
+
+### Step 2: Create Custom Action
+
+1. Go to agent **Custom Actions**
+2. Click **Add Tool**
+3. Configure the API connection
+
+### Step 3: Configure Endpoint
+
+```typescript
+{
+  name: "check_inventory",
+  type: "function",
+  function: {
+    name: "check_inventory",
+    description: "Check product availability in inventory",
+    parameters: {
+      type: "object",
+      properties: {
+        sku: { 
+          type: "string", 
+          description: "Product SKU" 
+        },
+        quantity: { 
+          type: "number", 
+          description: "Requested quantity" 
+        },
+        warehouse: {
+          type: "string",
+          description: "Warehouse location"
+        }
+      },
+      required: ["sku"]
+    }
+  },
+  server: {
+    url: "https://erp.company.com/api/inventory",
+    method: "POST",
+    headers: {
+      "Authorization": "Bearer {{ERP_API_KEY}}",
+      "Content-Type": "application/json"
+    }
+  }
+}
+```
+
+## Common Integrations
+
+### Inventory Check
+
+```typescript
+// Agent asks ERP for availability
+{
+  name: "check_inventory",
+  parameters: { sku: "STL-BEAM-W8", quantity: 100 }
+}
+
+// ERP responds
+{
+  available: true,
+  quantity: 250,
+  warehouse: "Chicago",
+  leadTime: "3-5 days"
+}
+```
+
+### Pricing Lookup
+
+```typescript
+{
+  name: "get_pricing",
+  parameters: { 
+    sku: "STL-BEAM-W8", 
+    quantity: 100,
+    customerId: "CUST-12345"
+  }
+}
+
+// Response includes customer-specific pricing
+{
+  listPrice: 125.00,
+  customerPrice: 112.50,
+  volumeDiscount: "10%",
+  currency: "USD"
+}
+```
+
+### Order History
+
+```typescript
+{
+  name: "get_order_history",
+  parameters: { customerId: "CUST-12345" }
+}
+
+// Recent orders returned
+{
+  orders: [
+    { orderNumber: "ORD-5678", date: "2024-01-15", total: 12500 },
+    { orderNumber: "ORD-5432", date: "2023-12-01", total: 8750 }
+  ]
+}
+```
+
+## Security
+
+### API Key Management
+
+Store credentials securely:
+
+1. Go to **Settings** → **Secrets**
+2. Add `ERP_API_KEY`
+3. Reference as `{{ERP_API_KEY}}`
+
+### Network Security
+
+- Use HTTPS endpoints only
+- Consider IP allowlisting
+- Implement rate limiting
+- Log all API calls
+
+### Data Handling
+
+- Don't log sensitive data
+- Mask account numbers
+- Follow data retention policies
+
+## Error Handling
+
+Configure graceful fallbacks:
+
+```typescript
+server: {
+  url: "https://erp.company.com/api/inventory",
+  timeoutSeconds: 10,
+  retries: 2,
+  fallbackMessage: "I'm unable to check inventory right now. 
+                    Let me connect you with someone who can help."
+}
+```
+
+## Testing
+
+### Test in Sandbox
+
+1. Use ERP sandbox environment
+2. Test all API endpoints
+3. Verify data formats
+
+### Production Testing
+
+1. Test with real data carefully
+2. Monitor API logs
+3. Check for rate limiting
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="API timeout">
+    - Check network connectivity
+    - Verify ERP API is responding
+    - Increase timeout if needed
+    - Add retry logic
+  </Accordion>
+  <Accordion title="Authentication errors">
+    - Verify API key is correct
+    - Check key hasn't expired
+    - Confirm permissions
+  </Accordion>
+  <Accordion title="Wrong data returned">
+    - Review parameter mapping
+    - Check field names match
+    - Test endpoint directly
+  </Accordion>
+</AccordionGroup>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Custom Actions" icon="bolt" href="/agents/custom-actions">
+    Tool configuration guide
+  </Card>
+  <Card title="Voice Agents" icon="phone" href="/agents/voice-agents">
+    Add tools to agents
+  </Card>
+  <Card title="Security" icon="shield" href="/engineering/security">
+    Security best practices
+  </Card>
+  <Card title="API Reference" icon="code" href="/api-reference/overview">
+    API documentation
+  </Card>
+</CardGroup>

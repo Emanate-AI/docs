@@ -1,0 +1,210 @@
+---
+title: "CRM Integration"
+description: "Connect HubSpot and Salesforce via Merge"
+---
+
+# CRM Integration
+
+Emanate integrates with popular CRMs via Merge.dev, enabling automatic sync of leads, contacts, and companies.
+
+## Supported CRMs
+
+| CRM | Sync Capabilities |
+|-----|-------------------|
+| **HubSpot** | Contacts, Companies, Deals, Notes |
+| **Salesforce** | Leads, Contacts, Accounts, Tasks |
+| **Pipedrive** | Contacts, Organizations, Deals |
+| **Zoho CRM** | Leads, Contacts, Accounts |
+
+## Connecting Your CRM
+
+### Step 1: Initiate Connection
+
+1. Go to **Settings** → **Integrations** → **CRM**
+2. Click **Connect CRM**
+3. Select your CRM from the list
+
+### Step 2: Authorize Access
+
+You'll be redirected to authorize Emanate:
+
+**For HubSpot:**
+- Log in to your HubSpot account
+- Select the portal to connect
+- Grant requested permissions
+
+**For Salesforce:**
+- Log in to Salesforce
+- Allow access to Emanate
+
+### Step 3: Configure Sync
+
+After authorization:
+
+1. Review default field mappings
+2. Adjust mappings as needed
+3. Set sync rules
+4. Enable auto-sync
+
+## Field Mapping
+
+### Default Mappings
+
+#### HubSpot
+
+| Emanate | HubSpot |
+|---------|---------|
+| name | firstname, lastname |
+| email | email |
+| phone | phone |
+| company | company |
+| title | jobtitle |
+| icpScore | icp_score (custom) |
+
+#### Salesforce
+
+| Emanate | Salesforce |
+|---------|------------|
+| name | FirstName, LastName |
+| email | Email |
+| phone | Phone |
+| company | Company / Account |
+| title | Title |
+
+### Custom Field Mapping
+
+Map to your custom fields:
+
+1. Go to **CRM Integration** → **Field Mapping**
+2. Click **Add Mapping**
+3. Select Emanate field
+4. Select CRM field
+5. Save
+
+## Sync Behavior
+
+### Create vs Update
+
+| Scenario | Behavior |
+|----------|----------|
+| New lead, no CRM match | Create new record |
+| Lead exists in CRM | Update existing record |
+| Duplicate detection | Merge or flag |
+
+### Sync Triggers
+
+| Trigger | When |
+|---------|------|
+| `on_capture` | Immediately when captured |
+| `on_enrich` | After enrichment |
+| `on_qualify` | When ICP threshold met |
+| `manual` | Only when requested |
+
+### Sync Direction
+
+Currently **one-way** (Emanate → CRM):
+- Leads push to CRM
+- CRM changes don't sync back
+
+## Conversation Notes
+
+Include conversation context:
+
+### Note Content
+
+```markdown
+## Emanate Conversation
+
+**Date:** February 4, 2024
+**Agent:** Sales Assistant
+**Channel:** Voice
+**Duration:** 4:32
+
+### Summary
+Customer inquired about steel beam pricing for a construction 
+project. Interested in 500 linear feet of W8x31 beams.
+
+### Key Points
+- Timeline: Q2 2024
+- Budget: Approved
+- Decision maker: Yes
+
+### ICP Score: 85/100
+
+---
+*Synced from Emanate*
+```
+
+### Note Configuration
+
+```typescript
+noteSettings: {
+  includeTranscript: false,
+  includeSummary: true,
+  includeScore: true,
+  includeKeyPoints: true
+}
+```
+
+## Deduplication
+
+### Matching Strategy
+
+```typescript
+deduplication: {
+  primary: "email",
+  secondary: "phone",
+  fallback: "name_company",
+  action: "update"  // or "create_new", "skip"
+}
+```
+
+### Handling Matches
+
+| Match Type | Default Action |
+|------------|----------------|
+| Email exact | Update record |
+| Phone match | Link or update |
+| Name + Company | Flag for review |
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Connection failed">
+    - Verify OAuth permissions
+    - Check CRM user has admin access
+    - Try disconnecting and reconnecting
+  </Accordion>
+  <Accordion title="Sync errors">
+    - Check required fields are mapped
+    - Verify field types match
+    - Review error details in sync log
+  </Accordion>
+  <Accordion title="Duplicates created">
+    - Review deduplication settings
+    - Check email field mapping
+    - Enable duplicate detection
+  </Accordion>
+</AccordionGroup>
+
+## Best Practices
+
+<Tip>
+  Start with minimal field mapping and add more as needed. Too many fields can cause sync issues if data is incomplete.
+</Tip>
+
+- Map email first (best deduplication key)
+- Test with a few leads before enabling auto-sync
+- Monitor sync logs regularly
+- Keep field mappings documented
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Lead Sync" icon="refresh" href="/leads/crm-sync">
+    Detailed sync configuration
+  </Card>
+  <Card title="Lead Enrichment" icon="sparkles" href="/leads/enrichment">
+    Enrich before syncing
+  </Card>
+</CardGroup>

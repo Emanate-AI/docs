@@ -1,0 +1,208 @@
+---
+title: "Release Notes"
+description: "Version history and updates"
+---
+
+# Release Notes
+
+Stay up to date with the latest Emanate features and improvements.
+
+---
+
+## v2.4.0 - February 2024
+
+### Highlights
+
+This release focuses on **reliability improvements** for lead enrichment and Business DNA extraction, along with several quality-of-life enhancements.
+
+### Updated Lead Enrichment
+
+<Note>
+  Lead enrichment is now more reliable with improved matching accuracy and better error handling.
+</Note>
+
+**What's New:**
+
+- **Improved Email Matching**: Better handling of email variations and aliases
+- **Company Domain Resolution**: More accurate company identification from email domains
+- **Fallback Strategies**: Multiple matching strategies (email → phone → name+company)
+- **Higher Match Rates**: 15% improvement in successful enrichment
+- **Better Error Messages**: Clear feedback when enrichment fails
+
+**Technical Details:**
+
+```
+Before: Single-pass email matching
+After:  Multi-strategy matching with fallbacks
+
+Match Priority:
+1. Exact email match (highest confidence)
+2. Domain + name match
+3. Phone number match
+4. Name + company fuzzy match
+```
+
+**Configuration:**
+
+```typescript
+enrichment: {
+  provider: "apollo",
+  strategies: ["email", "domain", "phone", "fuzzy"],
+  minConfidence: 0.7,
+  retryOnFailure: true
+}
+```
+
+### More Reliable Business DNA Extraction
+
+<Note>
+  Business DNA extraction now handles edge cases better and provides more consistent results across different website types.
+</Note>
+
+**Improvements:**
+
+- **Robust Logo Detection**: Better handling of SVG logos, inline logos, and various logo placement patterns
+- **Enhanced Color Extraction**: More accurate brand color detection from logos, CSS, and theme colors
+- **Improved Content Scraping**: Better handling of SPAs, lazy-loaded content, and bot-protected sites
+- **Smarter GPT Synthesis**: More consistent field extraction with better fallback handling
+- **Faster Extraction**: 30% reduction in average extraction time
+
+**Logo Detection Improvements:**
+
+| Method | Before | After |
+|--------|--------|-------|
+| og:logo meta | ✓ | ✓ |
+| JSON-LD schema | ✓ | ✓ |
+| Header img detection | Basic | Enhanced |
+| Inline SVG support | ✗ | ✓ |
+| Base64 logo support | ✗ | ✓ |
+
+**Color Extraction Improvements:**
+
+| Source | Before | After |
+|--------|--------|-------|
+| theme-color meta | ✓ | ✓ |
+| CSS variables | ✗ | ✓ |
+| Logo pixel analysis | Basic | K-means clustering |
+| SVG fill/stroke | ✗ | ✓ |
+| External CSS | Limited | Full support |
+
+**Extraction Pipeline:**
+
+```
+URL → Scraper → Exa Deep Search → GPT Synthesis → Validation
+       │           │                │
+       │           │                └─ Better field mapping
+       │           └─ 5 parallel calls for speed
+       └─ Enhanced HTML parsing
+```
+
+### Other Improvements
+
+**Agent Management:**
+- Fixed deep merge issues when updating voice settings
+- Improved assistant deletion cleanup
+- Better error handling in service layer
+
+**Analytics:**
+- New conversation duration distribution chart
+- Improved real-time campaign monitoring
+- Better export formatting for CSV reports
+
+**Integrations:**
+- Improved CRM sync reliability
+- Better handling of rate limits
+- Enhanced field mapping options
+
+### Bug Fixes
+
+- Fixed issue where voice agent model changes could wipe tool IDs
+- Resolved race condition in lead capture during concurrent calls
+- Fixed timezone handling in campaign scheduling
+- Corrected ICP score calculation for missing enrichment fields
+- Fixed chat widget z-index issues on some websites
+
+### Migration Notes
+
+No breaking changes. All improvements are backward compatible.
+
+---
+
+## v2.3.0 - January 2024
+
+### New Features
+
+- **Workflow Squads**: Multi-agent orchestration with visual workflow builder
+- **Campaign Monitoring**: Real-time dashboard for outbound campaigns
+- **Evaluation System**: AI-powered quality scoring for conversations
+
+### Improvements
+
+- Enhanced knowledge base processing speed
+- Improved voice latency (reduced by 200ms average)
+- Better handling of long conversations
+
+---
+
+## v2.2.0 - December 2023
+
+### New Features
+
+- **ICP Scoring**: AI-powered lead qualification
+- **Intent Signals**: Automatic detection of buying signals
+- **Custom Fields**: Support for custom lead capture fields
+
+### Improvements
+
+- Apollo enrichment expanded fields
+- HubSpot integration enhanced
+- Better transcript search
+
+---
+
+## v2.1.0 - November 2023
+
+### New Features
+
+- **Chat Agents**: Website chat widget support
+- **Lead Enrichment**: Apollo.io integration
+- **CRM Sync**: HubSpot and Salesforce via Merge
+
+### Improvements
+
+- Improved voice quality
+- Better first-message latency
+- Enhanced knowledge base queries
+
+---
+
+## v2.0.0 - October 2023
+
+### Major Release
+
+Complete platform rewrite with:
+
+- **New Architecture**: Feature-based code organization
+- **VAPI Integration**: 4-layer architecture
+- **Supabase Migration**: PostgreSQL database
+- **Next.js 14**: App Router adoption
+
+---
+
+## Version History
+
+| Version | Date | Highlights |
+|---------|------|------------|
+| v2.4.0 | Feb 2024 | Enrichment & DNA reliability |
+| v2.3.0 | Jan 2024 | Workflow squads, monitoring |
+| v2.2.0 | Dec 2023 | ICP scoring, intent signals |
+| v2.1.0 | Nov 2023 | Chat agents, enrichment |
+| v2.0.0 | Oct 2023 | Platform rewrite |
+
+## Getting Help
+
+If you encounter issues after an update:
+
+1. Check this page for known issues
+2. Review the [documentation](/introduction)
+3. Contact support@emanate.ai

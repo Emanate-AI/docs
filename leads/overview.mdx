@@ -1,0 +1,170 @@
+---
+title: "Leads Overview"
+description: "Lead management system in Emanate"
+---
+
+# Lead Management Overview
+
+Emanate's lead management system automatically captures, enriches, scores, and syncs leads from AI agent conversations to your CRM.
+
+## Lead Pipeline
+
+```
+┌─────────────┐     ┌─────────────┐     ┌─────────────┐     ┌─────────────┐
+│   Capture   │────►│   Enrich    │────►│   Score     │────►│   Sync      │
+│   Contact   │     │   Data      │     │   ICP       │     │   to CRM    │
+└─────────────┘     └─────────────┘     └─────────────┘     └─────────────┘
+      │                   │                   │                   │
+      ▼                   ▼                   ▼                   ▼
+  AI extracts        Apollo.io          AI matching         HubSpot/
+  from convo         enrichment         vs ICP              Salesforce
+```
+
+## How It Works
+
+### 1. Lead Capture
+
+During AI agent conversations, contact information is automatically extracted:
+
+- **Name**: First and last name
+- **Email**: Email address
+- **Phone**: Phone number
+- **Company**: Organization name
+- **Custom Fields**: Project details, requirements, etc.
+
+### 2. Lead Enrichment
+
+Captured leads are enriched with Apollo.io data:
+
+- **Title**: Job title and seniority
+- **Company Details**: Size, industry, revenue
+- **Contact Info**: Direct phone, LinkedIn
+- **Company Insights**: Technologies, funding
+
+### 3. ICP Scoring
+
+AI scores leads against your Ideal Customer Profile:
+
+- **Fit Score**: How well they match your ICP
+- **Intent Signals**: Buying indicators from conversation
+- **Engagement**: Quality of interaction
+
+### 4. CRM Sync
+
+Qualified leads are automatically synced to your CRM:
+
+- **HubSpot**: Contacts, Companies, Notes
+- **Salesforce**: Leads, Accounts, Tasks
+- **Custom**: Via Merge.dev or webhooks
+
+## Lead Sources
+
+Leads can come from multiple channels:
+
+| Source | Description |
+|--------|-------------|
+| **Inbound Calls** | Callers to voice agents |
+| **Outbound Campaigns** | Campaign conversations |
+| **Chat Widget** | Website chat interactions |
+| **Workflow Squads** | Multi-agent flows |
+
+## Lead Data Model
+
+```typescript
+interface Lead {
+  // Contact Info
+  name: string;
+  email: string;
+  phone: string;
+  company: string;
+  
+  // Enrichment Data
+  title: string;
+  linkedIn: string;
+  companySize: string;
+  industry: string;
+  
+  // Scoring
+  icpScore: number;
+  intentSignals: string[];
+  
+  // Source
+  source: "inbound" | "outbound" | "chat";
+  agentId: string;
+  conversationId: string;
+  
+  // CRM
+  crmId: string;
+  syncStatus: "pending" | "synced" | "error";
+}
+```
+
+## Lead Status
+
+| Status | Description |
+|--------|-------------|
+| **New** | Just captured, pending enrichment |
+| **Enriched** | Apollo data appended |
+| **Scored** | ICP score calculated |
+| **Qualified** | Meets threshold, ready for sales |
+| **Synced** | Pushed to CRM |
+| **Disqualified** | Does not meet criteria |
+
+## Key Features
+
+<CardGroup cols={2}>
+  <Card title="Capture" icon="inbox" href="/leads/capture">
+    Automatic extraction from conversations
+  </Card>
+  <Card title="Enrichment" icon="sparkles" href="/leads/enrichment">
+    Apollo.io data enrichment
+  </Card>
+  <Card title="ICP Scoring" icon="target" href="/leads/icp-scoring">
+    AI-powered qualification
+  </Card>
+  <Card title="CRM Sync" icon="refresh" href="/leads/crm-sync">
+    HubSpot & Salesforce integration
+  </Card>
+</CardGroup>
+
+## Quick Start
+
+### Enable Lead Capture
+
+1. Open agent editor
+2. Go to **Overview** tab
+3. Enable **Lead Capture**
+4. Select fields to capture
+
+### Configure Enrichment
+
+1. Go to **Settings** → **Integrations** → **Apollo**
+2. Add your Apollo API key
+3. Enable auto-enrichment
+
+### Set Up CRM Sync
+
+1. Go to **Settings** → **Integrations** → **CRM**
+2. Connect HubSpot or Salesforce
+3. Map fields
+4. Enable auto-sync
+
+## Lead Metrics
+
+| Metric | Description |
+|--------|-------------|
+| **Capture Rate** | % of conversations with captured leads |
+| **Enrichment Rate** | % of leads successfully enriched |
+| **Qualification Rate** | % of leads meeting ICP threshold |
+| **Sync Success** | % of leads synced to CRM |
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Lead Capture" icon="inbox" href="/leads/capture">
+    Configure capture fields
+  </Card>
+  <Card title="Lead Enrichment" icon="sparkles" href="/leads/enrichment">
+    Set up Apollo integration
+  </Card>
+</CardGroup>

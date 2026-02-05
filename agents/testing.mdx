@@ -1,0 +1,337 @@
+---
+title: "Testing Agents"
+description: "Testing voice and chat agents before deployment"
+---
+
+# Testing Agents
+
+Thorough testing ensures your AI agents perform correctly before going live. Emanate provides built-in test panels for both voice and chat agents.
+
+## Test Panel Overview
+
+Every agent has a test panel accessible from the editor:
+
+1. Open the agent in the editor
+2. Click the **Test** button
+3. Start a test session
+
+### Voice Test Panel
+
+The voice test panel simulates phone calls:
+
+- **Start Call**: Begin a test voice session
+- **End Call**: Terminate the session
+- **Transcript**: Real-time conversation display
+- **Debug View**: Tool invocations and model responses
+
+### Chat Test Panel
+
+The chat test panel simulates widget conversations:
+
+- **Message Input**: Type test messages
+- **Conversation View**: See agent responses
+- **Debug Panel**: View underlying processing
+
+## Testing Workflow
+
+### 1. Basic Functionality
+
+Start with core functionality:
+
+| Test | Verify |
+|------|--------|
+| First message | Greeting plays/displays correctly |
+| Simple question | Agent responds appropriately |
+| Follow-up | Context is maintained |
+| Goodbye | Session ends gracefully |
+
+### 2. Knowledge Base
+
+Test document retrieval:
+
+```
+You: "What products do you offer?"
+Agent: [Should reference knowledge base documents]
+
+You: "Tell me about SKU-1234"
+Agent: [Should find specific product info]
+```
+
+### 3. Lead Capture
+
+Verify data collection:
+
+```
+You: "I'm interested in getting a quote"
+Agent: "I'd be happy to help. May I have your name?"
+You: "John Smith"
+Agent: "Thanks John. What's the best email to reach you?"
+You: "john@company.com"
+[Verify lead record is created]
+```
+
+### 4. Custom Actions
+
+Test tool invocations:
+
+```
+You: "Do you have 100 units of steel beams in stock?"
+Agent: [Should invoke inventory check tool]
+Agent: "Yes, we have 250 units available..."
+```
+
+### 5. Edge Cases
+
+Test unusual scenarios:
+
+| Scenario | Expected Behavior |
+|----------|-------------------|
+| Silence (5+ seconds) | Agent prompts user |
+| Interruption | Agent handles gracefully |
+| Off-topic question | Redirects to scope |
+| Angry customer | De-escalation response |
+| Transfer request | Initiates handoff |
+
+## Voice-Specific Testing
+
+### Audio Quality
+
+| Test | What to Check |
+|------|---------------|
+| Speech recognition | Agent understands clearly |
+| Voice output | Natural, correct pacing |
+| Background noise | Handles ambient sound |
+
+### Conversation Flow
+
+- **Barge-in**: Can you interrupt the agent?
+- **Turn-taking**: Natural pauses between speakers?
+- **Long responses**: Agent breaks up appropriately?
+
+### Phone Features
+
+| Feature | Test |
+|---------|------|
+| Hold | "Can you hold for a moment?" |
+| Transfer | "Let me speak to a human" |
+| Voicemail | Call when unavailable |
+| Recording | Verify calls are recorded |
+
+## Chat-Specific Testing
+
+### Widget Functionality
+
+| Test | Verify |
+|------|--------|
+| Widget loads | Appears on page correctly |
+| Open/close | Toggle works |
+| Minimize | Stays accessible |
+| Mobile | Responsive on small screens |
+
+### Message Handling
+
+- **Long messages**: Agent handles appropriately
+- **Quick succession**: Multiple messages in a row
+- **Links**: Clickable and correct
+- **Formatting**: Markdown renders properly
+
+### Session Persistence
+
+1. Start a conversation
+2. Navigate to another page
+3. Return to original page
+4. Verify conversation continues
+
+## Debug View
+
+The debug view shows internal processing:
+
+### Model Calls
+
+```json
+{
+  "model": "gpt-4o",
+  "messages": [
+    {"role": "system", "content": "..."},
+    {"role": "user", "content": "What products do you offer?"}
+  ],
+  "response": "We offer a wide range of industrial materials..."
+}
+```
+
+### Tool Invocations
+
+```json
+{
+  "tool": "check_inventory",
+  "parameters": {
+    "sku": "SKU-1234",
+    "quantity": 100
+  },
+  "response": {
+    "available": true,
+    "quantity": 250
+  }
+}
+```
+
+### Structured Outputs
+
+```json
+{
+  "leadCapture": {
+    "name": "John Smith",
+    "email": "john@company.com",
+    "company": "Acme Corp"
+  }
+}
+```
+
+## Test Scenarios
+
+### Sales Qualification
+
+```markdown
+## Scenario: Qualified Lead
+1. Caller asks about products
+2. Agent provides information
+3. Caller expresses interest in quote
+4. Agent collects: name, email, company, requirements
+5. Agent offers to schedule meeting
+6. Lead captured with all fields
+
+## Expected: Lead created with ICP score > 70
+```
+
+### Technical Support
+
+```markdown
+## Scenario: Known Issue
+1. Caller reports problem
+2. Agent identifies issue from knowledge base
+3. Agent provides solution
+4. Caller confirms resolution
+5. Session ends positively
+
+## Expected: No escalation, issue resolved
+```
+
+### Escalation
+
+```markdown
+## Scenario: Complex Request
+1. Caller has unusual requirement
+2. Agent cannot find answer in knowledge base
+3. Agent offers to transfer to specialist
+4. Transfer executes correctly
+
+## Expected: Smooth handoff, context preserved
+```
+
+## Automated Testing
+
+### Test Scripts
+
+Create reusable test scenarios:
+
+```typescript
+const testScenarios = [
+  {
+    name: "Basic Q&A",
+    messages: [
+      { user: "What do you sell?", expectContains: "materials" },
+      { user: "What are your hours?", expectContains: "Monday" }
+    ]
+  },
+  {
+    name: "Lead Capture",
+    messages: [
+      { user: "I want a quote", expectContains: "name" },
+      { user: "John Smith", expectContains: "email" },
+      { user: "john@test.com", expectLeadCapture: true }
+    ]
+  }
+];
+```
+
+### Regression Testing
+
+Run tests after changes:
+
+1. Save test scenarios
+2. Make agent changes
+3. Run all scenarios
+4. Compare results to baseline
+
+## Pre-Deployment Checklist
+
+Before going live:
+
+### Agent Configuration
+- [ ] System prompt is complete
+- [ ] First message is appropriate
+- [ ] Model settings are optimal
+- [ ] Voice sounds natural (if voice)
+
+### Knowledge Base
+- [ ] All documents uploaded
+- [ ] Documents are processed
+- [ ] Test queries return correct info
+
+### Custom Actions
+- [ ] All tools configured
+- [ ] API endpoints working
+- [ ] Error handling in place
+
+### Lead Capture
+- [ ] Fields configured correctly
+- [ ] Data saves to database
+- [ ] Enrichment triggers (if enabled)
+
+### Edge Cases
+- [ ] Handles silence/pauses
+- [ ] Handles interruptions
+- [ ] Handles off-topic questions
+- [ ] Transfer/escalation works
+
+### Compliance
+- [ ] Recording disclosure (if required)
+- [ ] Data handling compliant
+- [ ] Boundaries respected
+
+## Troubleshooting Test Issues
+
+<AccordionGroup>
+  <Accordion title="Test call won't connect">
+    - Check browser microphone permissions
+    - Verify internet connection
+    - Try a different browser
+  </Accordion>
+  <Accordion title="Agent doesn't respond">
+    - Check system prompt isn't empty
+    - Verify model is configured
+    - Look for errors in debug view
+  </Accordion>
+  <Accordion title="Tools not working in test">
+    - Verify tool configuration
+    - Check API endpoints are accessible
+    - Review tool invocation in debug view
+  </Accordion>
+</AccordionGroup>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Voice Agents" icon="phone" href="/agents/voice-agents">
+    Voice configuration
+  </Card>
+  <Card title="Chat Agents" icon="message" href="/agents/chat-agents">
+    Chat configuration
+  </Card>
+  <Card title="Evaluations" icon="chart-bar" href="/analytics/evaluations">
+    Quality assessment
+  </Card>
+  <Card title="Deploy Campaign" icon="rocket" href="/campaigns/voice-campaigns">
+    Launch outbound calls
+  </Card>
+</CardGroup>

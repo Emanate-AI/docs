@@ -1,0 +1,297 @@
+---
+title: "Voice Campaigns"
+description: "Setting up and running outbound voice campaigns"
+---
+
+# Voice Campaigns
+
+Voice campaigns automate outbound calling to reach prospects and customers at scale. This guide covers campaign setup, configuration, and management.
+
+## Creating a Campaign
+
+Navigate to **Campaigns** → **Create Campaign**
+
+### Step 1: Campaign Details
+
+| Field | Description | Example |
+|-------|-------------|---------|
+| **Name** | Internal identifier | "Q1 Lead Follow-up" |
+| **Description** | Campaign purpose | "Follow up with January leads" |
+| **Start Date** | When to begin | "2024-02-01" |
+| **End Date** | When to stop | "2024-02-28" |
+
+### Step 2: Upload Contacts
+
+#### CSV Format
+
+```csv
+phone,first_name,last_name,company,email
++14155551234,John,Smith,Acme Corp,john@acme.com
++14155555678,Jane,Doe,Widget Inc,jane@widget.com
+```
+
+#### Required Fields
+
+| Field | Format | Required |
+|-------|--------|----------|
+| `phone` | E.164 format (+1...) | Yes |
+| `first_name` | Text | Recommended |
+| `last_name` | Text | Recommended |
+| `company` | Text | No |
+| `email` | Email | No |
+
+#### Upload Options
+
+- **CSV Upload**: Upload a CSV file
+- **CRM Import**: Pull from HubSpot/Salesforce
+- **API**: Push contacts programmatically
+
+### Step 3: Select Agent
+
+Choose the voice agent that will handle calls:
+
+1. Select from existing voice agents
+2. Or create a new agent for this campaign
+
+<Tip>
+  Create campaign-specific agents with tailored prompts for best results. A follow-up campaign agent should reference why you're calling.
+</Tip>
+
+### Step 4: Configure Schedule
+
+#### Calling Hours
+
+Set when calls are made (in contact's local time zone):
+
+| Day | Start | End |
+|-----|-------|-----|
+| Monday | 9:00 AM | 6:00 PM |
+| Tuesday | 9:00 AM | 6:00 PM |
+| Wednesday | 9:00 AM | 6:00 PM |
+| Thursday | 9:00 AM | 6:00 PM |
+| Friday | 9:00 AM | 5:00 PM |
+| Saturday | Disabled | |
+| Sunday | Disabled | |
+
+#### Time Zone Handling
+
+- Contacts are called in their local time zone
+- System automatically determines zone from phone number
+- Override with explicit time zone in contact data
+
+### Step 5: Set Pacing
+
+Control call volume:
+
+| Setting | Description | Recommended |
+|---------|-------------|-------------|
+| **Calls per hour** | Maximum concurrent calls | Start with 10-20 |
+| **Max attempts** | Retries for unanswered | 2-3 attempts |
+| **Retry delay** | Hours between attempts | 4-24 hours |
+
+### Step 6: Configure Outcomes
+
+Define what constitutes success:
+
+| Outcome | Trigger |
+|---------|---------|
+| **Interested** | Lead expresses interest |
+| **Meeting Booked** | Appointment scheduled |
+| **Not Interested** | Explicit decline |
+| **Callback Requested** | Wants follow-up later |
+| **Wrong Number** | Number invalid |
+| **Do Not Call** | DNC request |
+
+## Campaign Agent Configuration
+
+### System Prompt for Campaigns
+
+```markdown
+## Role
+You are calling on behalf of ABC Materials to follow up with 
+leads who recently inquired about our products.
+
+## Opening
+"Hi, this is Sarah from ABC Materials. I'm following up on 
+your recent inquiry about [Product]. Do you have a few minutes?"
+
+## Objectives
+1. Confirm their interest
+2. Understand their timeline and requirements
+3. Schedule a meeting with our sales team
+
+## Handling Objections
+- "Not a good time": Offer to schedule callback
+- "Not interested": Thank them, ask if future contact ok
+- "Already purchased": Congratulate, offer support info
+
+## Call Duration
+Keep calls to 3-5 minutes unless prospect wants more detail.
+```
+
+### Personalization
+
+Use contact data in conversations:
+
+```markdown
+## Personalization
+- Greet by name: "Hi {{first_name}}"
+- Reference company: "I see you're with {{company}}"
+- Reference inquiry: "You recently inquired about {{product}}"
+```
+
+## Managing Campaigns
+
+### Starting a Campaign
+
+1. Review all settings
+2. Click **Start Campaign**
+3. Confirm start
+
+Calls begin according to schedule and pacing settings.
+
+### Pausing a Campaign
+
+Temporarily stop calls:
+
+1. Go to campaign dashboard
+2. Click **Pause**
+3. All pending calls are held
+
+Resume anytime to continue.
+
+### Adjusting Mid-Campaign
+
+You can modify while running:
+
+| Changeable | Not Changeable |
+|------------|----------------|
+| Pacing | Contact list |
+| Schedule | Agent assignment |
+| End date | Start date |
+
+### Stopping a Campaign
+
+Permanently end a campaign:
+
+1. Click **Stop Campaign**
+2. Remaining contacts are marked incomplete
+3. Campaign cannot be restarted
+
+## Call Handling
+
+### Answered Calls
+
+1. Agent delivers opening message
+2. Conversation proceeds per system prompt
+3. Outcome is recorded
+4. Lead data is captured (if applicable)
+
+### Voicemail
+
+Configure voicemail handling:
+
+| Option | Description |
+|--------|-------------|
+| **Leave Message** | Agent leaves voicemail |
+| **Hang Up** | End call silently |
+| **Callback** | Schedule retry |
+
+#### Voicemail Message
+
+```markdown
+"Hi {{first_name}}, this is Sarah from ABC Materials. 
+I'm calling about your recent inquiry. Please call us back 
+at 1-800-ABC-MTLS or I'll try you again soon. Thanks!"
+```
+
+### No Answer
+
+After max attempts without answer:
+
+- Contact marked as "No Answer"
+- Removed from active queue
+- Can be re-queued manually
+
+## Analytics
+
+### Real-Time Dashboard
+
+Monitor active campaigns:
+
+- Calls in progress
+- Today's attempts/connections
+- Running connect rate
+- Live outcomes
+
+### Campaign Reports
+
+| Report | Contents |
+|--------|----------|
+| **Summary** | Overall performance metrics |
+| **Contact List** | Per-contact outcomes |
+| **Time Analysis** | Best performing hours/days |
+| **Agent Performance** | Conversion rates |
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Low connect rate">
+    - Verify phone numbers are valid
+    - Check calling hours match contact time zones
+    - Try different times of day
+    - Review caller ID settings
+  </Accordion>
+  <Accordion title="High hang-up rate">
+    - Review opening message
+    - Ensure agent sounds natural
+    - Check for long pauses before speaking
+    - A/B test different openers
+  </Accordion>
+  <Accordion title="Compliance concerns">
+    - Verify DNC list is current
+    - Confirm calling hour restrictions
+    - Review consent documentation
+    - Check state-specific regulations
+  </Accordion>
+</AccordionGroup>
+
+## Best Practices
+
+### List Quality
+
+- Verify numbers before upload
+- Remove duplicates
+- Update DNC lists regularly
+- Segment by priority
+
+### Agent Optimization
+
+- Test with small batches first
+- A/B test different scripts
+- Monitor and adjust
+- Train on common objections
+
+### Timing
+
+- Test different time slots
+- Respect lunch hours (12-1pm)
+- Avoid Monday mornings
+- Avoid Friday afternoons
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Monitoring" icon="chart-line" href="/campaigns/monitoring">
+    Track campaign performance
+  </Card>
+  <Card title="Voice Agents" icon="phone" href="/agents/voice-agents">
+    Optimize campaign agents
+  </Card>
+  <Card title="Lead Capture" icon="user-plus" href="/leads/capture">
+    Configure data collection
+  </Card>
+  <Card title="Analytics" icon="chart-bar" href="/analytics/overview">
+    Analyze results
+  </Card>
+</CardGroup>

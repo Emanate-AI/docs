@@ -1,0 +1,135 @@
+---
+title: "Campaigns Overview"
+description: "Outbound campaign management in Emanate"
+---
+
+# Campaigns Overview
+
+Campaigns enable automated outbound voice calling at scale. Reach prospects, follow up with leads, and drive revenue with AI-powered conversations.
+
+## What are Campaigns?
+
+A **Campaign** is an automated outbound calling program that:
+
+- Dials contacts from your list
+- Connects answered calls to AI agents
+- Handles voicemails and callbacks
+- Tracks results and metrics
+
+## Campaign Types
+
+### Voice Campaigns
+
+Outbound phone calls to prospects or customers:
+
+| Use Case | Description |
+|----------|-------------|
+| **Lead Follow-up** | Contact new leads quickly |
+| **Sales Outreach** | Reach prospects at scale |
+| **Customer Check-ins** | Proactive customer success |
+| **Event Reminders** | Appointment confirmations |
+| **Re-engagement** | Win back inactive customers |
+
+## Campaign Workflow
+
+```
+┌─────────────┐     ┌─────────────┐     ┌─────────────┐
+│   Create    │────►│   Launch    │────►│   Monitor   │
+│   Campaign  │     │   Calls     │     │   Results   │
+└─────────────┘     └─────────────┘     └─────────────┘
+      │                   │                   │
+      ▼                   ▼                   ▼
+  - Upload list      - Automated         - Real-time
+  - Configure agent    dialing             dashboard
+  - Set schedule     - AI conversations  - Call outcomes
+  - Set pacing       - Lead capture      - Analytics
+```
+
+## Creating a Campaign
+
+<Steps>
+  <Step title="Define Campaign">
+    Set name, description, and objectives
+  </Step>
+  <Step title="Upload Contacts">
+    Import phone numbers and contact data
+  </Step>
+  <Step title="Select Agent">
+    Choose the voice agent for calls
+  </Step>
+  <Step title="Configure Schedule">
+    Set calling hours and time zones
+  </Step>
+  <Step title="Set Pacing">
+    Define calls per hour limits
+  </Step>
+  <Step title="Launch">
+    Start the campaign
+  </Step>
+</Steps>
+
+## Campaign Status
+
+| Status | Description |
+|--------|-------------|
+| **Draft** | Campaign being configured |
+| **Scheduled** | Waiting for start time |
+| **Running** | Actively making calls |
+| **Paused** | Temporarily stopped |
+| **Completed** | All contacts processed |
+| **Cancelled** | Permanently stopped |
+
+## Key Metrics
+
+| Metric | Description |
+|--------|-------------|
+| **Contacts** | Total numbers in campaign |
+| **Attempted** | Calls dialed |
+| **Connected** | Calls answered |
+| **Connect Rate** | Connected / Attempted |
+| **Conversions** | Desired outcomes achieved |
+| **Conversion Rate** | Conversions / Connected |
+
+## Best Practices
+
+### Contact Lists
+
+- **Clean data**: Verify phone numbers before upload
+- **Segment wisely**: Group by relevance for better results
+- **Respect DNC**: Honor do-not-call requests
+
+### Timing
+
+- **Respect time zones**: Call during appropriate hours
+- **Optimal windows**: Typically 10am-12pm, 2pm-5pm local time
+- **Avoid holidays**: Skip major holidays
+
+### Pacing
+
+- **Start slow**: Begin with lower volume to test
+- **Scale gradually**: Increase after validating results
+- **Monitor closely**: Watch for quality issues
+
+## Compliance
+
+<Warning>
+  Ensure compliance with TCPA, DNC lists, and local regulations. Emanate provides tools to help, but compliance is your responsibility.
+</Warning>
+
+### Built-in Compliance Features
+
+- DNC list integration
+- Time zone enforcement
+- Calling hour restrictions
+- Consent tracking
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Voice Campaigns" icon="phone" href="/campaigns/voice-campaigns">
+    Create your first campaign
+  </Card>
+  <Card title="Monitoring" icon="chart-line" href="/campaigns/monitoring">
+    Track campaign performance
+  </Card>
+</CardGroup>

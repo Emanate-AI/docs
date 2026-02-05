@@ -1,0 +1,151 @@
+---
+title: "Email Integration"
+description: "Transactional email with Resend"
+---
+
+# Email Integration
+
+Emanate uses Resend for transactional email, enabling automated notifications, follow-ups, and confirmations.
+
+## Setting Up Resend
+
+### Step 1: Get API Key
+
+1. Sign up at [resend.com](https://resend.com)
+2. Go to API Keys
+3. Create new key
+4. Copy the key
+
+### Step 2: Configure in Emanate
+
+1. Go to **Settings** → **Integrations** → **Email**
+2. Paste your Resend API key
+3. Click **Connect**
+
+### Step 3: Verify Domain
+
+For production emails:
+
+1. Add your domain in Resend
+2. Configure DNS records
+3. Verify domain ownership
+
+## Email Types
+
+### Lead Notifications
+
+Alert sales when new leads come in:
+
+```typescript
+notifications: {
+  newLead: {
+    enabled: true,
+    recipients: ["sales@company.com"],
+    minScore: 60  // Only notify for qualified leads
+  }
+}
+```
+
+### Follow-up Emails
+
+Send automated follow-ups to leads:
+
+```typescript
+followUp: {
+  enabled: true,
+  delay: "1 hour",
+  template: "lead_follow_up"
+}
+```
+
+### Meeting Confirmations
+
+Confirm scheduled meetings:
+
+```typescript
+meetingConfirmation: {
+  enabled: true,
+  includeCalendarInvite: true
+}
+```
+
+## Email Templates
+
+### Creating Templates
+
+1. Go to **Settings** → **Email** → **Templates**
+2. Click **Create Template**
+3. Design your template
+4. Save and test
+
+### Template Variables
+
+Available variables:
+
+| Variable | Description |
+|----------|-------------|
+| `{{lead.name}}` | Lead's name |
+| `{{lead.email}}` | Lead's email |
+| `{{lead.company}}` | Company name |
+| `{{agent.name}}` | Agent name |
+| `{{conversation.summary}}` | AI summary |
+
+### Example Template
+
+```html
+Subject: Thanks for your interest, {{lead.name}}!
+
+Hi {{lead.name}},
+
+Thanks for chatting with us about {{conversation.topic}}.
+
+Based on our conversation, I wanted to share some additional 
+information about {{product.name}}.
+
+[CTA Button: Learn More]
+
+Best,
+The {{company.name}} Team
+```
+
+## Triggers
+
+### Automatic Triggers
+
+| Event | Email |
+|-------|-------|
+| Lead captured | Internal notification |
+| High-score lead | Priority alert |
+| Meeting booked | Confirmation |
+| Follow-up due | Reminder |
+
+### Manual Triggers
+
+Send emails manually:
+1. Open lead detail
+2. Click **Send Email**
+3. Select template
+4. Customize and send
+
+## Analytics
+
+Track email performance:
+
+| Metric | Description |
+|--------|-------------|
+| Sent | Emails sent |
+| Delivered | Successfully delivered |
+| Opened | Unique opens |
+| Clicked | Link clicks |
+| Bounced | Failed delivery |
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Calendar" icon="calendar" href="/integrations/calendar">
+    Meeting scheduling
+  </Card>
+  <Card title="Lead Capture" icon="inbox" href="/leads/capture">
+    Capture configuration
+  </Card>
+</CardGroup>

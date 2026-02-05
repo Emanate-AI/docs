@@ -1,0 +1,210 @@
+---
+title: "Onboarding"
+description: "Full admin onboarding walkthrough"
+---
+
+# Admin Onboarding Guide
+
+This guide walks through the complete onboarding process for new Emanate administrators.
+
+## Overview
+
+The onboarding process consists of four main steps:
+
+<Steps>
+  <Step title="Business DNA Setup">
+    Extract and configure your brand context
+  </Step>
+  <Step title="Agent Creation">
+    Build your first voice or chat agent
+  </Step>
+  <Step title="Integration Setup">
+    Connect your CRM and other tools
+  </Step>
+  <Step title="Team Onboarding">
+    Invite team members and set permissions
+  </Step>
+</Steps>
+
+## Step 1: Business DNA Setup
+
+Business DNA is the foundation of all your AI agents. It ensures every agent interaction feels authentic to your brand.
+
+### Automatic Extraction
+
+1. Navigate to **Settings** → **Business DNA**
+2. Enter your company website URL
+3. Click **Extract Brand**
+
+Emanate automatically extracts:
+
+| Field | Description |
+|-------|-------------|
+| Business Name | Your company name |
+| Tagline | Main value proposition |
+| Industry | Business category |
+| Products/Services | What you sell |
+| Target Audience | Who you serve |
+| Brand Colors | Visual identity |
+| Tone & Style | Communication style |
+
+### Manual Refinement
+
+After extraction, review and refine:
+
+1. **Business Overview**: Edit the company description for accuracy
+2. **Products/Services**: Add or remove items
+3. **Brand Values**: Adjust the extracted values
+4. **Visual Styles**: Confirm color palette
+
+<Tip>
+  Take time to refine the Business DNA — this context is injected into every agent's system prompt and significantly impacts conversation quality.
+</Tip>
+
+### Agent Context
+
+Configure how agents should represent your company:
+
+- **Tone**: Professional, friendly, technical, casual
+- **Personality**: Helpful, consultative, direct
+- **Boundaries**: Topics to avoid, escalation triggers
+
+## Step 2: Agent Creation
+
+### Choose Agent Type
+
+| Type | Use Case |
+|------|----------|
+| **Voice Agent** | Phone calls (inbound/outbound) |
+| **Chat Agent** | Website chat widget |
+| **Workflow Squad** | Multi-agent orchestration |
+
+### Voice Agent Setup
+
+1. **Basic Info**
+   - Name your agent
+   - Write a first message (greeting)
+   - Set the system prompt
+
+2. **Model Configuration**
+   - Select LLM provider (OpenAI, Anthropic, Google)
+   - Choose model (GPT-4o, Claude 3.5, etc.)
+   - Set temperature (0.7 recommended for conversations)
+
+3. **Voice Configuration**
+   - Select voice provider (Cartesia, ElevenLabs, Deepgram)
+   - Choose voice ID
+   - Configure speech settings
+
+4. **Knowledge Base**
+   - Upload product documents
+   - Add FAQ content
+   - Include sales materials
+
+5. **Custom Actions**
+   - ERP lookups
+   - Calendar booking
+   - CRM updates
+
+### Chat Agent Setup
+
+Similar to voice agents, with additional widget configuration:
+
+- Primary color (matches your brand)
+- Widget position (bottom-right, bottom-left)
+- Welcome message
+- Suggested prompts
+
+## Step 3: Integration Setup
+
+### CRM Integration (HubSpot/Salesforce)
+
+1. Navigate to **Settings** → **Integrations** → **CRM**
+2. Click **Connect CRM**
+3. Authorize via Merge.dev
+4. Configure field mappings:
+   - Lead fields → CRM contact fields
+   - Company fields → CRM account fields
+
+### Lead Enrichment (Apollo.io)
+
+1. Navigate to **Settings** → **Integrations** → **Apollo**
+2. Enter your Apollo API key
+3. Configure enrichment settings:
+   - Auto-enrich on lead capture
+   - Fields to enrich (title, company, LinkedIn)
+
+### Email (Resend)
+
+1. Navigate to **Settings** → **Integrations** → **Email**
+2. Add your Resend API key
+3. Configure email templates for:
+   - Lead notifications
+   - Meeting confirmations
+   - Follow-up sequences
+
+## Step 4: Team Onboarding
+
+### Invite Team Members
+
+1. Navigate to **Settings** → **Team**
+2. Click **Invite Member**
+3. Enter email addresses
+4. Assign roles
+
+### Role Permissions
+
+| Role | Capabilities |
+|------|--------------|
+| **Admin** | Full access, billing, team management |
+| **Manager** | Agent management, analytics, campaigns |
+| **Agent** | View logs, handle escalations |
+| **Viewer** | Read-only access to dashboards |
+
+### Training Resources
+
+Share these resources with your team:
+
+- [Quickstart Guide](/getting-started/quickstart) - 15-minute overview
+- [Concepts](/getting-started/concepts) - Key terminology
+- [Tutorials](/tutorials/first-voice-agent) - Step-by-step guides
+
+## Onboarding Checklist
+
+Use this checklist to ensure complete setup:
+
+### Business DNA
+- [ ] Website URL entered
+- [ ] Extraction completed
+- [ ] Business overview reviewed
+- [ ] Products/services verified
+- [ ] Agent context configured
+
+### First Agent
+- [ ] Agent created
+- [ ] Model configured
+- [ ] Voice selected (if voice agent)
+- [ ] Knowledge base uploaded
+- [ ] Lead capture enabled
+- [ ] Testing completed
+
+### Integrations
+- [ ] CRM connected
+- [ ] Apollo.io configured
+- [ ] Email integration set up
+
+### Team
+- [ ] Team members invited
+- [ ] Roles assigned
+- [ ] Training scheduled
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Create Voice Agent" icon="phone" href="/agents/voice-agents">
+    Build your first voice agent
+  </Card>
+  <Card title="Run a Campaign" icon="bullhorn" href="/campaigns/overview">
+    Launch outbound campaigns
+  </Card>
+</CardGroup>

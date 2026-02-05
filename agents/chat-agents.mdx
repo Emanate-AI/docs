@@ -1,0 +1,315 @@
+---
+title: "Chat Agents"
+description: "Setting up and embedding AI chat widgets"
+---
+
+# Chat Agents
+
+Chat agents provide AI-powered conversations via embeddable widgets on your website. They engage visitors, answer questions, and capture leads 24/7.
+
+## Creating a Chat Agent
+
+Navigate to **Agents** → **Chat Agents** → **Create Agent**
+
+### Basic Configuration
+
+| Field | Description | Example |
+|-------|-------------|---------|
+| **Name** | Internal identifier | "Website Assistant" |
+| **First Message** | Opening greeting | "Hi! How can I help you today?" |
+| **System Prompt** | Agent instructions | Role, capabilities, guidelines |
+
+### Model Configuration
+
+Chat agents use the same LLM configuration as voice agents:
+
+```typescript
+model: {
+  provider: "openai",
+  model: "gpt-4o",
+  temperature: 0.7,
+  maxTokens: 2000
+}
+```
+
+## Widget Configuration
+
+Customize the chat widget appearance:
+
+### Visual Settings
+
+| Setting | Description | Default |
+|---------|-------------|---------|
+| **Primary Color** | Button and header color | Brand color |
+| **Position** | Widget location | bottom-right |
+| **Welcome Message** | Pre-chat greeting | "Chat with us!" |
+| **Placeholder** | Input field text | "Type a message..." |
+
+### Widget Positions
+
+- `bottom-right` - Most common, standard position
+- `bottom-left` - Alternative for left-aligned designs
+
+### Branding
+
+```typescript
+widget: {
+  primaryColor: "#6366F1",
+  position: "bottom-right",
+  welcomeMessage: "Have questions? We're here to help!",
+  agentName: "Sales Assistant",
+  agentAvatar: "https://..."
+}
+```
+
+## Embedding the Widget
+
+### JavaScript Embed
+
+Add this code before the closing `</body>` tag:
+
+```html
+<script 
+  src="https://cdn.emanate.ai/widget.js" 
+  data-agent-id="YOUR_AGENT_ID"
+  data-primary-color="#6366F1"
+  data-position="bottom-right">
+</script>
+```
+
+### React Integration
+
+```jsx
+import { EmanateChat } from '@emanate/react';
+
+function App() {
+  return (
+    <div>
+      <EmanateChat 
+        agentId="YOUR_AGENT_ID"
+        primaryColor="#6366F1"
+        position="bottom-right"
+      />
+    </div>
+  );
+}
+```
+
+### Next.js Integration
+
+```jsx
+// app/layout.tsx
+import Script from 'next/script';
+
+export default function RootLayout({ children }) {
+  return (
+    <html>
+      <body>
+        {children}
+        <Script 
+          src="https://cdn.emanate.ai/widget.js"
+          data-agent-id="YOUR_AGENT_ID"
+        />
+      </body>
+    </html>
+  );
+}
+```
+
+## Suggested Prompts
+
+Add quick-start buttons for common questions:
+
+```typescript
+suggestedPrompts: [
+  "What products do you offer?",
+  "How do I get a quote?",
+  "What are your shipping options?",
+  "Can I speak with sales?"
+]
+```
+
+These appear as clickable buttons when the chat opens.
+
+## Lead Capture
+
+Configure lead capture for chat agents:
+
+1. Go to **Overview** tab
+2. Enable **Lead Capture**
+3. Set capture timing:
+   - **Immediate**: Ask for info at start
+   - **Contextual**: Collect naturally during conversation
+   - **End of Chat**: Request before closing
+
+### Pre-Chat Form
+
+Optionally require information before chatting:
+
+```typescript
+preChatForm: {
+  enabled: true,
+  fields: [
+    { name: "name", required: true },
+    { name: "email", required: true },
+    { name: "company", required: false }
+  ]
+}
+```
+
+## Chat Sessions
+
+### Session Lifecycle
+
+1. **Visitor opens widget** → New session created
+2. **Conversation happens** → Messages stored
+3. **Lead captured** → Contact info extracted
+4. **Session ends** → Full transcript saved
+
+### Session Persistence
+
+Sessions persist across page navigations:
+
+- Session ID stored in browser
+- Conversation history maintained
+- Visitor can return and continue
+
+### Session Timeout
+
+Configure session expiration:
+
+| Setting | Description | Default |
+|---------|-------------|---------|
+| **Idle Timeout** | Minutes before session expires | 30 |
+| **Max Duration** | Maximum session length | 24 hours |
+
+## Human Handoff
+
+Enable transfer to human agents:
+
+### Handoff Triggers
+
+- Explicit request: "Can I speak to a human?"
+- Sentiment detection: Frustrated visitor
+- Topic-based: Complex questions
+
+### Handoff Options
+
+```typescript
+handoff: {
+  enabled: true,
+  message: "Let me connect you with a team member.",
+  destinations: [
+    { type: "email", address: "support@company.com" },
+    { type: "intercom", teamId: "..." },
+    { type: "zendesk", ticketForm: "..." }
+  ]
+}
+```
+
+## Chat Agent Prompts
+
+### System Prompt Example
+
+```markdown
+## Role
+You are the website assistant for ABC Materials, helping visitors 
+find information about our industrial materials products.
+
+## Capabilities
+- Answer questions about products and specifications
+- Provide pricing guidance (refer to sales for quotes)
+- Help visitors navigate the website
+- Collect contact information for follow-up
+
+## Guidelines
+- Be concise - chat messages should be 1-3 sentences
+- Use bullet points for lists
+- Include links to relevant pages when helpful
+- Ask clarifying questions before giving detailed answers
+
+## Lead Capture
+When appropriate, collect:
+- Name
+- Email
+- Company
+- Project details
+```
+
+### Chat-Specific Considerations
+
+Unlike voice, chat has:
+
+- **Visual formatting**: Use markdown, bullets, links
+- **Asynchronous**: Visitors may take time to respond
+- **Multi-tab**: Visitor may be browsing while chatting
+
+## Testing Chat Agents
+
+Use the built-in test panel:
+
+1. Click **Test** in agent editor
+2. Chat test panel opens
+3. Verify:
+   - First message displays
+   - Responses are formatted correctly
+   - Links work
+   - Lead capture triggers
+
+### Test Checklist
+
+- [ ] Widget loads correctly
+- [ ] First message appears
+- [ ] Agent responds appropriately
+- [ ] Suggested prompts work
+- [ ] Lead capture collects data
+- [ ] Handoff triggers correctly
+
+## Analytics
+
+Track chat agent performance:
+
+| Metric | Description |
+|--------|-------------|
+| **Sessions** | Total chat sessions |
+| **Messages** | Average messages per session |
+| **Duration** | Average session length |
+| **Leads Captured** | Successful lead captures |
+| **Handoff Rate** | Sessions transferred to humans |
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Widget doesn't appear">
+    - Verify embed code is before `</body>`
+    - Check agent ID is correct
+    - Look for JavaScript errors in console
+  </Accordion>
+  <Accordion title="Responses are slow">
+    - Check model selection (try GPT-4o-mini for speed)
+    - Reduce max tokens
+    - Simplify system prompt
+  </Accordion>
+  <Accordion title="Formatting looks wrong">
+    - Use markdown in agent responses
+    - Keep messages concise
+    - Test on mobile devices
+  </Accordion>
+</AccordionGroup>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Embed Tutorial" icon="code" href="/tutorials/embed-chat-widget">
+    Step-by-step embedding guide
+  </Card>
+  <Card title="Knowledge Base" icon="book" href="/agents/knowledge-base">
+    Add context documents
+  </Card>
+  <Card title="Lead Capture" icon="user-plus" href="/leads/capture">
+    Configure lead collection
+  </Card>
+  <Card title="Chat Logs" icon="message" href="/analytics/chat-logs">
+    View conversation history
+  </Card>
+</CardGroup>

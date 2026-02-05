@@ -1,0 +1,306 @@
+---
+title: "Campaign Monitoring"
+description: "Real-time monitoring and alerts for campaigns"
+---
+
+# Campaign Monitoring
+
+Monitor your campaigns in real-time to ensure optimal performance and quickly address issues.
+
+## Real-Time Dashboard
+
+Access the monitoring dashboard from **Campaigns** → **Active Campaigns**
+
+### Live Metrics
+
+| Metric | Description |
+|--------|-------------|
+| **Active Calls** | Currently in progress |
+| **Queue Depth** | Calls waiting to dial |
+| **Today's Attempts** | Calls dialed today |
+| **Today's Connects** | Answered calls today |
+| **Connect Rate** | Connects / Attempts |
+| **Conversion Rate** | Conversions / Connects |
+
+### Campaign Health
+
+Visual indicators show campaign status:
+
+| Indicator | Meaning |
+|-----------|---------|
+| 🟢 Green | Performing well |
+| 🟡 Yellow | Below target, monitor |
+| 🔴 Red | Issues detected, action needed |
+
+## Call Activity Stream
+
+Live feed of call activity:
+
+```
+14:32:05  +1415555XXXX  Connected    3:24    Interested
+14:31:42  +1415555XXXX  Voicemail    0:45    Left Message
+14:31:18  +1415555XXXX  No Answer    -       Retry Scheduled
+14:30:55  +1415555XXXX  Connected    2:18    Meeting Booked
+```
+
+### Stream Filters
+
+Filter by:
+- Outcome (connected, voicemail, no answer)
+- Result (interested, not interested, etc.)
+- Time range
+- Contact attributes
+
+## Alerts
+
+Configure alerts for campaign events:
+
+### Alert Types
+
+| Alert | Trigger | Default |
+|-------|---------|---------|
+| **Low Connect Rate** | Below threshold | < 10% |
+| **High Hang-up Rate** | Above threshold | > 30% |
+| **Error Rate** | Technical failures | > 5% |
+| **Campaign Complete** | All contacts processed | Always |
+| **Pacing Maxed** | Hitting rate limits | Optional |
+
+### Alert Channels
+
+- **Email**: Immediate notification
+- **Slack**: Channel or DM
+- **SMS**: Critical alerts only
+- **Webhook**: Custom integrations
+
+### Configuring Alerts
+
+1. Go to **Campaigns** → **Settings** → **Alerts**
+2. Enable desired alerts
+3. Set thresholds
+4. Configure channels
+
+```typescript
+alerts: {
+  lowConnectRate: {
+    threshold: 0.10,  // 10%
+    channels: ["email", "slack"]
+  },
+  highHangupRate: {
+    threshold: 0.30,  // 30%
+    channels: ["email", "slack", "sms"]
+  }
+}
+```
+
+## Performance Metrics
+
+### Connect Rate Analysis
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  Connect Rate by Hour                                           │
+├─────────────────────────────────────────────────────────────────┤
+│  9am  ████████░░░░░░░░░░░░  12%                                 │
+│  10am ████████████░░░░░░░░  18%                                 │
+│  11am ██████████████████░░  24%  ← Best                         │
+│  12pm ██████████░░░░░░░░░░  14%                                 │
+│  1pm  ████████████░░░░░░░░  16%                                 │
+│  2pm  ████████████████░░░░  22%                                 │
+│  3pm  ██████████████░░░░░░  19%                                 │
+│  4pm  ████████████░░░░░░░░  17%                                 │
+│  5pm  ████████░░░░░░░░░░░░  11%                                 │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### Outcome Distribution
+
+| Outcome | Count | Percentage |
+|---------|-------|------------|
+| Interested | 145 | 28% |
+| Not Interested | 89 | 17% |
+| Callback Requested | 67 | 13% |
+| Meeting Booked | 52 | 10% |
+| Voicemail | 124 | 24% |
+| No Answer | 42 | 8% |
+
+### Conversion Funnel
+
+```
+Contacts:    1,000  100%
+Attempted:     850   85%
+Connected:     280   28%
+Interested:    145   14%
+Meeting:        52    5%
+```
+
+## Live Call Monitoring
+
+Listen to active calls in real-time:
+
+### Join a Call
+
+1. Click on an active call in the stream
+2. Select **Listen** (muted)
+3. Or select **Whisper** (agent hears you, contact doesn't)
+
+### Use Cases
+
+- Quality assurance
+- Training new agents
+- Handling escalations
+- Debugging issues
+
+<Note>
+  Live monitoring requires appropriate permissions. Contact administrators to enable access.
+</Note>
+
+## Historical Analysis
+
+### Time-Based Trends
+
+View performance over time:
+
+- Daily connect rates
+- Weekly conversion trends
+- Hour-by-hour patterns
+- Day-of-week analysis
+
+### A/B Comparisons
+
+Compare campaign variations:
+
+| Metric | Campaign A | Campaign B |
+|--------|------------|------------|
+| Connect Rate | 18% | 22% |
+| Conversion Rate | 12% | 15% |
+| Avg Call Duration | 2:45 | 3:12 |
+| Meeting Rate | 8% | 11% |
+
+### Contact Segment Analysis
+
+Performance by segment:
+
+| Segment | Connect Rate | Conversion |
+|---------|--------------|------------|
+| Recent Inquiries | 28% | 18% |
+| Old Leads | 12% | 6% |
+| Event Attendees | 32% | 22% |
+| Website Visitors | 15% | 9% |
+
+## Troubleshooting Campaigns
+
+### Low Connect Rates
+
+**Possible Causes:**
+- Bad phone numbers
+- Wrong calling hours
+- Caller ID issues
+- Saturated market
+
+**Actions:**
+1. Verify number quality
+2. Test different time slots
+3. Check caller ID configuration
+4. Try local presence dialing
+
+### High Hang-Up Rates
+
+**Possible Causes:**
+- Slow agent response
+- Unnatural voice
+- Wrong opening
+- Recognized as sales call
+
+**Actions:**
+1. Review opening message
+2. Reduce first-message latency
+3. Test different voices
+4. A/B test scripts
+
+### Conversion Issues
+
+**Possible Causes:**
+- Weak value proposition
+- Agent knowledge gaps
+- Poor lead quality
+- Objection handling
+
+**Actions:**
+1. Review call transcripts
+2. Update agent training
+3. Improve lead scoring
+4. Add objection responses
+
+## Automated Actions
+
+Configure automatic responses to conditions:
+
+### Auto-Pause
+
+Pause campaign when:
+- Connect rate drops below 5%
+- Error rate exceeds 10%
+- Complaint received
+
+### Auto-Adjust
+
+Automatically modify:
+- Reduce pacing during low-performance hours
+- Increase pacing during high-performance windows
+- Shift to optimal time slots
+
+```typescript
+automation: {
+  autoPause: {
+    connectRateBelow: 0.05,
+    errorRateAbove: 0.10
+  },
+  autoAdjust: {
+    optimizeForConnectRate: true,
+    pacingRange: { min: 5, max: 30 }
+  }
+}
+```
+
+## Reports
+
+### Daily Summary
+
+Automated daily report includes:
+- Calls attempted/connected
+- Outcomes breakdown
+- Top performing hours
+- Issues encountered
+- Recommendations
+
+### Weekly Analysis
+
+Comprehensive weekly report:
+- Week-over-week trends
+- Agent performance comparison
+- ROI analysis
+- Optimization suggestions
+
+### Export Data
+
+Export campaign data:
+- CSV for spreadsheets
+- JSON for integrations
+- PDF for stakeholders
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Voice Campaigns" icon="phone" href="/campaigns/voice-campaigns">
+    Campaign configuration
+  </Card>
+  <Card title="Analytics" icon="chart-bar" href="/analytics/overview">
+    Deep dive analytics
+  </Card>
+  <Card title="Call Logs" icon="list" href="/analytics/call-logs">
+    Review transcripts
+  </Card>
+  <Card title="Evaluations" icon="star" href="/analytics/evaluations">
+    Quality scoring
+  </Card>
+</CardGroup>

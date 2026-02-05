@@ -1,0 +1,230 @@
+---
+title: "Security"
+description: "Security and compliance in Emanate"
+---
+
+# Security & Compliance
+
+Emanate is built with security as a core principle, protecting your data and your customers' information.
+
+## Architecture Security
+
+### Data Isolation
+
+- **Multi-tenant**: Every record has `org_id`
+- **Row-Level Security**: Supabase RLS enforces isolation
+- **API Isolation**: Requests scoped to organization
+
+### Authentication
+
+| Layer | Provider |
+|-------|----------|
+| User Auth | PropelAuth |
+| API Auth | API Keys + JWT |
+| Webhook Auth | Signature verification |
+
+### Encryption
+
+| Data State | Protection |
+|------------|------------|
+| In Transit | TLS 1.3 |
+| At Rest | AES-256 |
+| Secrets | Encrypted storage |
+
+## Data Protection
+
+### Sensitive Data Handling
+
+| Data Type | Handling |
+|-----------|----------|
+| API Keys | Encrypted, never logged |
+| Phone Numbers | Masked in logs |
+| Call Recordings | Encrypted storage |
+| Transcripts | Access controlled |
+
+### Data Retention
+
+| Data Type | Retention |
+|-----------|-----------|
+| Call Logs | 90 days default |
+| Recordings | 30 days default |
+| Leads | Until deleted |
+| Analytics | 12 months |
+
+Configure retention in **Settings** → **Data Retention**.
+
+## API Security
+
+### Authentication
+
+All API requests require authentication:
+
+```bash
+curl -H "Authorization: Bearer YOUR_API_KEY" \
+     https://api.emanate.ai/v1/leads
+```
+
+### Rate Limiting
+
+| Endpoint Type | Limit |
+|---------------|-------|
+| Read operations | 1000/min |
+| Write operations | 100/min |
+| Bulk operations | 10/min |
+
+### Webhook Verification
+
+Verify webhook signatures:
+
+```typescript
+import crypto from "crypto";
+
+function verifyWebhook(payload: string, signature: string, secret: string) {
+  const expected = crypto
+    .createHmac("sha256", secret)
+    .update(payload)
+    .digest("hex");
+  
+  return crypto.timingSafeEqual(
+    Buffer.from(signature),
+    Buffer.from(expected)
+  );
+}
+```
+
+## Compliance
+
+### SOC 2 Type II
+
+Emanate maintains SOC 2 Type II compliance:
+- Security controls audited
+- Annual certification
+- Continuous monitoring
+
+### GDPR
+
+For EU customers:
+- Data Processing Agreement available
+- Right to deletion supported
+- Data export functionality
+- EU data residency option
+
+### CCPA
+
+For California residents:
+- Privacy policy compliant
+- Opt-out mechanisms
+- Data access requests
+
+### HIPAA
+
+For healthcare (coming soon):
+- BAA available
+- PHI handling procedures
+- Audit logging
+
+## Voice/Call Security
+
+### Call Recording
+
+- Recordings encrypted at rest
+- Access logging
+- Configurable retention
+- Optional recording disable
+
+### Phone Numbers
+
+- DNC list integration
+- TCPA compliance tools
+- Calling hour restrictions
+- Consent tracking
+
+### Transcripts
+
+- PII detection
+- Redaction options
+- Access controls
+
+## Best Practices
+
+### API Keys
+
+<Warning>
+  Never expose API keys in client-side code or public repositories.
+</Warning>
+
+- Rotate keys regularly
+- Use environment variables
+- Limit key permissions
+- Monitor key usage
+
+### Secrets Management
+
+1. Go to **Settings** → **Secrets**
+2. Add secrets (encrypted)
+3. Reference as `{{SECRET_NAME}}`
+
+### Access Control
+
+| Role | Permissions |
+|------|-------------|
+| Admin | Full access |
+| Manager | Agents, campaigns, leads |
+| Agent | View logs, handle escalations |
+| Viewer | Read-only dashboards |
+
+## Incident Response
+
+### Reporting Issues
+
+Report security concerns to: security@emanate.ai
+
+### Response Timeline
+
+| Severity | Response |
+|----------|----------|
+| Critical | 4 hours |
+| High | 24 hours |
+| Medium | 72 hours |
+| Low | 1 week |
+
+## Audit Logging
+
+All actions are logged:
+
+```json
+{
+  "timestamp": "2024-02-04T10:30:00Z",
+  "user_id": "user_123",
+  "org_id": "org_456",
+  "action": "assistant.create",
+  "resource_id": "asst_789",
+  "ip_address": "192.168.1.1",
+  "user_agent": "Mozilla/5.0..."
+}
+```
+
+Access logs in **Settings** → **Audit Log**.
+
+## Security Headers
+
+All responses include:
+
+```
+Strict-Transport-Security: max-age=31536000
+X-Content-Type-Options: nosniff
+X-Frame-Options: DENY
+X-XSS-Protection: 1; mode=block
+Content-Security-Policy: default-src 'self'
+```
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Architecture" icon="sitemap" href="/engineering/architecture">
+    System architecture
+  </Card>
+  <Card title="API Reference" icon="code" href="/api-reference/overview">
+    API documentation
+  </Card>
+</CardGroup>

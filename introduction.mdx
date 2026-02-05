@@ -1,0 +1,98 @@
+---
+title: "Introduction"
+description: "The AI Revenue Engine for Industrial Materials"
+---
+
+# Welcome to Emanate
+
+Emanate is the **AI Revenue Engine for Industrial Materials** — autonomous AI agents that handle revenue-generating operations so your team can focus on what matters most.
+
+<CardGroup cols={2}>
+  <Card title="Quickstart" icon="rocket" href="/getting-started/quickstart">
+    Get your first AI agent up and running in 15 minutes
+  </Card>
+  <Card title="Voice Agents" icon="phone" href="/agents/voice-agents">
+    Create AI agents that handle phone calls autonomously
+  </Card>
+  <Card title="Chat Agents" icon="message" href="/agents/chat-agents">
+    Embed AI chat widgets on your website
+  </Card>
+  <Card title="Lead Management" icon="users" href="/leads/overview">
+    Capture, enrich, and sync leads automatically
+  </Card>
+</CardGroup>
+
+## What is Emanate?
+
+Emanate provides AI-powered agents that autonomously handle customer interactions across voice and chat channels. Built specifically for industrial materials companies, Emanate agents can:
+
+- **Answer inbound calls** and qualify leads 24/7
+- **Run outbound campaigns** to reach prospects at scale
+- **Capture lead information** directly from conversations
+- **Enrich contacts** with company and contact data via Apollo.io
+- **Sync to your CRM** (HubSpot, Salesforce) automatically
+
+## Core Capabilities
+
+### AI Agents
+
+Create voice and chat agents that understand your business context, products, and customer needs. Agents are powered by your choice of LLM (OpenAI, Anthropic, Google) and can be customized with:
+
+- Custom system prompts and instructions
+- Knowledge base documents for context
+- Custom actions (ERP lookups, calendar booking, etc.)
+- Lead capture and qualification workflows
+
+### Lead Pipeline
+
+Every conversation is an opportunity. Emanate automatically:
+
+1. **Captures** contact information from agent conversations
+2. **Enriches** leads with Apollo.io data (title, company, LinkedIn)
+3. **Scores** leads against your Ideal Customer Profile
+4. **Syncs** qualified leads to your CRM with full context
+
+### Campaign Management
+
+Run outbound voice campaigns with:
+
+- Automated dialing and call scheduling
+- Real-time monitoring and alerts
+- Call transcripts and recordings
+- Performance analytics
+
+## Architecture Overview
+
+Emanate is built on a modern stack designed for reliability and performance:
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  Next.js 14 (App Router)         Frontend & API                 │
+├─────────────────────────────────────────────────────────────────┤
+│  VAPI                            Voice & Chat AI Platform       │
+├─────────────────────────────────────────────────────────────────┤
+│  Supabase                        Database & Auth                │
+├─────────────────────────────────────────────────────────────────┤
+│  Integrations                    Apollo, HubSpot, Resend        │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+<Note>
+  **Key Pattern:** "VAPI writes, Supabase reads" — All mutations go through VAPI as the source of truth, while reads come from Supabase for instant performance.
+</Note>
+
+## Get Started
+
+Ready to build your first AI agent? Start with the [Quickstart Guide](/getting-started/quickstart) to have your first agent running in 15 minutes.
+
+<CardGroup cols={3}>
+  <Card title="Quickstart" icon="play" href="/getting-started/quickstart">
+    15-minute setup
+  </Card>
+  <Card title="Concepts" icon="book" href="/getting-started/concepts">
+    Key terminology
+  </Card>
+  <Card title="Tutorials" icon="graduation-cap" href="/tutorials/first-voice-agent">
+    Step-by-step guides
+  </Card>
+</CardGroup>

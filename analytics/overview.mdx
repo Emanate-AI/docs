@@ -1,0 +1,176 @@
+---
+title: "Analytics Overview"
+description: "Metrics and dashboards in Emanate"
+---
+
+# Analytics Overview
+
+Emanate provides comprehensive analytics to understand agent performance, conversation quality, and lead generation effectiveness.
+
+## Dashboard
+
+The main dashboard shows key metrics at a glance:
+
+### Key Metrics
+
+| Metric | Description |
+|--------|-------------|
+| **Total Conversations** | Calls + chats combined |
+| **Connect Rate** | % of calls answered |
+| **Avg Duration** | Average conversation length |
+| **Leads Captured** | Successful lead captures |
+| **Conversion Rate** | Leads / Conversations |
+
+### Time Filters
+
+- Today
+- Last 7 days
+- Last 30 days
+- Custom range
+
+## Analytics Sections
+
+<CardGroup cols={2}>
+  <Card title="Call Logs" icon="phone" href="/analytics/call-logs">
+    Voice call history and transcripts
+  </Card>
+  <Card title="Chat Logs" icon="message" href="/analytics/chat-logs">
+    Chat session history
+  </Card>
+  <Card title="Evaluations" icon="star" href="/analytics/evaluations">
+    Quality scoring and assessment
+  </Card>
+  <Card title="Insights" icon="lightbulb" href="/analytics/insights">
+    AI-generated performance insights
+  </Card>
+</CardGroup>
+
+## Metrics Breakdown
+
+### Volume Metrics
+
+```
+Conversations This Month
+────────────────────────────────────────────────
+Voice Calls    ████████████████████░░░░  2,847
+Chat Sessions  ████████████░░░░░░░░░░░░  1,523
+────────────────────────────────────────────────
+Total                                    4,370
+```
+
+### Outcome Metrics
+
+| Outcome | Count | % |
+|---------|-------|---|
+| Completed | 3,248 | 74% |
+| Lead Captured | 1,892 | 43% |
+| Meeting Booked | 423 | 10% |
+| Transferred | 312 | 7% |
+| Abandoned | 387 | 9% |
+
+### Quality Metrics
+
+| Metric | Value |
+|--------|-------|
+| Avg Satisfaction | 4.2/5 |
+| First Call Resolution | 78% |
+| Avg Response Time | 1.2s |
+| Error Rate | 0.3% |
+
+## Agent Performance
+
+Compare agents side-by-side:
+
+| Agent | Conversations | Leads | Rate |
+|-------|--------------|-------|------|
+| Sales Assistant | 1,245 | 523 | 42% |
+| Support Agent | 892 | 156 | 17% |
+| Product Specialist | 634 | 287 | 45% |
+
+## Time-Based Analysis
+
+### By Hour
+
+Peak hours identification:
+
+```
+Conversations by Hour
+────────────────────────────────────────────────
+ 8am  ██░░░░░░░░  52
+ 9am  ████████░░░  187
+10am  ██████████████  324
+11am  ████████████████  412  ← Peak
+12pm  ████████░░░░  198
+ 1pm  ██████████░░  243
+ 2pm  ██████████████░  367
+ 3pm  █████████████░  298
+ 4pm  ████████░░░░  189
+ 5pm  ████░░░░░░  87
+```
+
+### By Day
+
+Weekly patterns:
+
+| Day | Volume | Best Hour |
+|-----|--------|-----------|
+| Monday | 892 | 2pm |
+| Tuesday | 956 | 11am |
+| Wednesday | 1,023 | 10am |
+| Thursday | 934 | 11am |
+| Friday | 565 | 10am |
+
+## Export & Reports
+
+### Scheduled Reports
+
+Set up automated reports:
+
+1. Go to **Analytics** → **Reports**
+2. Click **Create Report**
+3. Configure:
+   - Metrics to include
+   - Time period
+   - Schedule (daily/weekly/monthly)
+   - Recipients
+
+### Data Export
+
+Export raw data:
+
+- CSV for spreadsheets
+- JSON for integrations
+- PDF for stakeholders
+
+## Filters
+
+### Global Filters
+
+Apply across all analytics:
+
+- Date range
+- Agent
+- Channel (voice/chat)
+- Outcome
+
+### Saved Filters
+
+Save common filter combinations:
+
+```typescript
+savedFilters: [
+  { name: "High Value Leads", criteria: { icpScore: { min: 80 } } },
+  { name: "This Week Voice", criteria: { channel: "voice", date: "this_week" } }
+]
+```
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Call Logs" icon="phone" href="/analytics/call-logs">
+    Deep dive into calls
+  </Card>
+  <Card title="Insights" icon="lightbulb" href="/analytics/insights">
+    AI recommendations
+  </Card>
+</CardGroup>

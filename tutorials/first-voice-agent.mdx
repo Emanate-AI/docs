@@ -1,0 +1,222 @@
+---
+title: "Build Your First Voice Agent"
+description: "Step-by-step guide to creating your first AI voice agent"
+---
+
+# Build Your First Voice Agent
+
+This tutorial walks you through creating a complete voice agent that can answer calls, qualify leads, and capture contact information.
+
+**Time:** 20-30 minutes  
+**Prerequisites:** Emanate account, completed Business DNA setup
+
+## What We'll Build
+
+A voice agent that:
+- Greets callers professionally
+- Answers product questions
+- Qualifies leads
+- Captures contact information
+- Schedules follow-ups
+
+## Step 1: Create the Agent
+
+1. Navigate to **Agents** → **Voice Agents**
+2. Click **Create Agent**
+3. Enter basic information:
+
+| Field | Value |
+|-------|-------|
+| Name | Sales Assistant |
+| First Message | "Hi, thanks for calling ABC Materials! I'm here to help with your industrial materials needs. How can I assist you today?" |
+
+## Step 2: Configure the Model
+
+1. Go to **Model** tab
+2. Select your LLM:
+
+```yaml
+Provider: OpenAI
+Model: gpt-4o
+Temperature: 0.7
+Max Tokens: 2000
+```
+
+<Tip>
+  Start with GPT-4o for best quality. You can switch to GPT-4o-mini later for faster, cheaper responses if quality is sufficient.
+</Tip>
+
+## Step 3: Write the System Prompt
+
+Go to **Instructions** tab and enter:
+
+```markdown
+## Role
+You are a friendly and knowledgeable sales assistant for ABC Materials, 
+a leading supplier of industrial materials including steel, aluminum, 
+and specialty metals.
+
+## Your Capabilities
+- Answer questions about our products and services
+- Provide general pricing guidance
+- Qualify leads by understanding their project needs
+- Collect contact information for follow-up
+- Schedule meetings with our sales team
+
+## Conversation Guidelines
+- Be warm, professional, and helpful
+- Keep responses concise (2-3 sentences)
+- Ask clarifying questions before providing detailed answers
+- If you don't know something, offer to connect them with a specialist
+
+## Lead Qualification
+During the conversation, try to understand:
+1. What products they're interested in
+2. Project timeline
+3. Approximate quantities needed
+4. Their role and decision-making authority
+
+## Contact Collection
+When the caller shows interest, naturally collect:
+- Full name
+- Company name
+- Email address
+- Best phone number for follow-up
+
+## Boundaries
+- Don't commit to specific pricing without a formal quote
+- Don't make promises about delivery dates
+- For technical specifications, offer to send documentation
+- For complex orders, offer to schedule a meeting with sales
+```
+
+## Step 4: Configure Voice
+
+1. Go to **Voice** tab
+2. Select voice settings:
+
+```yaml
+Provider: Cartesia
+Voice: Professional Female (or your preference)
+Model: sonic-3
+```
+
+3. Test the voice by clicking **Preview**
+
+## Step 5: Add Knowledge Base
+
+1. Go to **Knowledge Base** tab
+2. Click **Upload Documents**
+3. Add your materials:
+   - Product catalog (PDF)
+   - FAQ document (Word/PDF)
+   - Pricing guide (PDF)
+
+Wait for processing to complete (1-2 minutes).
+
+## Step 6: Enable Lead Capture
+
+1. Go to **Overview** tab
+2. Toggle **Lead Capture** on
+3. Configure fields:
+
+| Field | Required |
+|-------|----------|
+| Name | Yes |
+| Email | Yes |
+| Company | Yes |
+| Phone | No |
+
+## Step 7: Test Your Agent
+
+1. Click **Test** to open the test panel
+2. Click **Start Call**
+3. Test these scenarios:
+
+### Scenario 1: Product Inquiry
+```
+You: "I'm looking for steel beams for a construction project"
+Expected: Agent asks clarifying questions about type, size, quantity
+```
+
+### Scenario 2: Knowledge Base
+```
+You: "What sizes do your steel beams come in?"
+Expected: Agent references knowledge base for accurate info
+```
+
+### Scenario 3: Lead Capture
+```
+You: "I'd like to get a quote"
+Expected: Agent collects name, email, company
+```
+
+### Scenario 4: Transfer Request
+```
+You: "Can I speak to a human?"
+Expected: Agent offers to connect with sales team
+```
+
+## Step 8: Add Phone Number
+
+1. Go to **Phone Numbers** tab
+2. Click **Add Phone Number**
+3. Choose:
+   - **Local**: For a specific area code
+   - **Toll-Free**: For 1-800 number
+4. Assign to your agent
+
+## Step 9: Go Live
+
+Your agent is ready! The phone number is now active.
+
+### Verify Everything Works
+
+Make a real test call:
+1. Call the assigned phone number
+2. Verify greeting plays correctly
+3. Ask a question about products
+4. Provide your contact information
+5. Check that the lead was captured
+
+## What's Next?
+
+<CardGroup cols={2}>
+  <Card title="Lead Enrichment" icon="sparkles" href="/leads/enrichment">
+    Enrich captured leads with Apollo
+  </Card>
+  <Card title="CRM Sync" icon="database" href="/leads/crm-sync">
+    Push leads to HubSpot/Salesforce
+  </Card>
+  <Card title="Voice Campaigns" icon="bullhorn" href="/tutorials/outbound-campaign">
+    Run outbound campaigns
+  </Card>
+  <Card title="Custom Actions" icon="bolt" href="/agents/custom-actions">
+    Add ERP integrations
+  </Card>
+</CardGroup>
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Agent doesn't respond">
+    - Check model is configured correctly
+    - Verify system prompt isn't empty
+    - Test in the test panel first
+  </Accordion>
+  <Accordion title="Voice sounds robotic">
+    - Try a different voice provider
+    - Adjust the voice model
+    - Simplify sentence structures in prompts
+  </Accordion>
+  <Accordion title="Knowledge base not working">
+    - Ensure documents are processed (Ready status)
+    - Test with questions that match document content
+    - Check query tool is attached
+  </Accordion>
+  <Accordion title="Lead capture not triggering">
+    - Verify lead capture is enabled
+    - Check structured output configuration
+    - Test by explicitly providing information
+  </Accordion>
+</AccordionGroup>

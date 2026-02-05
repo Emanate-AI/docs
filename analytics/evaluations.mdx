@@ -1,0 +1,245 @@
+---
+title: "Evaluations"
+description: "Quality assurance and conversation scoring"
+---
+
+# Evaluations
+
+Evaluations provide AI-assisted quality scoring for agent conversations, helping you maintain high standards and identify improvement opportunities.
+
+## How Evaluations Work
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│ Conversation Completed                                          │
+└─────────────────────────────────────────────────────────────────┘
+                    │
+                    ▼
+┌─────────────────────────────────────────────────────────────────┐
+│ AI Evaluation Engine                                             │
+│ - Analyze transcript                                             │
+│ - Score against criteria                                         │
+│ - Generate feedback                                              │
+└─────────────────────────────────────────────────────────────────┘
+                    │
+                    ▼
+┌─────────────────────────────────────────────────────────────────┐
+│ Evaluation Report                                                │
+│ - Overall score                                                  │
+│ - Category scores                                                │
+│ - Specific feedback                                              │
+│ - Improvement suggestions                                        │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+## Evaluation Criteria
+
+### Standard Criteria
+
+| Category | Weight | Description |
+|----------|--------|-------------|
+| **Greeting** | 10% | Opening warmth and clarity |
+| **Understanding** | 20% | Correctly understood customer need |
+| **Knowledge** | 20% | Accurate product/service information |
+| **Helpfulness** | 20% | Provided value to customer |
+| **Resolution** | 15% | Successfully addressed the inquiry |
+| **Closing** | 15% | Professional wrap-up |
+
+### Custom Criteria
+
+Add criteria specific to your business:
+
+```typescript
+customCriteria: [
+  {
+    name: "Lead Qualification",
+    weight: 15,
+    description: "Did agent properly qualify the lead?"
+  },
+  {
+    name: "Upsell Attempt",
+    weight: 10,
+    description: "Did agent identify upsell opportunities?"
+  }
+]
+```
+
+## Evaluation Scores
+
+### Score Scale
+
+| Score | Rating | Description |
+|-------|--------|-------------|
+| 90-100 | Excellent | Exceeds expectations |
+| 80-89 | Good | Meets expectations |
+| 70-79 | Satisfactory | Acceptable performance |
+| 60-69 | Needs Improvement | Below expectations |
+| Under 60 | Poor | Significant issues |
+
+### Sample Evaluation
+
+```
+Conversation #12345
+Overall Score: 87/100 (Good)
+────────────────────────────────────
+
+Greeting          ████████████░░  92%
+  "Warm, professional opening"
+
+Understanding     ██████████░░░░  82%
+  "Correctly identified need, missed clarifying question"
+
+Knowledge         █████████████░  95%
+  "Accurate product information provided"
+
+Helpfulness       ████████████░░  88%
+  "Good recommendations, could offer alternatives"
+
+Resolution        █████████░░░░░  78%
+  "Issue partially resolved, needs follow-up"
+
+Closing           █████████████░  90%
+  "Clear next steps, friendly goodbye"
+```
+
+## Viewing Evaluations
+
+### Evaluations List
+
+Navigate to **Analytics** → **Evaluations**
+
+Filter by:
+- Date range
+- Agent
+- Score range
+- Category
+
+### Evaluation Detail
+
+Click an evaluation to see:
+- Full conversation transcript
+- Score breakdown
+- Specific feedback
+- Improvement suggestions
+- Comparison to average
+
+## Automatic vs Manual Evaluations
+
+### Automatic (AI)
+
+All conversations are automatically evaluated:
+- Runs after conversation ends
+- Scores against all criteria
+- Generates feedback
+
+### Manual Review
+
+Human review for:
+- Disputed evaluations
+- Training purposes
+- Quality audits
+
+To add manual review:
+1. Open evaluation detail
+2. Click **Add Review**
+3. Adjust scores if needed
+4. Add notes
+
+## Agent Performance
+
+### Leaderboard
+
+| Agent | Avg Score | Evaluations |
+|-------|-----------|-------------|
+| Sales Assistant | 88.5 | 523 |
+| Product Expert | 86.2 | 312 |
+| Support Agent | 82.1 | 445 |
+
+### Trend Analysis
+
+Track scores over time:
+
+```
+Weekly Average Score
+────────────────────────────────────
+Week 1  ████████████████░░  84.2
+Week 2  █████████████████░  86.5
+Week 3  █████████████████░  87.1
+Week 4  ██████████████████  88.3
+```
+
+### Category Comparison
+
+Identify strengths and weaknesses:
+
+```
+Agent: Sales Assistant
+────────────────────────────────────
+Greeting       ████████████████  94%  ↑
+Understanding  ████████████░░░░  85%  →
+Knowledge      █████████████░░░  90%  ↑
+Helpfulness    ███████████░░░░░  80%  ↓ Needs work
+Resolution     ████████████░░░░  87%  →
+Closing        ███████████████░  92%  ↑
+```
+
+## Improvement Recommendations
+
+AI generates actionable suggestions:
+
+### Example Recommendations
+
+> **Understanding (82%)**
+> 
+> The agent correctly identified the customer's main need but missed 
+> an opportunity to ask about timeline and budget. Add these 
+> qualifying questions to improve lead quality.
+> 
+> **Suggested prompt addition:**
+> "After understanding the product need, ask about timeline and budget 
+> to better qualify the lead."
+
+## Alerts
+
+Set up alerts for quality issues:
+
+| Alert | Trigger |
+|-------|---------|
+| Low Score | Evaluation < 70 |
+| Score Drop | Agent drops 10+ points |
+| Category Issue | Any category < 60 |
+
+## Reports
+
+### Weekly Summary
+
+Automated weekly report:
+- Overall score trend
+- Top performers
+- Improvement areas
+- Specific examples
+
+### Agent Report Card
+
+Individual agent performance:
+- Score history
+- Category breakdown
+- Peer comparison
+- Recommendations
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Insights" icon="lightbulb" href="/analytics/insights">
+    AI recommendations
+  </Card>
+  <Card title="Call Logs" icon="phone" href="/analytics/call-logs">
+    Review conversations
+  </Card>
+  <Card title="Voice Agents" icon="phone" href="/agents/voice-agents">
+    Improve agents
+  </Card>
+  <Card title="Testing" icon="flask" href="/agents/testing">
+    Test improvements
+  </Card>
+</CardGroup>

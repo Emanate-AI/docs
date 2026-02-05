@@ -1,0 +1,317 @@
+---
+title: "ICP Scoring"
+description: "AI-powered Ideal Customer Profile scoring"
+---
+
+# ICP Scoring
+
+ICP (Ideal Customer Profile) Scoring uses AI to evaluate how well leads match your target customer, helping sales teams prioritize their efforts.
+
+## How It Works
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│ Lead Data + Enrichment                                          │
+├─────────────────────────────────────────────────────────────────┤
+│ - Title: VP of Operations                                       │
+│ - Company Size: 500 employees                                   │
+│ - Industry: Manufacturing                                       │
+│ - Revenue: $50M                                                 │
+│ - Conversation: Interested in bulk steel orders                 │
+└─────────────────────────────────────────────────────────────────┘
+                    │
+                    ▼
+┌─────────────────────────────────────────────────────────────────┐
+│ ICP Scoring Engine                                               │
+│ - Compare against ICP criteria                                   │
+│ - Weight each factor                                             │
+│ - Analyze conversation intent                                    │
+│ - Calculate overall score                                        │
+└─────────────────────────────────────────────────────────────────┘
+                    │
+                    ▼
+┌─────────────────────────────────────────────────────────────────┐
+│ Score: 85/100 (Highly Qualified)                                 │
+│ - Company Fit: 90 (matches industry & size)                      │
+│ - Role Fit: 85 (decision-maker level)                            │
+│ - Intent: 80 (strong buying signals)                             │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+## Defining Your ICP
+
+### Step 1: Access ICP Settings
+
+Navigate to **Settings** → **Leads** → **ICP Configuration**
+
+### Step 2: Define Criteria
+
+#### Company Criteria
+
+| Criterion | Example Values | Weight |
+|-----------|----------------|--------|
+| **Industry** | Manufacturing, Construction | 25% |
+| **Company Size** | 100-1000 employees | 20% |
+| **Revenue** | $10M-500M | 15% |
+| **Location** | United States, Canada | 10% |
+
+#### Role Criteria
+
+| Criterion | Example Values | Weight |
+|-----------|----------------|--------|
+| **Title Keywords** | VP, Director, Manager | 15% |
+| **Department** | Operations, Procurement | 10% |
+| **Seniority** | Executive, Director | 10% |
+
+#### Intent Signals
+
+| Signal | Points |
+|--------|--------|
+| Requested pricing | +10 |
+| Asked about timeline | +10 |
+| Mentioned budget | +15 |
+| Requested meeting | +20 |
+| Mentioned competitor | +5 |
+
+### Step 3: Set Weights
+
+Distribute 100% across criteria:
+
+```typescript
+icpWeights: {
+  industry: 25,
+  companySize: 20,
+  revenue: 15,
+  location: 10,
+  title: 15,
+  department: 10,
+  seniority: 10,
+  intentSignals: 20  // Bonus points
+}
+```
+
+## Score Calculation
+
+### Scoring Formula
+
+```
+Score = Σ (Criterion Match × Weight × 100)
+```
+
+### Example Calculation
+
+| Criterion | Match | Weight | Points |
+|-----------|-------|--------|--------|
+| Industry: Manufacturing | ✓ 100% | 25% | 25 |
+| Size: 500 employees | ✓ 100% | 20% | 20 |
+| Revenue: $50M | ✓ 100% | 15% | 15 |
+| Location: USA | ✓ 100% | 10% | 10 |
+| Title: VP | ✓ 100% | 15% | 15 |
+| Department: Operations | ✓ 100% | 10% | 10 |
+| **Intent Bonus** | +15 | - | +15 |
+| **Total** | | | **110** → 100 (capped) |
+
+### Score Tiers
+
+| Score | Tier | Action |
+|-------|------|--------|
+| 80-100 | 🟢 Highly Qualified | Fast-track to sales |
+| 60-79 | 🟡 Qualified | Standard follow-up |
+| 40-59 | 🟠 Needs Nurturing | Marketing sequence |
+| 0-39 | 🔴 Not a Fit | Low priority |
+
+## Intent Analysis
+
+### Conversation Analysis
+
+AI analyzes conversation content for buying signals:
+
+```typescript
+intentSignals: {
+  urgency: ["need this week", "urgent", "asap"],
+  budget: ["budget approved", "have budget", "can spend"],
+  authority: ["I decide", "my decision", "I'm the buyer"],
+  timeline: ["this quarter", "next month", "by end of year"],
+  competition: ["comparing", "looking at options", "vs competitor"]
+}
+```
+
+### Signal Scoring
+
+| Signal Type | Points | Example |
+|-------------|--------|---------|
+| BANT - Budget | +15 | "We have $100K budgeted" |
+| BANT - Authority | +15 | "I make these decisions" |
+| BANT - Need | +10 | "We need to replace our current supplier" |
+| BANT - Timeline | +10 | "Looking to purchase this quarter" |
+| Competitor Mention | +5 | "We're also talking to XYZ Corp" |
+
+## Automatic Scoring
+
+### Trigger Points
+
+Scoring runs automatically:
+
+1. **On Lead Capture**: Initial score from conversation
+2. **After Enrichment**: Updated with company data
+3. **On Updates**: Recalculate when data changes
+
+### Score History
+
+Track score changes over time:
+
+```
+Lead: John Smith (Acme Corp)
+─────────────────────────────
+Feb 1: Created          Score: 45
+Feb 1: Enriched         Score: 72 (+27)
+Feb 3: Follow-up call   Score: 85 (+13)
+```
+
+## Using Scores
+
+### Lead Prioritization
+
+Sort and filter leads by score:
+
+1. Go to **Leads**
+2. Sort by **ICP Score** (descending)
+3. Focus on highest scores first
+
+### Automated Routing
+
+Route leads based on score:
+
+```typescript
+routing: {
+  rules: [
+    { scoreMin: 80, action: "assign_to_ae", notify: true },
+    { scoreMin: 60, scoreMax: 79, action: "add_to_sequence" },
+    { scoreMax: 59, action: "marketing_nurture" }
+  ]
+}
+```
+
+### CRM Integration
+
+Push scores to CRM:
+
+- HubSpot: Custom property "ICP Score"
+- Salesforce: Custom field "ICP_Score__c"
+
+## Score Breakdown
+
+View detailed scoring:
+
+```
+Lead: John Smith
+Overall Score: 85
+
+Company Fit                    [████████░░] 80%
+├─ Industry Match              [██████████] 100%
+├─ Company Size               [████████░░] 80%
+├─ Revenue Range              [██████░░░░] 60%
+└─ Location                   [██████████] 100%
+
+Role Fit                       [█████████░] 90%
+├─ Title Level                [██████████] 100%
+├─ Department Match           [████████░░] 80%
+└─ Seniority                  [██████████] 100%
+
+Intent Signals                 [████████░░] +15 points
+├─ Requested pricing          [██████████] ✓
+├─ Timeline mentioned         [██████████] ✓
+└─ Budget confirmed           [░░░░░░░░░░] ✗
+```
+
+## Customizing Scoring
+
+### Industry-Specific ICP
+
+Create multiple ICP profiles:
+
+```typescript
+icpProfiles: [
+  {
+    name: "Enterprise Manufacturing",
+    criteria: { ... },
+    weights: { ... }
+  },
+  {
+    name: "Mid-Market Construction",
+    criteria: { ... },
+    weights: { ... }
+  }
+]
+```
+
+### Negative Signals
+
+Reduce scores for disqualifying factors:
+
+| Factor | Points |
+|--------|--------|
+| Personal email domain | -10 |
+| Company size < 10 | -20 |
+| Student/Intern title | -15 |
+| Wrong industry | -25 |
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Scores seem too high/low">
+    - Review weight distribution
+    - Check criterion definitions
+    - Adjust thresholds based on closed deals
+  </Accordion>
+  <Accordion title="Intent signals not detecting">
+    - Review conversation transcripts
+    - Add more signal keywords
+    - Check language variations
+  </Accordion>
+  <Accordion title="Scores not updating">
+    - Verify enrichment completed
+    - Check scoring triggers
+    - Manual recalculate if needed
+  </Accordion>
+</AccordionGroup>
+
+## Best Practices
+
+### Calibrate Regularly
+
+<Tip>
+  Review scored leads monthly against actual outcomes. Adjust weights based on which criteria best predict conversions.
+</Tip>
+
+### Start Simple
+
+Begin with 5-7 key criteria, then refine:
+1. Industry
+2. Company size
+3. Title level
+4. Intent signals
+
+### Use Data
+
+Analyze won/lost deals to identify patterns:
+- What did won deals have in common?
+- What disqualified lost deals?
+- Adjust ICP accordingly
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="CRM Sync" icon="refresh" href="/leads/crm-sync">
+    Push scores to CRM
+  </Card>
+  <Card title="Lead Capture" icon="inbox" href="/leads/capture">
+    Capture configuration
+  </Card>
+  <Card title="Analytics" icon="chart-bar" href="/analytics/insights">
+    Score analytics
+  </Card>
+  <Card title="Integrations" icon="plug" href="/integrations/crm">
+    CRM integration
+  </Card>
+</CardGroup>

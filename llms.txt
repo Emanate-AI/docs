@@ -34,25 +34,13 @@ Outbound voice campaign management with real-time monitoring.
 Comprehensive metrics and conversation insights.
 - Call Logs: Voice call history and transcripts
 - Chat Logs: Chat session history
-- Evaluations: Quality assurance and performance evals
+- Evaluations: Test scenarios for agent quality assurance
 - Insights: AI-generated performance analysis
-
-## Architecture
-
-Emanate uses a 4-layer VAPI integration:
-1. VAPI Client (SDK wrapper)
-2. Service Layer (business logic)
-3. Server Actions (Next.js)
-4. React Hooks (UI)
-
-Key pattern: "VAPI writes, Supabase reads"
-- All mutations go through VAPI (source of truth)
-- List/detail views read from Supabase cache (fast)
 
 ## Tech Stack
 
-- Framework: Next.js 14 (App Router)
-- Voice AI: VAPI (@vapi-ai/server-sdk)
+- Framework: Next.js (App Router)
+- Voice AI: VAPI
 - Database: Supabase (PostgreSQL)
 - Auth: PropelAuth
 - Styling: Tailwind CSS + shadcn/ui
@@ -95,14 +83,7 @@ docs/
 │   ├── overview.mdx
 │   ├── crm.mdx
 │   ├── email.mdx
-│   ├── calendar.mdx
 │   └── erp.mdx
-├── engineering/
-│   ├── architecture.mdx
-│   ├── vapi-integration.mdx
-│   ├── data-flow.mdx
-│   ├── business-dna.mdx
-│   └── security.mdx
 ├── tutorials/
 │   ├── first-voice-agent.mdx
 │   ├── embed-chat-widget.mdx
@@ -110,8 +91,7 @@ docs/
 │   └── outbound-campaign.mdx
 ├── api-reference/
 │   ├── overview.mdx
-│   ├── webhooks.mdx
-│   └── endpoints.mdx
+│   └── webhooks.mdx
 └── about/
     ├── overview.mdx
     ├── release-notes.mdx

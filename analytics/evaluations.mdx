@@ -1,245 +1,191 @@
 ---
 title: "Evaluations"
-description: "Quality assurance and conversation scoring"
+description: "Test scenarios for agent quality assurance"
 ---
 
 # Evaluations
 
-Evaluations provide AI-assisted quality scoring for agent conversations, helping you maintain high standards and identify improvement opportunities.
+Evaluations let you create test scenarios to verify your agents behave correctly. Think of them as automated tests for your AI agents.
 
 ## How Evaluations Work
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│ Conversation Completed                                          │
+│ Create Test Scenario                                            │
+│ - Define mock conversation messages                             │
+│ - Set expected responses or behaviors                           │
+│ - Choose pass/fail criteria                                     │
 └─────────────────────────────────────────────────────────────────┘
                     │
                     ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│ AI Evaluation Engine                                             │
-│ - Analyze transcript                                             │
-│ - Score against criteria                                         │
-│ - Generate feedback                                              │
+│ Run Against Agent or Workflow                                   │
+│ - Execute the test conversation                                 │
+│ - Evaluate against criteria                                     │
+│ - Record pass/fail result                                       │
 └─────────────────────────────────────────────────────────────────┘
                     │
                     ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│ Evaluation Report                                                │
-│ - Overall score                                                  │
-│ - Category scores                                                │
-│ - Specific feedback                                              │
-│ - Improvement suggestions                                        │
+│ Review Results                                                  │
+│ - See which tests passed or failed                              │
+│ - Identify issues before they reach customers                   │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-## Evaluation Criteria
+## Creating an Evaluation
 
-### Standard Criteria
+Navigate to **Analytics** → **Evaluations** → **Create Eval**
 
-| Category | Weight | Description |
-|----------|--------|-------------|
-| **Greeting** | 10% | Opening warmth and clarity |
-| **Understanding** | 20% | Correctly understood customer need |
-| **Knowledge** | 20% | Accurate product/service information |
-| **Helpfulness** | 20% | Provided value to customer |
-| **Resolution** | 15% | Successfully addressed the inquiry |
-| **Closing** | 15% | Professional wrap-up |
+### Step 1: Name Your Eval
 
-### Custom Criteria
+Give it a descriptive name like "Lead Qualification Flow" or "Product FAQ Test".
 
-Add criteria specific to your business:
+### Step 2: Define Test Messages
 
-```typescript
-customCriteria: [
-  {
-    name: "Lead Qualification",
-    weight: 15,
-    description: "Did agent properly qualify the lead?"
-  },
-  {
-    name: "Upsell Attempt",
-    weight: 10,
-    description: "Did agent identify upsell opportunities?"
-  }
-]
-```
-
-## Evaluation Scores
-
-### Score Scale
-
-| Score | Rating | Description |
-|-------|--------|-------------|
-| 90-100 | Excellent | Exceeds expectations |
-| 80-89 | Good | Meets expectations |
-| 70-79 | Satisfactory | Acceptable performance |
-| 60-69 | Needs Improvement | Below expectations |
-| Under 60 | Poor | Significant issues |
-
-### Sample Evaluation
+Create a mock conversation with user messages:
 
 ```
-Conversation #12345
-Overall Score: 87/100 (Good)
-────────────────────────────────────
-
-Greeting          ████████████░░  92%
-  "Warm, professional opening"
-
-Understanding     ██████████░░░░  82%
-  "Correctly identified need, missed clarifying question"
-
-Knowledge         █████████████░  95%
-  "Accurate product information provided"
-
-Helpfulness       ████████████░░  88%
-  "Good recommendations, could offer alternatives"
-
-Resolution        █████████░░░░░  78%
-  "Issue partially resolved, needs follow-up"
-
-Closing           █████████████░  90%
-  "Clear next steps, friendly goodbye"
+User: "What products do you sell?"
+User: "How much does the steel beam cost?"
+User: "I'd like to place an order"
 ```
 
-## Viewing Evaluations
+### Step 3: Set Evaluation Criteria
 
-### Evaluations List
+Choose how to judge the agent's response:
 
-Navigate to **Analytics** → **Evaluations**
+| Type | Use Case |
+|------|----------|
+| **Exact Match** | Response must contain specific text |
+| **Regex** | Response matches a pattern |
+| **AI Judge** | AI evaluates if response meets criteria |
 
-Filter by:
-- Date range
-- Agent
-- Score range
-- Category
+### Step 4: Run the Eval
 
-### Evaluation Detail
+Select a target:
+- **Assistant**: Test a single agent
+- **Squad**: Test a workflow with multiple agents
 
-Click an evaluation to see:
+## Evaluation Types
+
+### Exact Match
+
+Check if response contains specific content:
+
+```
+Criteria: "steel beam"
+Pass if: Agent response contains "steel beam"
+```
+
+### Regex Match
+
+Pattern-based validation:
+
+```
+Pattern: \$\d+(\.\d{2})?
+Pass if: Agent mentions a price like "$125.00"
+```
+
+### AI Judge
+
+Use AI to evaluate complex criteria:
+
+```
+Criteria: "Agent should politely decline to discuss 
+competitor pricing and redirect to our products"
+```
+
+## Running Evaluations
+
+### Manual Run
+
+1. Open an eval
+2. Select target agent or workflow
+3. Click **Run**
+4. View results
+
+### Results
+
+| Status | Meaning |
+|--------|---------|
+| **Pass** | All criteria met |
+| **Fail** | One or more criteria failed |
+| **Error** | Technical issue during test |
+
+## Best Practices
+
+### Test Key Scenarios
+
+Create evals for:
+- Common customer questions
+- Lead qualification flows
+- Edge cases and error handling
+- Tool invocations
+
+### Run After Changes
+
+Re-run evals after updating:
+- System prompts
+- Knowledge base documents
+- Tool configurations
+
+### Start Simple
+
+Begin with a few critical test cases:
+
+```markdown
+1. Basic greeting and response
+2. Product information query
+3. Lead capture flow
+4. Transfer/escalation request
+```
+
+## Viewing Results
+
+### Eval Detail Page
+
+See for each run:
+- Pass/fail status
 - Full conversation transcript
-- Score breakdown
-- Specific feedback
-- Improvement suggestions
-- Comparison to average
+- Which criteria passed or failed
+- Timestamp and duration
 
-## Automatic vs Manual Evaluations
+### Stats Overview
 
-### Automatic (AI)
+Track across all evals:
+- Total pass rate
+- Recent run history
+- Failing tests that need attention
 
-All conversations are automatically evaluated:
-- Runs after conversation ends
-- Scores against all criteria
-- Generates feedback
+## Troubleshooting
 
-### Manual Review
-
-Human review for:
-- Disputed evaluations
-- Training purposes
-- Quality audits
-
-To add manual review:
-1. Open evaluation detail
-2. Click **Add Review**
-3. Adjust scores if needed
-4. Add notes
-
-## Agent Performance
-
-### Leaderboard
-
-| Agent | Avg Score | Evaluations |
-|-------|-----------|-------------|
-| Sales Assistant | 88.5 | 523 |
-| Product Expert | 86.2 | 312 |
-| Support Agent | 82.1 | 445 |
-
-### Trend Analysis
-
-Track scores over time:
-
-```
-Weekly Average Score
-────────────────────────────────────
-Week 1  ████████████████░░  84.2
-Week 2  █████████████████░  86.5
-Week 3  █████████████████░  87.1
-Week 4  ██████████████████  88.3
-```
-
-### Category Comparison
-
-Identify strengths and weaknesses:
-
-```
-Agent: Sales Assistant
-────────────────────────────────────
-Greeting       ████████████████  94%  ↑
-Understanding  ████████████░░░░  85%  →
-Knowledge      █████████████░░░  90%  ↑
-Helpfulness    ███████████░░░░░  80%  ↓ Needs work
-Resolution     ████████████░░░░  87%  →
-Closing        ███████████████░  92%  ↑
-```
-
-## Improvement Recommendations
-
-AI generates actionable suggestions:
-
-### Example Recommendations
-
-> **Understanding (82%)**
-> 
-> The agent correctly identified the customer's main need but missed 
-> an opportunity to ask about timeline and budget. Add these 
-> qualifying questions to improve lead quality.
-> 
-> **Suggested prompt addition:**
-> "After understanding the product need, ask about timeline and budget 
-> to better qualify the lead."
-
-## Alerts
-
-Set up alerts for quality issues:
-
-| Alert | Trigger |
-|-------|---------|
-| Low Score | Evaluation < 70 |
-| Score Drop | Agent drops 10+ points |
-| Category Issue | Any category < 60 |
-
-## Reports
-
-### Weekly Summary
-
-Automated weekly report:
-- Overall score trend
-- Top performers
-- Improvement areas
-- Specific examples
-
-### Agent Report Card
-
-Individual agent performance:
-- Score history
-- Category breakdown
-- Peer comparison
-- Recommendations
+<AccordionGroup>
+  <Accordion title="Eval keeps failing">
+    - Review the full transcript to see what the agent said
+    - Check if criteria are too strict
+    - Verify agent has necessary knowledge/tools
+  </Accordion>
+  <Accordion title="Timeout errors">
+    - Agent may be stuck in a loop
+    - Check tool configurations
+    - Simplify the test scenario
+  </Accordion>
+</AccordionGroup>
 
 ## Next Steps
 
 <CardGroup cols={2}>
-  <Card title="Insights" icon="lightbulb" href="/analytics/insights">
-    AI recommendations
-  </Card>
-  <Card title="Call Logs" icon="phone" href="/analytics/call-logs">
-    Review conversations
-  </Card>
   <Card title="Voice Agents" icon="phone" href="/agents/voice-agents">
-    Improve agents
+    Configure agents
   </Card>
   <Card title="Testing" icon="flask" href="/agents/testing">
-    Test improvements
+    Manual testing guide
+  </Card>
+  <Card title="Call Logs" icon="list" href="/analytics/call-logs">
+    Review real conversations
+  </Card>
+  <Card title="Workflow Squads" icon="users" href="/agents/workflow-squads">
+    Test workflows
   </Card>
 </CardGroup>

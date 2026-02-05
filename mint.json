@@ -79,18 +79,7 @@
         "integrations/overview",
         "integrations/crm",
         "integrations/email",
-        "integrations/calendar",
         "integrations/erp"
-      ]
-    },
-    {
-      "group": "Engineering",
-      "pages": [
-        "engineering/architecture",
-        "engineering/vapi-integration",
-        "engineering/data-flow",
-        "engineering/business-dna",
-        "engineering/security"
       ]
     },
     {
@@ -106,8 +95,7 @@
       "group": "API Reference",
       "pages": [
         "api-reference/overview",
-        "api-reference/webhooks",
-        "api-reference/endpoints"
+        "api-reference/webhooks"
       ]
     },
     {

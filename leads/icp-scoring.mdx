@@ -40,11 +40,9 @@ ICP (Ideal Customer Profile) Scoring uses AI to evaluate how well leads match yo
 
 ## Defining Your ICP
 
-### Step 1: Access ICP Settings
+ICP scoring evaluates leads against criteria you define. Here's how the scoring works:
 
-Navigate to **Settings** → **Leads** → **ICP Configuration**
-
-### Step 2: Define Criteria
+### Criteria Categories
 
 #### Company Criteria
 
@@ -73,9 +71,9 @@ Navigate to **Settings** → **Leads** → **ICP Configuration**
 | Requested meeting | +20 |
 | Mentioned competitor | +5 |
 
-### Step 3: Set Weights
+### Weighting
 
-Distribute 100% across criteria:
+Criteria are weighted to reflect importance:
 
 ```typescript
 icpWeights: {

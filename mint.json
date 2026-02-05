@@ -19,7 +19,6 @@
     "url": "https://app.emanate.ai/signup"
   },
   "anchors": [
-    { "name": "API Reference", "icon": "code", "url": "api-reference" },
     { "name": "Changelog", "icon": "list", "url": "about/release-notes" }
   ],
   "navigation": [
@@ -89,13 +88,6 @@
         "tutorials/embed-chat-widget",
         "tutorials/lead-qualification",
         "tutorials/outbound-campaign"
-      ]
-    },
-    {
-      "group": "API Reference",
-      "pages": [
-        "api-reference/overview",
-        "api-reference/webhooks"
       ]
     },
     {

@@ -2,15 +2,14 @@
 
 > The AI Revenue Engine for Industrial Materials
 
-Emanate provides autonomous AI agents that handle revenue-generating operations for industrial materials companies. This documentation covers setup, configuration, and integration of voice agents, chat agents, lead management, and campaign orchestration.
+Emanate provides autonomous AI agents that handle revenue-generating operations for industrial materials companies.
 
 ## Quick Links
 
 - Introduction: /introduction
 - Quickstart Guide: /getting-started/quickstart
-- API Reference: /api-reference/overview
 
-## Core Concepts
+## Core Features
 
 ### Agents
 AI-powered voice and chat agents that handle customer interactions autonomously.
@@ -27,73 +26,9 @@ Automated lead capture, enrichment, and CRM synchronization.
 
 ### Campaigns
 Outbound voice campaign management with real-time monitoring.
-- Voice Campaigns: Automated outbound calling
-- Monitoring: Real-time call tracking and alerts
 
 ### Analytics
-Comprehensive metrics and conversation insights.
-- Call Logs: Voice call history and transcripts
-- Chat Logs: Chat session history
-- Evaluations: Test scenarios for agent quality assurance
-- Insights: AI-generated performance analysis
+Call logs, chat logs, evaluations, and insights.
 
-## Tech Stack
-
-- Framework: Next.js (App Router)
-- Voice AI: VAPI
-- Database: Supabase (PostgreSQL)
-- Auth: PropelAuth
-- Styling: Tailwind CSS + shadcn/ui
-
-## File Structure
-
-```
-docs/
-├── introduction.mdx
-├── getting-started/
-│   ├── welcome.mdx
-│   ├── quickstart.mdx
-│   ├── onboarding.mdx
-│   └── concepts.mdx
-├── agents/
-│   ├── overview.mdx
-│   ├── voice-agents.mdx
-│   ├── chat-agents.mdx
-│   ├── workflow-squads.mdx
-│   ├── knowledge-base.mdx
-│   ├── custom-actions.mdx
-│   └── testing.mdx
-├── campaigns/
-│   ├── overview.mdx
-│   ├── voice-campaigns.mdx
-│   └── monitoring.mdx
-├── leads/
-│   ├── overview.mdx
-│   ├── capture.mdx
-│   ├── enrichment.mdx
-│   ├── icp-scoring.mdx
-│   └── crm-sync.mdx
-├── analytics/
-│   ├── overview.mdx
-│   ├── call-logs.mdx
-│   ├── chat-logs.mdx
-│   ├── evaluations.mdx
-│   └── insights.mdx
-├── integrations/
-│   ├── overview.mdx
-│   ├── crm.mdx
-│   ├── email.mdx
-│   └── erp.mdx
-├── tutorials/
-│   ├── first-voice-agent.mdx
-│   ├── embed-chat-widget.mdx
-│   ├── lead-qualification.mdx
-│   └── outbound-campaign.mdx
-├── api-reference/
-│   ├── overview.mdx
-│   └── webhooks.mdx
-└── about/
-    ├── overview.mdx
-    ├── release-notes.mdx
-    └── roadmap.mdx
-```
+### Integrations
+CRM (HubSpot, Salesforce), Email (Resend), and ERP connections.

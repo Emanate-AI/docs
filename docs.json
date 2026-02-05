@@ -99,18 +99,6 @@
             ]
           }
         ]
-      },
-      {
-        "tab": "API Reference",
-        "groups": [
-          {
-            "group": "API",
-            "pages": [
-              "api-reference/overview",
-              "api-reference/webhooks"
-            ]
-          }
-        ]
       }
     ],
     "global": {

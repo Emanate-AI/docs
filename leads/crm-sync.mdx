@@ -129,43 +129,6 @@ When a lead syncs to Salesforce:
    - Follow-up action
    - Linked to lead/contact
 
-## Sync Process
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│ Lead Ready for Sync                                              │
-│ - Enriched                                                       │
-│ - Score: 85                                                      │
-└─────────────────────────────────────────────────────────────────┘
-                    │
-                    ▼
-┌─────────────────────────────────────────────────────────────────┐
-│ Deduplication Check                                              │
-│ - Search CRM by email                                            │
-│ - Search by phone (if email not found)                           │
-│ - Search by name + company (fallback)                            │
-└─────────────────────────────────────────────────────────────────┘
-                    │
-           ┌───────┴───────┐
-           │               │
-     Found Match    No Match
-           │               │
-           ▼               ▼
-┌─────────────────┐ ┌─────────────────┐
-│ Update Record   │ │ Create Record   │
-│ - Merge data    │ │ - All fields    │
-│ - Add note      │ │ - Create company│
-└─────────────────┘ └─────────────────┘
-                    │
-                    ▼
-┌─────────────────────────────────────────────────────────────────┐
-│ Sync Complete                                                    │
-│ - CRM ID saved to lead                                           │
-│ - Sync status updated                                            │
-│ - Audit trail logged                                             │
-└─────────────────────────────────────────────────────────────────┘
-```
-
 ## Conversation Notes
 
 Include conversation context in CRM:

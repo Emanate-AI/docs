@@ -89,40 +89,6 @@ Enrich multiple leads:
 2. Click **Bulk Actions** → **Enrich**
 3. Process runs in background
 
-## Enrichment Process
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│ Lead Captured                                                    │
-│ name: "John Smith"                                               │
-│ email: "john@acme.com"                                           │
-│ company: "Acme Corp"                                             │
-└─────────────────────────────────────────────────────────────────┘
-                    │
-                    ▼
-┌─────────────────────────────────────────────────────────────────┐
-│ Apollo API Call                                                  │
-│ 1. Match by email (primary)                                      │
-│ 2. Match by name + company (fallback)                            │
-│ 3. Match by phone (if available)                                 │
-└─────────────────────────────────────────────────────────────────┘
-                    │
-                    ▼
-┌─────────────────────────────────────────────────────────────────┐
-│ Enriched Lead                                                    │
-│ name: "John Smith"                                               │
-│ email: "john@acme.com"                                           │
-│ company: "Acme Corporation"                                      │
-│ title: "VP of Operations"                                        │
-│ seniority: "VP"                                                  │
-│ linkedin: "linkedin.com/in/johnsmith"                            │
-│ directPhone: "+1-415-555-1234"                                   │
-│ companySize: "501-1000"                                          │
-│ industry: "Manufacturing"                                        │
-│ revenue: "$50M-100M"                                             │
-└─────────────────────────────────────────────────────────────────┘
-```
-
 ## Matching Strategies
 
 ### Email-Based (Primary)

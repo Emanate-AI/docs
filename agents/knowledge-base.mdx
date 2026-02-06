@@ -9,13 +9,6 @@ The Knowledge Base provides AI agents with context from your documents. Upload p
 
 ## How It Works
 
-```
-┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
-│    Documents    │────►│    Processing   │────►│    Agent        │
-│    Uploaded     │     │    & Indexing   │     │    Context      │
-└─────────────────┘     └─────────────────┘     └─────────────────┘
-```
-
 1. **Upload**: Add documents to the knowledge base
 2. **Process**: Documents are chunked and indexed
 3. **Query**: Agent retrieves relevant chunks during conversations
@@ -96,25 +89,6 @@ Organize documents by type:
 ## Query Tools
 
 Knowledge base documents are accessed via query tools:
-
-### How Query Tools Work
-
-```
-Customer: "What sizes do your steel beams come in?"
-                    │
-                    ▼
-┌─────────────────────────────────────────────────────────────────┐
-│ Query Tool executes:                                             │
-│ 1. Extracts question: "steel beam sizes"                         │
-│ 2. Searches knowledge base                                       │
-│ 3. Returns relevant chunks                                       │
-│ 4. Agent synthesizes response                                    │
-└─────────────────────────────────────────────────────────────────┘
-                    │
-                    ▼
-Agent: "Our steel beams range from W4x13 to W44x335, 
-        with lengths up to 60 feet."
-```
 
 ### Query Tool Configuration
 

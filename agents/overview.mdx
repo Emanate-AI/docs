@@ -69,26 +69,6 @@ Custom actions the agent can perform:
 - **SMS Tools**: Send text messages
 - **Calendar Tools**: Book meetings
 
-## Agent Architecture
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                        Agent Configuration                       │
-├─────────────────────────────────────────────────────────────────┤
-│  System Prompt        Business DNA + Custom Instructions         │
-├─────────────────────────────────────────────────────────────────┤
-│  Model                OpenAI / Anthropic / Google / Groq         │
-├─────────────────────────────────────────────────────────────────┤
-│  Voice (if voice)     Cartesia / ElevenLabs / Deepgram           │
-├─────────────────────────────────────────────────────────────────┤
-│  Knowledge Base       Documents for context                      │
-├─────────────────────────────────────────────────────────────────┤
-│  Tools                Functions, transfers, SMS                  │
-├─────────────────────────────────────────────────────────────────┤
-│  Structured Outputs   Lead capture, conversation metrics         │
-└─────────────────────────────────────────────────────────────────┘
-```
-
 ## Creating an Agent
 
 <Steps>

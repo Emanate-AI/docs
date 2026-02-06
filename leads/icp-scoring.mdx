@@ -7,37 +7,6 @@ description: "AI-powered Ideal Customer Profile scoring"
 
 ICP (Ideal Customer Profile) Scoring uses AI to evaluate how well leads match your target customer, helping sales teams prioritize their efforts.
 
-## How It Works
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│ Lead Data + Enrichment                                          │
-├─────────────────────────────────────────────────────────────────┤
-│ - Title: VP of Operations                                       │
-│ - Company Size: 500 employees                                   │
-│ - Industry: Manufacturing                                       │
-│ - Revenue: $50M                                                 │
-│ - Conversation: Interested in bulk steel orders                 │
-└─────────────────────────────────────────────────────────────────┘
-                    │
-                    ▼
-┌─────────────────────────────────────────────────────────────────┐
-│ ICP Scoring Engine                                               │
-│ - Compare against ICP criteria                                   │
-│ - Weight each factor                                             │
-│ - Analyze conversation intent                                    │
-│ - Calculate overall score                                        │
-└─────────────────────────────────────────────────────────────────┘
-                    │
-                    ▼
-┌─────────────────────────────────────────────────────────────────┐
-│ Score: 85/100 (Highly Qualified)                                 │
-│ - Company Fit: 90 (matches industry & size)                      │
-│ - Role Fit: 85 (decision-maker level)                            │
-│ - Intent: 80 (strong buying signals)                             │
-└─────────────────────────────────────────────────────────────────┘
-```
-
 ## Defining Your ICP
 
 ICP scoring evaluates leads against criteria you define. Here's how the scoring works:
@@ -196,31 +165,6 @@ Push scores to CRM:
 
 - HubSpot: Custom property "ICP Score"
 - Salesforce: Custom field "ICP_Score__c"
-
-## Score Breakdown
-
-View detailed scoring:
-
-```
-Lead: John Smith
-Overall Score: 85
-
-Company Fit                    [████████░░] 80%
-├─ Industry Match              [██████████] 100%
-├─ Company Size               [████████░░] 80%
-├─ Revenue Range              [██████░░░░] 60%
-└─ Location                   [██████████] 100%
-
-Role Fit                       [█████████░] 90%
-├─ Title Level                [██████████] 100%
-├─ Department Match           [████████░░] 80%
-└─ Seniority                  [██████████] 100%
-
-Intent Signals                 [████████░░] +15 points
-├─ Requested pricing          [██████████] ✓
-├─ Timeline mentioned         [██████████] ✓
-└─ Budget confirmed           [░░░░░░░░░░] ✗
-```
 
 ## Customizing Scoring
 

@@ -61,26 +61,6 @@ Run outbound voice campaigns with:
 - Call transcripts and recordings
 - Performance analytics
 
-## Architecture Overview
-
-Emanate is built on a modern stack designed for reliability and performance:
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│  Next.js (App Router)            Frontend & API                 │
-├─────────────────────────────────────────────────────────────────┤
-│  VAPI                            Voice & Chat AI Platform       │
-├─────────────────────────────────────────────────────────────────┤
-│  Supabase                        Database                       │
-├─────────────────────────────────────────────────────────────────┤
-│  Integrations                    Apollo, HubSpot, Resend        │
-└─────────────────────────────────────────────────────────────────┘
-```
-
-<Note>
-  **Key Pattern:** "VAPI writes, Supabase reads" — All mutations go through VAPI as the source of truth, while reads come from Supabase for instant performance.
-</Note>
-
 ## Get Started
 
 Ready to build your first AI agent? Start with the [Quickstart Guide](/getting-started/quickstart) to have your first agent running in 15 minutes.
